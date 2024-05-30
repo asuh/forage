@@ -13,7 +13,7 @@ export default defineConfig({
     outDir: `dist`,
     emptyOutDir: true,
     rollupOptions: {
-      input: ['resources/scripts/scripts.js', 'resources/styles/styles.scss', 'resources/scripts/blocks.js'],
+      input: ['resources/scripts/scripts.js', 'resources/styles/styles.css', 'resources/scripts/blocks.js'],
       output: {
         entryFileNames: '[hash].js',
         assetFileNames: '[hash].[ext]',
@@ -25,7 +25,7 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: `resources/images/**/*.{png,jpg,jpeg,svg,webp}`,
+          src: `resources/images/**/*.{png,jpg,jpeg,svg,webp,avif}`,
         },
       ],
     }),

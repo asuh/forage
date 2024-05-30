@@ -2,28 +2,32 @@
 <html {!! language_attributes() !!}>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {!! wp_head() !!}
   </head>
 
   <body {!! body_class() !!}>
+    <a class="visuallyhidden" href="#main">
+      {{ __('Skip to content') }}
+    </a>
     {!! do_action('wp_body_open') !!}
     {!! do_action('get_header') !!}
 
-    <div class="app">
-      @section('header')
-        @include('partials.header')
-      @show
+    @include('partials.header')
+    @include('partials/h-card')
 
-      @section('content')
-        @include('partials.content')
-      @show
+    <main class="main" id="main">
+      @yield('content')
+    </main>
 
-      @yield('sidebar')
-    </div>
+    @hasSection('sidebar')
+      <aside class="sidebar">
+        @yield('sidebar')
+      </aside>
+    @endif
 
     {!! do_action('get_footer') !!}
+    @include('partials.footer')
     {!! do_action('wp_footer') !!}
   </body>
 </html>
