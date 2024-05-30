@@ -60,7 +60,7 @@ ul {
   justify-content: center;
 }
 
-.app__header {
+.banner {
   display: flex;
   flex-basis: 100%;
   align-items: center;
@@ -79,13 +79,13 @@ ul {
   }
 }
 
-.app__content {
+.main {
   flex-basis: 70%;
   max-width: 70%;
   padding: 0 20px;
 }
 
-.app__sidebar {
+.sidebar {
   flex-basis: 30%;
   max-width: 30%;
   padding: 0 20px;
