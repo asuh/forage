@@ -58,35 +58,35 @@ ul {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
 
-  &__header {
-    display: flex;
-    flex-basis: 100%;
-    align-items: center;
-    max-width: 100%;
-    padding: 1rem 2rem;
+.app__header {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  max-width: 100%;
+  padding: 1rem 2rem;
 
-    h3 {
-      margin: 0;
-    }
-
-    img {
-      max-width: 2.5rem;
-      max-height: 2.5rem;
-      margin-right: 1rem;
-      object-fit: contain;
-    }
+  h3 {
+    margin: 0;
   }
 
-  &__content {
-    flex-basis: 70%;
-    max-width: 70%;
-    padding: 0 20px;
+  img {
+    max-width: 2.5rem;
+    max-height: 2.5rem;
+    margin-right: 1rem;
+    object-fit: contain;
   }
+}
 
-  &__sidebar {
-    flex-basis: 30%;
-    max-width: 30%;
-    padding: 0 20px;
-  }
+.app__content {
+  flex-basis: 70%;
+  max-width: 70%;
+  padding: 0 20px;
+}
+
+.app__sidebar {
+  flex-basis: 30%;
+  max-width: 30%;
+  padding: 0 20px;
 }
