@@ -3,6 +3,7 @@
 namespace FM;
 
 use FM\Assets\Assets;
+use FM\Comments\Comments;
 use FM\Core\Config;
 use FM\Core\Hooks;
 use FM\Core\Widgets;
@@ -15,6 +16,8 @@ use Illuminate\Filesystem\Filesystem;
 class App
 {
     private Assets $assets;
+
+    private Comments $comments;
 
     private Config $config;
 
@@ -35,6 +38,7 @@ class App
     private function __construct()
     {
         $this->assets = self::init(new Assets());
+        $this->comments = self::init(new Comments());
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
         $this->integrations = self::init(new Integrations());
@@ -47,6 +51,11 @@ class App
     public function assets(): Assets
     {
         return $this->assets;
+    }
+
+    public function comments(): Comments
+    {
+        return $this->comments;
     }
 
     public function config(): Config
