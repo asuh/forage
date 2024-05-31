@@ -21,15 +21,6 @@ Make sure all dependencies have been installed before moving on:
 * [Node.js](http://nodejs.org/) >= 20.0.0
 * [Yarn](https://yarnpkg.com/getting-started/install)
 
-## Theme installation
-
-Install Sage FootMATE using Composer from your WordPress themes directory:
-
-```shell
-# @ wp-content/themes/
-$ composer install
-```
-
 ## Theme structure
 
 ```shell
@@ -61,6 +52,26 @@ themes/your-theme-name/   # → Root of your theme
 │   └── views/            # → Theme templates
 │       └── partials/     # → Partial templates
 └── vendor/               # → Composer packages (never edit)
+```
+
+## Environment Type
+
+Multiple features of this theme require the environment type to be set.
+
+* Hot Module Reload
+* Versioning
+
+To enable these features, add the following line to `wp-config.php` in the root of your WordPress installation.
+
+`define( 'WP_ENVIRONMENT_TYPE', 'development' );`
+
+## Theme installation
+
+Install Sage FootMATE using Composer from your WordPress themes directory:
+
+```shell
+# @ wp-content/themes/
+$ composer install
 ```
 
 ## Theme development
