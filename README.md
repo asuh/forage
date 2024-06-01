@@ -30,8 +30,6 @@ themes/your-theme-name/   # → Root of your theme
 │   ├── Comments/         # → Comment_Walker
 │   ├── Core/             # → Core files
 │   ├── Integrations/     # → Various integrations
-│   ├── Posts/            # → Posts
-│   ├── Teams/            # → Example Teams
 │   └── Templates/        # → Render and Compile Templates files
 ├── composer.json         # → Autoloading for `app/` files
 ├── composer.lock         # → Composer lock file (never edit)
