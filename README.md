@@ -1,15 +1,19 @@
 # sage-footmate
-This theme combines Footmate + Sage 9
+This theme combines FootMATE + Sage 9
 
 ## [Sage](https://roots.io/sage/)
 Sage is a WordPress starter theme with a modern development workflow.
 
+## [FootMATE](https://github.com/przemekhernik/footmate.pro/tree/develop)
+FootMATE is a modern WordPress starter theme
+
 ## Features
 
-* Modern CSS
-* Modern JavaScript
 * [Blade](https://laravel.com/docs/10.x/blade) as a templating engine
-* [Vite](https://laravel.com/docs/10.x/blade) for compiling assets, concatenating, and minifying files
+* [Vite](https://vitejs.dev/) for compiling assets, concatenating, and minifying files
+* Modern CSS & JavaScript - No need for preprocessors
+* [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
+
 
 ## Requirements
 
