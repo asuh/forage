@@ -4,7 +4,7 @@
   @else
     <span class="posted-on">
   @endif
-  <a class="u-url" href="{{ get_permalink() }}">@section('link')<svg xmlns="http://www.w3.org/2000/svg" class="hyperlink" width="12" height="12" viewBox="0 0 32 32"><title>hyperlink</title><path fill="#ccc" d="M13.757 19.868a1.62 1.62 0 0 1-1.149-.476c-2.973-2.973-2.973-7.81 0-10.783l6-6C20.048 1.169 21.963.376 24 .376s3.951.793 5.392 2.233c2.973 2.973 2.973 7.81 0 10.783l-2.743 2.743a1.624 1.624 0 1 1-2.298-2.298l2.743-2.743a4.38 4.38 0 0 0 0-6.187c-.826-.826-1.925-1.281-3.094-1.281s-2.267.455-3.094 1.281l-6 6a4.38 4.38 0 0 0 0 6.187 1.624 1.624 0 0 1-1.149 2.774z"/><path fill="#ccc" d="M8 31.625a7.575 7.575 0 0 1-5.392-2.233c-2.973-2.973-2.973-7.81 0-10.783l2.743-2.743a1.624 1.624 0 1 1 2.298 2.298l-2.743 2.743a4.38 4.38 0 0 0 0 6.187c.826.826 1.925 1.281 3.094 1.281s2.267-.455 3.094-1.281l6-6a4.38 4.38 0 0 0 0-6.187 1.624 1.624 0 1 1 2.298-2.298c2.973 2.973 2.973 7.81 0 10.783l-6 6A7.575 7.575 0 0 1 8 31.625z"/></svg>@endsection
+  <a class="u-url" href="{{ get_permalink() }}">@section('link')<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" class="hyperlink" viewBox="0 0 32 32"><path fill="currentColor" d="M13.8 19.9a1.6 1.6 0 0 1-1.2-.5c-3-3-3-7.8 0-10.8l6-6a7.6 7.6 0 0 1 10.8 0c3 3 3 7.8 0 10.8L26.6 16a1.6 1.6 0 1 1-2.2-2.3l2.7-2.7a4.4 4.4 0 0 0 0-6.2 4.3 4.3 0 0 0-6.2 0l-6 6a4.4 4.4 0 0 0 0 6.2 1.6 1.6 0 0 1-1.1 2.8z"/><path fill="currentColor" d="M8 31.6a7.6 7.6 0 0 1-5.4-2.2c-3-3-3-7.8 0-10.8L5.4 16a1.6 1.6 0 1 1 2.2 2.3L5 20.9a4.4 4.4 0 0 0 0 6.2 4.3 4.3 0 0 0 6.2 0l6-6a4.4 4.4 0 0 0 0-6.2 1.6 1.6 0 1 1 2.3-2.3c3 3 3 7.8 0 10.8l-6 6A7.6 7.6 0 0 1 8 31.6z"/></svg>@endsection
     {{-- "mins/hrs ago if < 24hrs --}}
     @if ( current_time( 'timestamp' ) - get_the_time( 'U' ) > 0 && current_time( 'timestamp' ) - get_the_time( 'U' ) < 24*60*60 )
       @yield('link')<time class="entry-date published updated dt-published dt-updated" datetime="{{ get_post_time( DATE_W3C ) }}">{!! human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) ).' '.__( 'ago' ); !!}</time>
@@ -15,10 +15,10 @@
 </span>
 @endif
 
-@if ( ! is_singular() && ! post_password_required() && ( comments_open() || get_comments_number() ) )
-  <span class="comments-link">
-    {!! comments_number('', '1 reply', '% replies') !!}
-  </span>
+@if ( ! is_singular() )
+<span class="comments-link">
+  {!! comments_number('', '1 reply', '% replies') !!}
+</span>
 @endif
 
 @if ( function_exists( 'get_syndication_links' ) )
@@ -33,19 +33,19 @@
 @endif
 
 @if ( 'post' === get_post_type() )
-  @if ( taxonomy_exists( 'series' ) && get_the_term_list( get_the_ID(), 'series', '', _x( ', ', 'Used between list items, there is a space after the comma.') ) )
+  @if ( taxonomy_exists( 'series' ) && get_the_term_list( get_the_ID(), 'series', '', ', ') )
     <span class="series-links">
       <span class="screen-reader-text">
-        {{ _x( 'Series', 'Used before series names.') }}
+        {{ _x( 'Series', '') }}
       </span>
-      {!! get_the_term_list( get_the_ID(), 'series', '', _x( ', ', 'Used between list items, there is a space after the comma.') ) !!}
+      {!! get_the_term_list( get_the_ID(), 'series', '', ', ') !!}
     </span>
   @endif
 
-  @if ( is_singular() && get_the_tag_list( '', _x( ', ', 'Used between list items, there is a space after the comma.') ) )
+  @if ( is_singular() && get_the_tag_list( '', ', ') )
     <div class="tags-links">
-      {{ _x( 'Tags:', 'Used before tag names.') }}
-      {!! get_the_tag_list( '', _x( ', ', 'Used between list items, there is a space after the comma.') ) !!}
+      {{ _x( 'Tags:', '') }}
+      {!! get_the_tag_list( '', ', ') !!}
     </div>
   @endif
 @endif
