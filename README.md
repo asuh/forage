@@ -94,8 +94,19 @@ $ composer install
 * `yarn dev` — Compile assets when file changes are made, start Browsersync session
 * `yarn build` — Compile and optimize the files in your assets directory
 
+## IndieWeb
+
+This theme has many pieces that integrate with the IndieWeb ecosystem out of the box with provided [IndieWeb WordPress plugins](https://indieweb.org/WordPress/Plugins). Specifically, I recommend the following:
+
+* IndieWeb Plugin
+* Webmention
+* Syndication Links
+* IndieAuth
+* Post Kinds
+* Micropub
+
+If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugins/indieblocks/) instead of everything above but IndieAuth.
+
 ## Contributing
 
 Contributions are welcome from everyone.
-
-
