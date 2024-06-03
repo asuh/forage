@@ -1,6 +1,6 @@
 <header class="banner">
   @if (is_front_page() && is_home())
-    <h1 class="site-title"><a class="brand" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a></h1>
+    <h1 class="site-title"><a class="brand u-url" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a></h1>
   @else
     <p class="site-title"><a class="brand" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a></p>
   @endif
