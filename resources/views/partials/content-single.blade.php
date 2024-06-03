@@ -8,9 +8,9 @@
   </header>
   @endif
   @if (get_the_title())
-  <div class="main-content">
+  <div class="main-content e-content">
   @else
-  <div class="main-content p-name">
+  <div class="main-content e-content p-name">
   @endif
     @php the_content() @endphp
   </div><!-- .main-content -->

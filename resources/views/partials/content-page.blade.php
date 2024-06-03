@@ -1,4 +1,4 @@
-  <div class="main-content">
+  <div class="main-content e-content">
     @if (has_post_thumbnail())
       <figure class="full">@php the_post_thumbnail() @endphp</figure>
     @endif
