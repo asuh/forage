@@ -9,10 +9,6 @@
     "lint": "biome lint --apply ./resources; stylelint **/*.{css,scss}; composer lint;",
     "format": "biome check --apply ./resources; stylelint **/*.{css,scss} --fix; composer format;"
   },
-  "browserslist": [
-    "last 2 versions",
-    "> 1%"
-  ],
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
     "glob": "^10.4.1",
