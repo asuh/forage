@@ -97,7 +97,7 @@ class Setup
      * @param array $classes Classes for the body element.
      * @return array
      */
-    public function iw26_post_classes($classes)
+    public function postClasses($classes)
     {
         $classes = array_diff($classes, [ 'hentry' ]);
         if (! is_singular()) {
