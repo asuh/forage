@@ -12,6 +12,8 @@ export default defineConfig({
     assetsDir: '.',
     outDir: `dist`,
     emptyOutDir: true,
+    sourcemap: 'inline',
+    cssTarget: 'chrome125', // Chrome 125 is arbitrary, just picking a modern browser
     rollupOptions: {
       input: ['resources/scripts/scripts.js', 'resources/styles/styles.css', 'resources/scripts/blocks.js'],
       output: {
