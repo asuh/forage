@@ -10,7 +10,7 @@
     "format": "biome check --write ./resources; stylelint **/*.{css,scss} --fix; composer format;"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.0",
+    "@biomejs/biome": "^1.8.0",
     "glob": "^10.4.1",
     "stylelint": "^16.6.1",
     "stylelint-config-clean-order": "^5.4.2",
