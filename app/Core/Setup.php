@@ -112,4 +112,24 @@ class Setup
         }
         return $classes;
     }
+
+    /**
+     * Add <body> classes
+     * @filter body_class
+     */
+    public function addBodyClasses(array $classes) {
+        /** Add page slug if it doesn't exist */
+        if (is_single() || is_page() && !is_front_page()) {
+            if (!in_array(basename(get_permalink()), $classes)) {
+                $classes[] = basename(get_permalink());
+            }
+        }
+
+        /** Clean up class names for custom templates */
+        $classes = array_map(function ($class) {
+            return preg_replace(['/-blade(-php)?$/', '/^page-template-views/'], '', $class);
+        }, $classes);
+
+        return array_filter($classes);
+    }    
 }
