@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "lint": "biome lint --apply ./resources/**/.{js,ts}; stylelint **/*.{css,scss}; composer lint;",
+    "lint": "biome lint --apply ./resources; stylelint **/*.{css,scss}; composer lint;",
     "format": "biome check --apply ./resources; stylelint **/*.{css,scss} --fix; composer format;"
   },
   "browserslist": [
@@ -16,7 +16,6 @@
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
     "glob": "^10.4.1",
-    "postcss": "^8.4.38",
     "stylelint": "^16.6.1",
     "stylelint-config-clean-order": "^5.4.2",
     "stylelint-order": "^6.0.4",
