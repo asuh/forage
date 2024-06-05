@@ -11,6 +11,7 @@ FootMATE is a modern WordPress starter theme
 
 * [Blade](https://laravel.com/docs/10.x/blade) as a templating engine
 * [Vite](https://vitejs.dev/) for compiling assets, concatenating, and minifying files
+* [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
 * [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
 
@@ -68,7 +69,7 @@ To enable these features, add the following line to `wp-config.php` in the root 
 
 ## Theme installation
 
-Install Forage using Composer from your WordPress themes directory:
+Install Forage using Composer from the theme directory:
 
 ```shell
 # @ wp-content/themes/
@@ -81,8 +82,8 @@ $ composer install
 
 ### Build commands
 
-* `yarn dev` — Compile assets when file changes are made, start Browsersync session
 * `yarn build` — Compile and optimize the files in your assets directory
+* `yarn dev` — Compile assets when file changes are made using Vite's hot module reload
 
 ## IndieWeb
 
@@ -99,13 +100,13 @@ If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugi
 
 ## Background
 
-The Roots Sage project provided an excellent philosophy for a progressive WordPress theme, but after version 9 had too many interconnected pieces and legacy to keep up with. Additionally, returning to an old version of Sage left much to be desired, as well as plenty of broken services or packages.
+The Roots Sage project provided an excellent philosophy for a progressive WordPress theme, but after version 9 Sage had too many interconnected pieces, new dependencies, and legacy to keep up with. Additionally, later returning to an old version of Sage left much to be desired, as well as plenty of broken services or packages.
 
-I found FootMATE in spring of 2024 looking for an alternatives. Strangely, it provides enough of a similarity to Sage that it feels like a younger cousin. Also, the author decided to integrate Vite instead of Webpack, and that's a huge win for productivity and DX.
+I found FootMATE in spring of 2024 looking for an alternative. Strangely, it follows enough of a paradigm similar to Sage that it feels like a younger cousin. Also, the author decided to integrate Vite instead of Webpack, and that's a huge win for productivity and DX.
 
 The combination of the two themes satisfies my desire for good file architecture and modern tooling without much bloat or dependencies. It just works.
 
-WordPress' direction towards full-site editing leaves much to be desired for developers working on WordPress. This theme, while starting from a basis of the classic theme structure, has a lot of flexibility between the two worlds of classic and modern WordPress theme development. 
+WordPress' direction towards full-site editing and Gutenberg leaves much to be desired for developers working on WordPress. This theme, while starting from a basis of the classic theme structure, has a lot of flexibility between the two worlds of classic and modern WordPress theme development. 
 
 ## Contributing
 
