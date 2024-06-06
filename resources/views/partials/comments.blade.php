@@ -16,12 +16,12 @@ if (post_password_required()) {
     </h2>
 
     <ol class="comment-list">
-      <? 
+      <?
         wp_list_comments(
           [
-            'style' => 'ol', 
-            'short_ping' => true, 
-            'avatar_size' => 64, 
+            'style' => 'ol',
+            'short_ping' => true,
+            'avatar_size' => 64,
             'walker' => new FM\Comments\Comments()
           ]
         );
@@ -29,7 +29,7 @@ if (post_password_required()) {
     </ol><!-- .comment-list -->
 
     <? if (get_comment_pages_count() > 1 && get_option('page_comments')) { ?>
-      <nav>
+      <nav aria-label="Comment">
         <ul class="pager">
           <? if (get_previous_comments_link()) { ?>
             <li class="previous"><? previous_comments_link(__('&larr; Older comments')) ?></li>

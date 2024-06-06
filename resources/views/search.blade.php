@@ -1,18 +1,20 @@
 @extends('base')
 
 @section('content')
-  @include('partials.page-header')
+    @include('partials.page-header')
 
-  @if (!have_posts())
-    <div class="alert alert-warning">
-      {{ __('Sorry, no results were found.') }}
-    </div>
-    {!! get_search_form(false) !!}
-  @endif
+    @if (!have_posts())
+        <div class="alert alert-warning">
+            {{ __('Sorry, no results were found.') }}
+        </div>
 
-  @while(have_posts()) @php the_post() @endphp
-    @include('partials.content-search')
-  @endwhile
+        {!! get_search_form(false) !!}
+    @endif
 
-  {!! get_the_posts_navigation() !!}
+    @while (have_posts())
+        @php(the_post())
+        @include('partials.content-search')
+    @endwhile
+
+    {!! get_the_posts_navigation() !!}
 @endsection
