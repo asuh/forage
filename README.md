@@ -1,3 +1,5 @@
+<p align="center"><img src="/resources/images/Forage.png" alt="Forage" /></p>
+
 # Forage
 This theme combines two starter themes: FootMATE + Sage
 
@@ -6,6 +8,10 @@ Sage is a WordPress starter theme with a modern development workflow.
 
 ## [FootMATE](https://github.com/przemekhernik/footmate.pro/tree/develop)
 FootMATE is a modern WordPress starter theme
+
+> [!NOTE]
+> 
+> Forage is in active development and will introduce some updates that might need attention from time to time.
 
 ## Features
 
