@@ -20,6 +20,7 @@ FootMATE is a modern WordPress starter theme
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
 * [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
+* [IndieWeb](https://indieweb.org/) support with baked in Microformats2.
 
 ## Requirements
 
@@ -113,6 +114,8 @@ I found FootMATE in spring of 2024 looking for an alternative. Strangely, it fol
 The combination of the two themes satisfies my desire for good file architecture and modern tooling without much bloat or dependencies. It just works.
 
 WordPress' direction towards full-site editing and Gutenberg leaves much to be desired for developers working on WordPress. This theme, while starting from a basis of the classic theme structure, has a lot of flexibility between the two worlds of classic and modern WordPress theme development.
+
+I wrote more on the theme in [a blog post on my site](https://asuh.com/forage/).
 
 ## Contributing
 
