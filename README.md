@@ -105,6 +105,25 @@ This theme has many pieces that integrate with the IndieWeb ecosystem out of the
 
 If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugins/indieblocks/) instead of everything above but IndieAuth.
 
+## Libraries, Frameworks, and Packages
+
+While this theme purposely doesn't include any external dependencies for projects, anything can be added to the workflow. But, before you do this, a couple of things to keep in mind.
+
+* `.jsx`, `.tsx`, `.vue` and more are provided natively in Vite. With this support, you likely don't need an additional dependency for React or Vue.
+* `.scss`, `.less`, `.styl` and more are provided natively in Vite. The only additional thing to do is add the pre-processor itself, such as:
+
+Scss
+
+```
+yarn add -D sass
+```
+
+* PostCSS is provided natively in Vite. Considering this, you can write Sass syntax in `.css` files already. If you want to support Sass specific language features like Mixins or Functions, add [postcss-scss](https://github.com/postcss/postcss-scss) in `devDependencies` and you'll get most everything you need from the Sass language processed by PostCSS.
+
+With anything mentioned above, if you add additional dependencies to `package.json`, make sure to update `vite.config.js` to include the necessary watch files and syntax.
+
+[Vite's documentation](https://vitejs.dev/guide/features.html) provides a lot of great info to extend the Vite config file.
+
 ## Background
 
 The Roots Sage project provided an excellent philosophy and approaches for a progressively developed WordPress theme, but after version 9, Sage had too many interconnected pieces, new dependencies, and legacy to keep up with. Additionally, having focused on so many other  returning to an old version of Sage left much to be desired, as well as plenty of broken services or packages.
