@@ -1,17 +1,13 @@
 <p align="center"><img src="/resources/images/Forage.png" alt="Forage" /></p>
 
 # Forage
-This theme combines two starter themes: FootMATE + Sage
+This theme combines two starter themes: FootMATE + Sage. [I go into more detail on my blog post about everything](https://asuh.com/forage/).
 
 ## [Sage](https://roots.io/sage/)
 Sage is a WordPress starter theme with a modern development workflow.
 
 ## [FootMATE](https://github.com/przemekhernik/footmate.pro/tree/develop)
 FootMATE is a modern WordPress starter theme
-
-> [!NOTE]
-> 
-> Forage is in active development and will introduce some updates that might need attention from time to time.
 
 ## Features
 
@@ -21,6 +17,11 @@ FootMATE is a modern WordPress starter theme
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
 * [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
 * [IndieWeb](https://indieweb.org/) support with baked in Microformats2.
+
+> [!NOTE]
+> 
+> Forage is in active development and might add or subtract features as it matures. It will introduce some updates that might need attention from time to time.
+
 
 ## Requirements
 
