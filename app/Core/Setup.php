@@ -36,17 +36,55 @@ class Setup
          * HTML5 support
          */
         add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form']);
+
+        /**
+         * Remove Global Styles rendered for Gutenberg blocks
+         * Remove the line below if you are using Gutenberg
+         */
+        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+
+        /**
+         * Enable plugins to manage the document title.
+         *
+         * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
+         */
+        add_theme_support('title-tag');
+
+        /**
+         * Enable responsive embed support.
+         *
+         * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
+         */
+        add_theme_support('responsive-embeds');
+
+        /**
+         * Remove the largest WP image sizes
+         * They often cause more issues than fix
+         */
+        // remove_image_size( '1536x1536' );
+        // remove_image_size( '2048x2048' );
+
+        /**
+         * Custom image sizes
+         */
+        // add_image_size( '424x424', 424, 424, true );
+        // add_image_size( '1920', 1920, 9999 );
     }
 
     /**
      * Register navigation menus
      * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
+     *
+     * @action init
      */
     public function addNavMenus()
     {
-        register_nav_menus([
-            'primary_navigation' => __('Primary Navigation')
-        ]);
+        register_nav_menus(
+            [
+                'primary_navigation' => __( 'Primary Navigation' ),
+                // 'secondary_navigation' => __( 'Secondary Navigation' )
+            ]
+        );
     }
 
     /**
@@ -132,5 +170,16 @@ class Setup
         }, $classes);
 
         return array_filter($classes);
+    }
+
+    /**
+     * Add SVG to allowed file uploads
+     * @add upload_mimes
+     */
+    public function add_file_types_to_uploads($mime_types)
+    {
+        $mime_types['svg'] = 'image/svg+xml';
+
+        return $mime_types;
     }
 }
