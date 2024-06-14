@@ -10,9 +10,9 @@ export default defineConfig({
   build: {
     manifest: 'manifest.json',
     assetsDir: '.',
+    assetsInlineLimit: 0,
     outDir: `dist`,
     emptyOutDir: true,
-    sourcemap: 'inline',
     cssTarget: 'chrome125', // Chrome 125 is arbitrary, just picking a modern browser
     rollupOptions: {
       input: ['resources/scripts/scripts.js', 'resources/styles/styles.css', 'resources/scripts/blocks.js'],
@@ -40,4 +40,7 @@ export default defineConfig({
       },
     },
   ],
+  css: {
+    devSourcemap: true
+  }
 });
