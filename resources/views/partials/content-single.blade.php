@@ -1,4 +1,4 @@
-<article @php post_class() @endphp>
+<article @php post_class('h-entry') @endphp>
     @if (has_post_thumbnail())
         <figure class="full">@php the_post_thumbnail() @endphp</figure>
     @endif
