@@ -104,7 +104,15 @@ This theme has many pieces that integrate with the IndieWeb ecosystem out of the
 * Post Kinds
 * Micropub
 
-If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugins/indieblocks/) instead of everything above but IndieAuth.
+If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugins/indieblocks/), which duplicates most of the plugins above except IndieWeb Plugin and IndieAuth.
+
+### h-card
+
+I'm highlighting a feature called [h-card](https://microformats.org/wiki/h-card), which is a Microformats2 format for publishing people and a vital building block for the IndieWeb to work with WordPress.
+
+If you haven't already installed any of the above and want to test the waters, you can start with the IndieWeb Plugin. Generally, everything should just work out of the box.
+
+If you have more than one WordPress user on your site, to use the correct person for the h-card, go to `wp-admin/admin.php?page=iw_general_options` of your WordPress instance and make sure the Default Author is correct.
 
 ## Libraries, Frameworks, and Packages
 
