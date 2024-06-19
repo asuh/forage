@@ -9,7 +9,7 @@ class Config
     public function __construct()
     {
         $this->config = [
-            'version' => wp_get_environment_type() === 'development' ? time() : FM_VERSION,
+            'version' => wp_get_environment_type() === 'development' || 'local' ? time() : FM_VERSION,
             'env' => [
                 'type' => wp_get_environment_type(),
                 'mode' => false === strpos(FM_PATH, ABSPATH . 'wp-content/plugins') ? 'theme' : 'plugin',
@@ -18,7 +18,7 @@ class Config
                 'uri' => FM_HMR_HOST,
                 'client' => FM_HMR_URI . '/@vite/client',
                 'sources' => FM_HMR_URI . '/resources',
-                'active' => wp_get_environment_type() === 'development' && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
+                'active' => wp_get_environment_type() === 'development' || 'local' && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
             ],
             'manifest' => [
                 'path' => FM_ASSETS_PATH . '/manifest.json',

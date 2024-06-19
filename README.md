@@ -71,7 +71,7 @@ Multiple features of this theme require the environment type to be set.
 * Hot Module Reload
 * Versioning
 
-To enable these features, add the following line to `wp-config.php` in the root of your WordPress installation.
+To enable these features, add or adjust `WP_ENVIRONMENT_TYPE` in `wp-config.php` located in the root of your WordPress installation. The value needs to be either `development` or `local`.
 
 `define( 'WP_ENVIRONMENT_TYPE', 'development' );`
 
