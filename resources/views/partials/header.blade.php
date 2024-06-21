@@ -3,7 +3,7 @@
         <h1 class="site-title"><a class="brand u-url" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a>
         </h1>
     @else
-        <p class="site-title"><a class="brand" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a></p>
+        <site-title><a class="brand" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a></site-title>
     @endif
 
     @if (has_nav_menu('primary_navigation'))
