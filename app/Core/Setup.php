@@ -182,4 +182,18 @@ class Setup
 
         return $mime_types;
     }
+
+    /**
+     * Use `forms/search.blade.php` for the search form.
+     *
+     * @filter get_search_form
+     *
+     * @return string Rendered view
+     */
+    public function filterSearchForm($view)
+    {
+        $view = '';
+        locate_template('../resources/views/forms/search.php', true, false);
+        return $view;
+    }
 }
