@@ -17,8 +17,12 @@
                 array('class' => 'u-photo')
             ) !!}
         <span class="p-name fn">
-            <span class="p-given-name">{{ get_the_author_meta('first_name', $id) }}</span>
-            <span class="screen-reader-text p-family-name">{{ get_the_author_meta('last_name', $id) }}</span>
+            @if (get_the_author_meta('organization') !== "")
+                <span class="fn org">{{ get_the_author_meta('organization', $id) }}</span>
+            @else
+                <span class="p-given-name">{{ get_the_author_meta('first_name', $id) }}</span>
+                <span class="screen-reader-text p-family-name">{{ get_the_author_meta('last_name', $id) }}</span>
+            @endif
         </span>
         {{-- Many h-cards contain a notes section where you can add a biography or short description of the author. Feel free to uncomment the line below, add a bio to the default profile (found in the Users profile section of WordPress), and then delete this line as well.
 
