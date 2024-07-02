@@ -26,8 +26,9 @@
             </aside>
         @endif
 
-        @php('get_footer')
         @include('partials.footer')
-        @php('wp_footer')
+
+        @php(do_action('get_footer'))
+        @php(wp_footer())
     </body>
 </html>
