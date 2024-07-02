@@ -9,6 +9,6 @@ class Widgets
      */
     public function addLinks(): void
     {
-        // Widget code goes here
+        // Widget code goes here.
     }
 }

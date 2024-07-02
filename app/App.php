@@ -39,7 +39,7 @@ class App
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
         $this->integrations = self::init(new Integrations());
-        $this->templates = self ::init(new Templates());
+        $this->templates = self::init(new Templates());
         $this->widgets = self::init(new Widgets());
         $this->setup = self::init(new Setup());
     }

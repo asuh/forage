@@ -25,12 +25,15 @@ class Setup
          * The following requires the Roots Soil plugin
          * https://github.com/roots/soil
          */
-        add_theme_support('soil', [
-          'clean-up', // Cleaner WordPress markup
-          'nav-walker', // Clean up nav menu markup
-          'nice-search', // Redirect /?s=query to /search/query
-          'relative-urls', // Convert absolute URLs to relative URLs
-        ]);
+        add_theme_support(
+            'soil',
+            [
+                'clean-up', // Cleaner WordPress markup.
+                'nav-walker', // Clean up nav menu markup.
+                'nice-search', // Redirect /?s=query to /search/query.
+                'relative-urls', // Convert absolute URLs to relative URLs.
+            ]
+        );
 
         /**
          * HTML5 support
@@ -61,14 +64,18 @@ class Setup
          * Remove the largest WP image sizes
          * They often cause more issues than fix
          */
-        // remove_image_size( '1536x1536' );
-        // remove_image_size( '2048x2048' );
+        /**
+         * remove_image_size( '1536x1536' );
+         * remove_image_size( '2048x2048' );
+         */
 
         /**
          * Custom image sizes
          */
-        // add_image_size( '424x424', 424, 424, true );
-        // add_image_size( '1920', 1920, 9999 );
+        /**
+         * add_image_size( '424x424', 424, 424, true );
+         * add_image_size( '1920', 1920, 9999 );
+         */
     }
 
     /**
@@ -81,8 +88,8 @@ class Setup
     {
         register_nav_menus(
             [
-                'primary_navigation' => __( 'Primary Navigation' ),
-                // 'secondary_navigation' => __( 'Secondary Navigation' )
+                'primary_navigation' => __('Primary Navigation'),
+                /** 'secondary_navigation' => __('Secondary Navigation') */
             ]
         );
     }
@@ -142,9 +149,9 @@ class Setup
             if ('venue' === get_post_type()) {
                 $classes[] = 'h-card';
             } elseif ('page' !== get_post_type()) {
-                // Adds a class for microformats v2
+                // Adds a class for microformats v2.
                 $classes[] = 'h-entry';
-                // add hentry to the same tag as h-entry
+                // add hentry to the same tag as h-entry.
                 $classes[] = 'hentry';
             }
         }
@@ -158,16 +165,19 @@ class Setup
     public function addBodyClasses(array $classes)
     {
         /** Add page slug if it doesn't exist */
-        if (is_single() || is_page() && !is_front_page()) {
-            if (!in_array(basename(get_permalink()), $classes)) {
+        if ((is_single() || is_page()) && ! is_front_page()) {
+            if (! in_array(basename(get_permalink()), $classes)) {
                 $classes[] = basename(get_permalink());
             }
         }
 
         /** Clean up class names for custom templates */
-        $classes = array_map(function ($class) {
-            return preg_replace(['/-blade(-php)?$/', '/^page-template-views/'], '', $class);
-        }, $classes);
+        $classes = array_map(
+            function ($classname) {
+                return preg_replace(['/-blade(-php)?$/', '/^page-template-views/'], '', $classname);
+            },
+            $classes
+        );
 
         return array_filter($classes);
     }
@@ -176,11 +186,11 @@ class Setup
      * Add SVG to allowed file uploads
      * @add upload_mimes
      */
-    public function add_file_types_to_uploads($mime_types)
+    public function addFileTypesToUploads($mimeTypes)
     {
-        $mime_types['svg'] = 'image/svg+xml';
+        $mimeTypes['svg'] = 'image/svg+xml';
 
-        return $mime_types;
+        return $mimeTypes;
     }
 
     /**
