@@ -4,30 +4,30 @@ if (post_password_required()) {
 }
 ?>
 
-<? if (get_comments_number() != '0') { ?>
-<h2 class="comments-title">
-    Responses
-</h2>
-
+<? if (comments_open()) { ?>
 <section id="comments" class="comments">
-    <? if (comments_open()) { ?>
+    <h2 class="comments-title">
+        Responses
+    </h2>
+
     <div class="button">
         <a href="#respond">Write a new comment below</a>
     </div>
-    <? } ?>
 
+    <? if (get_comments_number() != '0') { ?>
     <ol class="comment-list">
         <?
         wp_list_comments(
-          [
+        [
             'style' => 'ol',
             'short_ping' => true,
             'avatar_size' => 64,
             'walker' => new FM\Comments\Comments()
-          ]
+        ]
         );
-      ?>
+    ?>
     </ol><!-- .comment-list -->
+    <? } ?>
 
     <? if (get_comment_pages_count() > 1 && get_option('page_comments')) { ?>
     <nav aria-label="Comment">
