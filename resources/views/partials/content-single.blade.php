@@ -32,3 +32,7 @@
 
 {!! get_the_post_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
 {!! comments_template('/views/partials/comments.blade.php') !!}
+
+@section('sidebar')
+  @include('partials.sidebar')
+@endsection
