@@ -61,6 +61,13 @@ class Setup
         add_theme_support('responsive-embeds');
 
         /**
+         * Enable selective refresh for widgets in customizer.
+         *
+         * @link https://developer.wordpress.org/reference/functions/add_theme_support/
+         */
+        add_theme_support('customize-selective-refresh-widgets');
+
+        /**
          * Remove the largest WP image sizes
          * They often cause more issues than fix
          */
