@@ -10,7 +10,7 @@ if (post_password_required()) {
         Responses
     </h2>
 
-    <div class="button">
+    <div class="respond-link">
         <a href="#respond">Write a new comment below</a>
     </div>
 
