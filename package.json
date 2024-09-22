@@ -12,12 +12,12 @@
     "format": "biome check --write ./resources; stylelint **/*.{css,scss} --fix; composer format;"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
-    "glob": "^10.4.2",
-    "stylelint": "^16.6.1",
-    "stylelint-config-clean-order": "^6.0.0",
+    "@biomejs/biome": "^1.9.2",
+    "glob": "^11.0.0",
+    "stylelint": "^16.9.0",
+    "stylelint-config-clean-order": "^6.1.0",
     "stylelint-order": "^6.0.4",
-    "vite": "^5.3.2"
+    "vite": "^5.4.7"
   },
   "licenses": [
     {
