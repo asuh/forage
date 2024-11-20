@@ -13,6 +13,7 @@ export default defineConfig({
     assetsInlineLimit: 0,
     outDir: `dist`,
     emptyOutDir: true,
+    // cssMinify: 'lightningcss',
     cssTarget: 'chrome125', // Chrome 125 is arbitrary, just picking a modern browser
     rollupOptions: {
       input: ['resources/scripts/scripts.js', 'resources/styles/styles.css', 'resources/scripts/blocks.js'],
@@ -42,5 +43,6 @@ export default defineConfig({
   ],
   css: {
     devSourcemap: true
-  }
+    // transformer: 'lightningcss',
+   }
 });

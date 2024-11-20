@@ -93,6 +93,16 @@ $ composer install
 * `yarn build` — Compile and optimize the files in your assets directory
 * `yarn dev` — Compile assets when file changes are made using Vite's hot module reload
 
+### Lightning CSS (optional)
+
+Lightning CSS is a fast CSS parser that can be used as a great tool to manage the project's CSS. The primary benefit is in its speed and transpiling over PostCSS/ESBuild.
+
+To enable Lightning CSS, run `yarn add --dev lightningcss` to add Lightning CSS as a new package referenced in `devDependencies` in `package.json`.
+
+In `vite.config.js`, uncomment the two lines containing references to Lightning CSS and it'll be active by default.
+
+For more info on whether or not to add this package, you can check [Vite's official documentation for Lightning CSS](https://vite.dev/guide/features.html#lightning-css).
+
 ## IndieWeb
 
 This theme has many pieces that integrate with the IndieWeb ecosystem out of the box with provided [IndieWeb WordPress plugins](https://indieweb.org/WordPress/Plugins). Specifically, I recommend the following:
