@@ -9,7 +9,7 @@ class Config
     public function __construct()
     {
         $this->config = [
-            'version' => wp_get_environment_type() === 'development' || 'local' ? time() : FM_VERSION,
+            'version' => isLocalEnvironment() ? time() : FM_VERSION,
             'env' => [
                 'type' => wp_get_environment_type(),
                 'mode' => false === strpos(FM_PATH, ABSPATH . 'wp-content/plugins') ? 'theme' : 'plugin',
@@ -18,7 +18,7 @@ class Config
                 'uri' => FM_HMR_HOST,
                 'client' => FM_HMR_URI . '/@vite/client',
                 'sources' => FM_HMR_URI . '/resources',
-                'active' => wp_get_environment_type() === 'development' || 'local' && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
+                'active' => isLocalEnvironment() && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
             ],
             'manifest' => [
                 'path' => FM_ASSETS_PATH . '/manifest.json',
@@ -58,5 +58,19 @@ class Config
     public function isPlugin(): bool
     {
         return 'plugin' === $this->get('env.mode');
+    }
+
+    /**
+     * Determines if the current environment is set to 'local' or 'development'.
+     *
+     * Checks the WP_ENVIRONMENT_TYPE constant and compares it to the current
+     * environment type to identify if the environment is considered local.
+     *
+     * @return bool True if the environment is 'local' or 'development', false otherwise.
+     */
+    public function isLocalEnvironment(): bool
+    {
+        $env = wp_get_environment_type();
+        return defined('WP_ENVIRONMENT_TYPE') && in_array($env, ['local', 'development'], true);
     }
 }
