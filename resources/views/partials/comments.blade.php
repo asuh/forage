@@ -1,10 +1,8 @@
-<?
-if (post_password_required()) {
-  return;
-}
-?>
+@if(isset($post) && $post->password_required)
+    @return
+@endif
 
-<? if (comments_open()) { ?>
+@if(isset($comments_open) && $comments_open)
 <section id="comments" class="comments">
     <h2 class="comments-title">
         Responses
@@ -14,34 +12,34 @@ if (post_password_required()) {
         <a href="#respond">Write a new comment below</a>
     </div>
 
-    <? if (get_comments_number() != '0') { ?>
+    @if(have_comments())
     <ol class="comment-list">
-        <?
-        wp_list_comments(
-        [
+        {!! wp_list_comments([
             'style' => 'ol',
             'short_ping' => true,
             'avatar_size' => 64,
             'walker' => new FM\Comments\Comments()
-        ]
-        );
-    ?>
+        ]) !!}
     </ol><!-- .comment-list -->
-    <? } ?>
+    @endif
 
-    <? if (get_comment_pages_count() > 1 && get_option('page_comments')) { ?>
+    @if(get_comment_pages_count() > 1 && get_option('page_comments'))
     <nav aria-label="Comment">
         <ul class="pager">
-            <? if (get_previous_comments_link()) { ?>
-            <li class="previous"><? previous_comments_link(__('&larr; Older comments')) ?></li>
-            <? } ?>
-            <? if (get_next_comments_link()) { ?>
-            <li class="next"><? next_comments_link(__('Newer comments &rarr;')) ?></li>
-            <? } ?>
+            @if(isset($previous_page_url))
+            <li class="previous">
+                <a href="{{ $previous_page_url }}">&larr; Older comments</a>
+            </li>
+            @endif
+            @if(isset($next_page_url))
+            <li class="next">
+                <a href="{{ $next_page_url }}">Newer comments &rarr;</a>
+            </li>
+            @endif
         </ul>
     </nav>
-    <? } ?>
+    @endif
 
-    <? comment_form() ?>
+    {!! comment_form() !!}
 </section>
-<? } ?>
+@endif
