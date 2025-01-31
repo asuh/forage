@@ -44,5 +44,8 @@ export default defineConfig({
   css: {
     devSourcemap: true
     // transformer: 'lightningcss',
-   }
+  },
+  server: {
+    cors: true
+  }
 });
