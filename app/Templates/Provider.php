@@ -70,7 +70,7 @@ class Provider
             ]);
 
             // Return a blank file to prevent WordPress from rendering the default template
-            return FM_PATH . '/resources/views/index.php';
+            return FM_PATH . '/resources/index.php';
         }
 
         // If the Blade template doesn't exist, fall back to the default behavior
