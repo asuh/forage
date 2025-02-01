@@ -4,32 +4,37 @@ namespace FM\Comments;
 
 class Comments extends \Walker_Comment
 {
-    // Wrapper for child comments list, starts the list before the elements are added.
+    /**
+     * Start the list of child comments.
+     *
+     * @param string    $output  Used to append additional content.
+     * @param int       $depth   Optional. Depth of the current comment. Default 0.
+     * @param array     $args    Optional. Uses 'style' argument for type of HTML list. Default empty array.
+     */
     public function start_lvl(&$output, $depth = 0, $args = [])
-    { ?>
-
-        <ol class="children comments-list">
-
-        <?php
+    {
+        ?><ol class="children comments-list"><?php
     }
 
-    // Closing wrapper for child comments list.
+    /**
+     * End the list of child comments.
+     *
+     * @param string    $output  Used to append additional content.
+     * @param int       $depth   Optional. Depth of the current comment. Default 0.
+     * @param array     $args    Optional. Uses 'style' argument for type of HTML list. Default empty array.
+     */
     public function end_lvl(&$output, $depth = 0, $args = [])
-    { ?>
-
-        </ol><!-- .children -->
-
-        <?php
+    {
+        ?></ol><!-- .children --><?php
     }
 
     /**
      * Outputs a comment in the HTML5 format.
      *
-     * @see wp_list_comments()
-     *
      * @param WP_Comment $comment Comment to display.
      * @param int        $depth   Depth of the current comment.
      * @param array      $args    An array of arguments.
+     * @param int        $id      Optional. ID of the comment.
      */
     public function start_el(&$output, $comment, $depth = 0, $args = [], $id = 0)
     {
@@ -37,47 +42,68 @@ class Comments extends \Walker_Comment
         $GLOBALS['comment_depth'] = $depth;
         $GLOBALS['comment'] = $comment;
 
-        if ('article' === $args['style']) {
-            $tag = 'article';
-            $addBelow = 'comment';
-        } else {
-            $tag = 'article';
-            $addBelow = 'comment';
-        }
-
+        // Set up variables for WordPress functions
+        $addBelow = 'comment';
+        $commentClass = comment_class(empty($args['has_children']) ? '' : 'parent', null, null, false);
+        $commentId = get_comment_ID();
+        $avatar = get_avatar($comment, 65, '', 'Author\'s gravatar');
+        $authorUrl = get_comment_author_url();
+        $author = get_comment_author();
+        $commentDate = get_comment_date('F jS Y');
+        $isoDate = get_comment_date('Y-m-d');
+        $commentTime = get_comment_time('H:iP');
+        $editLink = get_edit_comment_link();
+        $commentText = get_comment_text();
+        
         ob_start();
         ?>
-        <li <?php comment_class(empty($args['has_children']) ? '' : 'parent'); ?> id="comment-<?php comment_ID(); ?>" itemprop="comment" itemscope itemtype="http://schema.org/Comment">
+        <li <?php echo $commentClass; ?> 
+            id="comment-<?php echo $commentId; ?>" 
+            itemprop="comment" 
+            itemscope 
+            itemtype="http://schema.org/Comment">
             <article class="comment-body">
                 <footer class="comment-meta post-meta" role="complementary">
                     <h2 class="comment-author">
-                        <figure class="gravatar"><?php echo get_avatar($comment, 65, '', 'Author\'s gravatar'); ?></figure>
-                        <a class="comment-author-link" href="<?php comment_author_url(); ?>" itemprop="author"><?php comment_author(); ?></a>
+                        <figure class="gravatar">
+                            <?php echo $avatar; ?>
+                        </figure>
+                        <a class="comment-author-link" 
+                           href="<?php echo esc_url($authorUrl); ?>" 
+                           itemprop="author">
+                            <?php echo esc_html($author); ?>
+                        </a>
                     </h2>
-                    <a href="#comment-<?php comment_ID(); ?>">#</a> <time class="comment-meta-item" datetime="<?php comment_date('Y-m-d'); ?>T<?php comment_time('H:iP'); ?>" itemprop="datePublished"><?php comment_date('F jS Y'); ?></time>
-                    <?php edit_comment_link('<p class="comment-meta-item">Edit this comment</p>', '', ''); ?>
+
+                    <a href="#comment-<?php echo $commentId; ?>">#</a>
+                    
+                    <time class="comment-meta-item" 
+                          datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" 
+                          itemprop="datePublished">
+                        <?php echo $commentDate; ?>
+                    </time>
+
+                    <?php if ($editLink): ?>
+                        <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit this comment</a>
+                    <?php endif; ?>
+
                     <?php if ($comment->comment_approved == '0') : ?>
-                    <p class="comment-meta-item">Your comment is awaiting moderation.</p>
+                        <p class="comment-meta-item">Your comment is awaiting moderation.</p>
                     <?php endif; ?>
                 </footer>
+
                 <div class="comment-content post-content" itemprop="text">
-                    <?php comment_text(); ?>
+                    <?php echo $commentText; ?>
                     <?php
-                        comment_reply_link(
-                            array_merge(
-                                $args,
-                                [
-                                    'add_below' => $addBelow,
-                                    'depth' => $depth,
-                                    'max_depth' => $args['max_depth'],
-                                ]
-                            )
-                        );
+                        comment_reply_link([
+                            'add_below' => $addBelow,
+                            'depth' => $depth,
+                            'max_depth' => $args['max_depth'] ?? 5,
+                        ]);
                     ?>
                 </div>
             </article>
-        </li>
-        <?php
+        </li><?php
         $output .= ob_get_clean();
     }
 }
