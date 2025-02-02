@@ -38,7 +38,7 @@ class Setup
         /**
          * HTML5 support
          */
-        add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form']);
+        add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form', 'style', 'script']);
 
         /**
          * Remove Global Styles rendered for Gutenberg blocks

@@ -7,11 +7,11 @@ This theme combines two starter themes: FootMATE + Sage. [I go into more detail 
 Sage is a WordPress starter theme with a modern development workflow.
 
 ## [FootMATE](https://github.com/przemekhernik/footmate.pro/tree/develop)
-FootMATE is a modern WordPress starter theme
+FootMATE is a WordPress theme used as [a demo for the author's course](https://pragmate.dev/wordpress/how-to-build-solid-wordpress-applications/) built to teach modern WordPress development.
 
 ## Features
 
-* [Blade](https://laravel.com/docs/10.x/blade) as a templating engine
+* [Blade](https://laravel.com/docs/master/blade) as a templating engine
 * [Vite](https://vitejs.dev/) for compiling assets, concatenating, and minifying files
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
@@ -145,9 +145,9 @@ With anything mentioned above, if you add additional dependencies to `package.js
 
 ## Background
 
-The Roots Sage project provided an excellent philosophy and approaches for a progressively developed WordPress theme, but after version 9, Sage had too many interconnected pieces, new dependencies, and legacy to keep up with. Additionally, having focused on so many other  returning to an old version of Sage left much to be desired, as well as plenty of broken services or packages.
+The Roots Sage project provided an excellent philosophy and approaches for a progressively developed WordPress theme, but after version 9, Sage had too many interconnected pieces, new dependencies and abstractions, and increasingly difficult to keep up with. Additionally, having focused on so many other projects and returning to an old version of this theme, Sage left much to be desired, as well as plenty of broken services or packages.
 
-I found FootMATE in spring of 2024 looking for an alternative. Strangely, it follows enough of a paradigm similar to Sage that it feels like a younger cousin. Also, the author decided to integrate Vite instead of Webpack, and that's a huge win for productivity and DX.
+I found FootMATE in spring of 2024 looking for an alternative to Sage. It purposely follows enough of a paradigm similar to Sage that it feels like a younger cousin. The author also decided to integrate Vite, a direction that Sage has taken in 2025, and that's a win for productivity and DX.
 
 The combination of the two themes satisfies my desire for good file architecture and modern tooling without much bloat or dependencies. It just works.
 
