@@ -17,6 +17,7 @@ class Provider
     {
         add_action('after_setup_theme', fn() => $this->init());
         add_filter('comments_template', [$this, 'filterCommentsTemplate']);
+        add_filter('get_search_form', [$this, 'filterSearchForm']);
     }
 
     public function render(string $template, array $data = []): void
@@ -75,5 +76,21 @@ class Provider
 
         // If the Blade template doesn't exist, fall back to the default behavior
         return $file;
+    }
+
+
+    public function filterSearchForm($view)
+    {
+        // Path to the Blade search form template
+        $bladeTemplate = 'forms.search';
+
+        // Check if the Blade template exists
+        if ($this->templateExists($bladeTemplate)) {
+            // Generate and return the rendered search form
+            return $this->generate($bladeTemplate, []);
+        }
+
+        // If the Blade template doesn't exist, fall back to the default behavior
+        return $view;
     }
 }
