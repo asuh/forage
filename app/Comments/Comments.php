@@ -57,29 +57,21 @@ class Comments extends \Walker_Comment
         
         ob_start();
         ?>
-        <li <?php echo $commentClass; ?> 
-            id="comment-<?php echo $commentId; ?>" 
-            itemprop="comment" 
-            itemscope 
-            itemtype="http://schema.org/Comment">
+        <li <?php echo $commentClass; ?> id="comment-<?php echo $commentId; ?>">
             <article class="comment-body">
                 <footer class="comment-meta post-meta" role="complementary">
                     <h2 class="comment-author">
                         <figure class="gravatar">
                             <?php echo $avatar; ?>
                         </figure>
-                        <a class="comment-author-link" 
-                           href="<?php echo esc_url($authorUrl); ?>" 
-                           itemprop="author">
+                        <a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
                             <?php echo esc_html($author); ?>
                         </a>
                     </h2>
 
                     <a href="#comment-<?php echo $commentId; ?>">#</a>
                     
-                    <time class="comment-meta-item" 
-                          datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" 
-                          itemprop="datePublished">
+                    <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>">
                         <?php echo $commentDate; ?>
                     </time>
 
@@ -92,7 +84,7 @@ class Comments extends \Walker_Comment
                     <?php endif; ?>
                 </footer>
 
-                <div class="comment-content post-content" itemprop="text">
+                <div class="comment-content post-content">
                     <?php echo $commentText; ?>
                     <?php
                         comment_reply_link([
