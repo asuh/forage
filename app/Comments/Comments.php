@@ -65,13 +65,12 @@ class Comments extends \Walker_Comment
                         <b class="fn"><a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
                             <?php echo esc_html($author); ?>
                         </a></b>
+                        <a href="#comment-<?php echo $commentId; ?>">
+                            <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate; ?>">
+                                <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
+                            </time>
+                        </a>
                     </div>
-
-                    <a href="#comment-<?php echo $commentId; ?>">#</a>
-                    
-                    <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>">
-                        <?php echo $commentDate; ?>
-                    </time>
 
                     <?php if ($editLink): ?>
                         <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit this comment</a>
@@ -95,5 +94,41 @@ class Comments extends \Walker_Comment
             </article>
         </li><?php
         $output .= ob_get_clean();
+    }
+
+    public function timeAgo($timestamp) {
+        $currentTime = time();
+        $timestampDate = strtotime($timestamp);
+        $timeDiff = $currentTime - $timestampDate;
+        
+        // Define time intervals in seconds
+        $intervals = [
+            'mo'  => 2592000,
+            'd'   => 86400,
+            'h'   => 3600,
+            'm'   => 60
+        ];
+        
+        // If 12 months or more, return formatted date
+        if ($timeDiff >= (31536000)) { // 365 days
+            return date('m/d/Y', $timestampDate);
+        }
+        
+        if ($timeDiff < 60) {
+            return 'now';
+        }
+        
+        foreach ($intervals as $interval => $seconds) {
+            $diff = floor($timeDiff / $seconds);
+            
+            if ($diff >= 1) {
+                // If it's at least a month, calculate total months
+                if ($interval === 'mo') {
+                    $totalMonths = floor($timeDiff / $intervals['mo']);
+                    return $totalMonths . 'mo';
+                }
+                return $diff . $interval;
+            }
+        }
     }
 }
