@@ -13,7 +13,7 @@ class Comments extends \Walker_Comment
      */
     public function start_lvl(&$output, $depth = 0, $args = [])
     {
-        ?><ol class="children comments-list"><?php
+        $output .= '<ol class="children comments-list">';
     }
 
     /**
@@ -25,7 +25,7 @@ class Comments extends \Walker_Comment
      */
     public function end_lvl(&$output, $depth = 0, $args = [])
     {
-        ?></ol><!-- .children --><?php
+        $output .= '</ol><!-- .children -->';
     }
 
     /**
@@ -60,14 +60,12 @@ class Comments extends \Walker_Comment
         <li <?php echo $commentClass; ?> id="comment-<?php echo $commentId; ?>">
             <article class="comment-body">
                 <footer class="comment-meta post-meta" role="complementary">
-                    <h2 class="comment-author">
-                        <figure class="gravatar">
-                            <?php echo $avatar; ?>
-                        </figure>
-                        <a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
+                    <div class="comment-author vcard">
+                        <?php echo $avatar; ?>
+                        <b class="fn"><a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
                             <?php echo esc_html($author); ?>
-                        </a>
-                    </h2>
+                        </a></b>
+                    </div>
 
                     <a href="#comment-<?php echo $commentId; ?>">#</a>
                     
