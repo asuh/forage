@@ -53,7 +53,6 @@ class Comments extends \Walker_Comment
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
-        $commentText = get_comment_text();
         
         ob_start();
         ?>
@@ -82,7 +81,19 @@ class Comments extends \Walker_Comment
                 </footer>
 
                 <div class="comment-content post-content">
-                    <?php echo $commentText; ?>
+                    <?php  
+                        comment_text(
+                            $comment,
+                            array_merge(
+                                $args,
+                                array(
+                                    'add_below' => $addBelow,
+                                    'depth'     => $depth,
+                                    'max_depth' => $args['max_depth'] ?? 5,
+                                )
+                            )
+                        );                    
+                    ?>
                     <?php
                         comment_reply_link([
                             'add_below' => $addBelow,
@@ -103,7 +114,7 @@ class Comments extends \Walker_Comment
         
         // Define time intervals in seconds
         $intervals = [
-            'mo'  => 2592000,
+            'mo'  => 2592000,    // 30 days
             'd'   => 86400,
             'h'   => 3600,
             'm'   => 60
@@ -130,5 +141,5 @@ class Comments extends \Walker_Comment
                 return $diff . $interval;
             }
         }
-    }
+    }  
 }
