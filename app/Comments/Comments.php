@@ -49,7 +49,7 @@ class Comments extends \Walker_Comment
         $avatar = get_avatar($comment, 65, '', 'Author\'s gravatar');
         $authorUrl = get_comment_author_url();
         $author = get_comment_author();
-        $commentDate = get_comment_date('F jS Y');
+        $commentDate = get_comment_date('F jS, Y');
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
@@ -58,14 +58,20 @@ class Comments extends \Walker_Comment
         ?>
         <li <?php echo $commentClass; ?> id="comment-<?php echo $commentId; ?>">
             <article class="comment-body">
-                <footer class="comment-meta post-meta" role="complementary">
+                <footer class="comment-meta meta" role="complementary">
                     <div class="comment-author vcard">
-                        <?php echo $avatar; ?>
-                        <b class="fn"><a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
+                        <b class="fn">
+                        <?php if (!empty($authorUrl)): ?>
+                            <a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
+                                <?php echo esc_html($author); ?>
+                            </a>
+                        <?php else: ?>
                             <?php echo esc_html($author); ?>
-                        </a></b>
-                        <a href="#comment-<?php echo $commentId; ?>">
-                            <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate; ?>">
+                        <?php endif; ?>
+                        </b>
+                        ·
+                        <a class="comment-permalink" href="#comment-<?php echo $commentId; ?>">
+                            <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
                                 <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
                             </time>
                         </a>
@@ -80,7 +86,7 @@ class Comments extends \Walker_Comment
                     <?php endif; ?>
                 </footer>
 
-                <div class="comment-content post-content">
+                <div class="comment-content">
                     <?php  
                         comment_text(
                             $comment,
@@ -101,6 +107,9 @@ class Comments extends \Walker_Comment
                             'max_depth' => $args['max_depth'] ?? 5,
                         ]);
                     ?>
+                </div>
+                <div class="avatar">
+                    <?php echo $avatar; ?>
                 </div>
             </article>
         </li><?php
