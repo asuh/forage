@@ -4,47 +4,25 @@ namespace FM\Comments;
 
 class Comments extends \Walker_Comment
 {
-    /**
-     * Start the list of child comments.
-     *
-     * @param string    $output  Used to append additional content.
-     * @param int       $depth   Optional. Depth of the current comment. Default 0.
-     * @param array     $args    Optional. Uses 'style' argument for type of HTML list. Default empty array.
-     */
-    public function start_lvl(&$output, $depth = 0, $args = [])
-    {
-        $output .= '<ol class="children comments-list">';
-    }
-
-    /**
-     * End the list of child comments.
-     *
-     * @param string    $output  Used to append additional content.
-     * @param int       $depth   Optional. Depth of the current comment. Default 0.
-     * @param array     $args    Optional. Uses 'style' argument for type of HTML list. Default empty array.
-     */
-    public function end_lvl(&$output, $depth = 0, $args = [])
-    {
-        $output .= '</ol><!-- .children -->';
-    }
 
     /**
      * Outputs a comment in the HTML5 format.
      *
+	 * @param string     $output  Used to append additional content. Passed by reference.
      * @param WP_Comment $comment Comment to display.
-     * @param int        $depth   Depth of the current comment.
-     * @param array      $args    An array of arguments.
-     * @param int        $id      Optional. ID of the comment.
+     * @param int        $depth   Optional. Depth of the current comment.
+     * @param array      $args    Optional. An array of arguments.
+     * @param int        $id      Optional. ID of the current comment.
      */
     public function start_el(&$output, $comment, $depth = 0, $args = [], $id = 0)
     {
         $depth++;
         $GLOBALS['comment_depth'] = $depth;
-        $GLOBALS['comment'] = $comment;
+        $GLOBALS['comment']       = $comment;
 
         // Set up variables for WordPress functions
         $addBelow = 'comment';
-        $commentClass = comment_class(empty($args['has_children']) ? '' : 'parent', null, null, false);
+        $commentClass = comment_class($args['has_children'] ? 'parent u-comment h-cite' : 'u-comment h-cite', null, null, false);
         $commentId = get_comment_ID();
         $avatar = get_avatar($comment, 65, '', 'Author\'s gravatar');
         $authorUrl = get_comment_author_url();
@@ -56,13 +34,13 @@ class Comments extends \Walker_Comment
         
         ob_start();
         ?>
-        <li <?php echo $commentClass; ?> id="comment-<?php echo $commentId; ?>">
+        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent u-comment h-cite' : 'u-comment h-cite', $comment); ?>>
             <article class="comment-body">
-                <footer class="comment-meta meta" role="complementary">
+                <footer class="comment-meta meta">
                     <div class="comment-author vcard">
-                        <b class="fn">
+                        <b class="u-author h-card fn">
                         <?php if (!empty($authorUrl)): ?>
-                            <a class="comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
+                            <a class="u-url comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
                                 <?php echo esc_html($author); ?>
                             </a>
                         <?php else: ?>
@@ -71,7 +49,7 @@ class Comments extends \Walker_Comment
                         </b>
                         ·
                         <a class="comment-permalink" href="#comment-<?php echo $commentId; ?>">
-                            <time class="comment-meta-item" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
+                            <time class="comment-meta-item dt-published" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
                                 <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
                             </time>
                         </a>
@@ -86,33 +64,30 @@ class Comments extends \Walker_Comment
                     <?php endif; ?>
                 </footer>
 
-                <div class="comment-content">
+                <div class="comment-content p-content p-name">
                     <?php  
-                        comment_text(
-                            $comment,
+                        comment_text();                    
+                    ?>
+                    <?php
+                        comment_reply_link(
                             array_merge(
                                 $args,
                                 array(
-                                    'add_below' => $addBelow,
+                                    'add_below' => 'div-comment',
                                     'depth'     => $depth,
-                                    'max_depth' => $args['max_depth'] ?? 5,
+                                    'max_depth' => $args['max_depth'],
+                                    'before'    => '<div class="reply">',
+                                    'after'     => '</div>',
                                 )
-                            )
-                        );                    
-                    ?>
-                    <?php
-                        comment_reply_link([
-                            'add_below' => $addBelow,
-                            'depth' => $depth,
-                            'max_depth' => $args['max_depth'] ?? 5,
-                        ]);
+                            )                            
+                        );
                     ?>
                 </div>
                 <div class="avatar">
                     <?php echo $avatar; ?>
                 </div>
-            </article>
-        </li><?php
+            </article><!-- .comment-body -->
+        <?php
         $output .= ob_get_clean();
     }
 
