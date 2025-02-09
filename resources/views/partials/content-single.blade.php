@@ -28,10 +28,11 @@
             ]) !!}
         </footer>
     @endif
+
+    {!! comments_template() !!}
 </article>
 
 {!! get_the_post_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
-{!! comments_template() !!}
 
 @section('sidebar')
   @include('partials.sidebar')

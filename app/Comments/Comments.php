@@ -22,9 +22,8 @@ class Comments extends \Walker_Comment
 
         // Set up variables for WordPress functions
         $addBelow = 'comment';
-        $commentClass = comment_class($args['has_children'] ? 'parent u-comment h-cite' : 'u-comment h-cite', null, null, false);
         $commentId = get_comment_ID();
-        $avatar = get_avatar($comment, 65, '', 'Author\'s gravatar');
+        $avatar = get_avatar($comment, 48, '', 'Author\'s gravatar', array('class' => 'u-photo comment-author'));
         $authorUrl = get_comment_author_url();
         $author = get_comment_author();
         $commentDate = get_comment_date('F jS, Y');
@@ -34,26 +33,26 @@ class Comments extends \Walker_Comment
         
         ob_start();
         ?>
-        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent u-comment h-cite' : 'u-comment h-cite', $comment); ?>>
+        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent u-comment' : 'u-comment', $comment); ?>>
             <article class="comment-body">
-                <footer class="comment-meta meta">
-                    <div class="comment-author vcard">
-                        <b class="u-author h-card fn">
-                        <?php if (!empty($authorUrl)): ?>
-                            <a class="u-url comment-author-link" href="<?php echo esc_url($authorUrl); ?>">
-                                <?php echo esc_html($author); ?>
-                            </a>
-                        <?php else: ?>
-                            <?php echo esc_html($author); ?>
-                        <?php endif; ?>
-                        </b>
-                        ·
-                        <a class="comment-permalink" href="#comment-<?php echo $commentId; ?>">
-                            <time class="comment-meta-item dt-published" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
-                                <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
-                            </time>
-                        </a>
+                <footer class="vcard h-card u-author comment-meta">
+                    <div class="avatar">
+                        <?php echo $avatar; ?>
                     </div>
+                    <?php if (!empty($authorUrl)): ?>
+                        <a class="comment-author u-url p-name" href="<?php echo esc_url($authorUrl); ?>">
+                            <?php echo esc_html($author); ?>
+                        </a>
+                    <?php else: ?>
+                        <span class="comment-author p-name">
+                            <?php echo esc_html($author); ?>
+                        </span>
+                    <?php endif; ?>
+                    <a class="u-url comment-permalink" href="#comment-<?php echo $commentId; ?>">
+                        <time class="comment-meta-item dt-published" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
+                            <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
+                        </time>
+                    </a>
 
                     <?php if ($editLink): ?>
                         <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit this comment</a>
@@ -83,14 +82,18 @@ class Comments extends \Walker_Comment
                         );
                     ?>
                 </div>
-                <div class="avatar">
-                    <?php echo $avatar; ?>
-                </div>
             </article><!-- .comment-body -->
         <?php
         $output .= ob_get_clean();
     }
 
+    /**
+     * Converts date and time to be relative to current time
+     * 
+     * @param string $timestamp
+     * @return string
+     * 
+     */
     public function timeAgo($timestamp) {
         $currentTime = time();
         $timestampDate = strtotime($timestamp);
@@ -98,7 +101,7 @@ class Comments extends \Walker_Comment
         
         // Define time intervals in seconds
         $intervals = [
-            'mo'  => 2592000,    // 30 days
+            'mo'  => 2592000,
             'd'   => 86400,
             'h'   => 3600,
             'm'   => 60
