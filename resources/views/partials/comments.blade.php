@@ -24,7 +24,7 @@
     @endif
 
     @if(get_comment_pages_count() > 1 && get_option('page_comments'))
-    <nav aria-label="Comment">
+    <nav>
         <ul class="pager">
             @if(isset($previous_page_url))
             <li class="previous">
