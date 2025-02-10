@@ -20,5 +20,6 @@
             @includeFirst(['partials.content-' . get_post_type(), 'partials.content'])
         @endif
     @endwhile
+    
+    {!! get_the_posts_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
 @endsection
-{!! get_the_posts_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
