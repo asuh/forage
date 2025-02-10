@@ -3,7 +3,6 @@
 
 body {
   font-family: Montserrat, sans-serif;
-  background: white url('../images/logo.svg') no-repeat center center;
 
   > *:not(#wpadminbar) {
     margin-inline: auto;
