@@ -1,7 +1,7 @@
-<article @php post_class('h-entry') @endphp>
-    @if (has_post_thumbnail())
-        <figure class="full">@php the_post_thumbnail() @endphp</figure>
-    @endif
+<article @php(post_class('h-entry'))>
+    {{-- @if (has_post_thumbnail())
+        <figure class="full">@php(the_post_thumbnail())</figure>
+    @endif --}}
 
     @if (get_the_title())
         <header class="post-header">
@@ -17,22 +17,21 @@
         @php(the_content())
     </div><!-- .main-content -->
 
-    @include('partials/entry-meta')
+    <footer>
+        @include('partials/entry-meta')
 
-    @if (wp_link_pages())
-        <footer>
+        @if (wp_link_pages())
             {!! wp_link_pages([
                 'echo' => 0,
-                'before' => '<nav class="page-nav" aria-label="Page"><p>' . __('Pages:'),
+                'before' => '<nav class="page-nav"><p>' . __('Pages:'),
                 'after' => '</p></nav>',
             ]) !!}
-        </footer>
-    @endif
+        @endif
+    </footer>
 
+    {!! get_the_post_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
     {!! comments_template() !!}
 </article>
-
-{!! get_the_post_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
 
 @section('sidebar')
   @include('partials.sidebar')
