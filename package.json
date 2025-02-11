@@ -1,6 +1,6 @@
 {
   "name": "forage",
-  "version": "1.0.0",
+  "private": true,
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
@@ -8,14 +8,14 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "lint": "biome lint --write ./resources; stylelint **/*.{css,scss}; composer lint;",
-    "format": "biome check --write ./resources; stylelint **/*.{css,scss} --fix; composer format;"
+    "format": "biome check --write ./resources; stylelint **/*.{css,scss} --fix; composer format;",
+    "lint": "biome lint --write ./resources; stylelint **/*.{css,scss}; composer lint;"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "glob": "^11.0.1",
     "stylelint": "^16.14.1",
-    "vite": "^6.0.11"
+    "vite": "^6.1.0"
   },
   "licenses": [
     {
