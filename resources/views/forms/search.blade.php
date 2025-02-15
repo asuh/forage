@@ -1,13 +1,13 @@
 <form role="search" method="get" class="search-form" action="<?php echo home_url('/'); ?>">
   <label class="search-label">
     <span class="visuallyhidden">
-      <?php echo _x('Search for:', 'label') ?>
+      {{ _x('Search for:', 'label') }}
     </span>
 
     <input
       type="search"
       class="search-field"
-      placeholder="{{ _x('Search...', 'placeholder') }}"
+      placeholder="{{ esc_attr_x('Search...', 'placeholder') }}"
       value="{{ get_search_query() }}"
       name="s"
     >
@@ -20,10 +20,10 @@
     </svg>
   </button>
 
-  <button id="search-close" type="button" class="search-close">
-    <span class="visuallyhidden">{{ _x('Close mobile navigation', 'label') }}</span>
-    <svg width="60" height="60" viewBox="0 0 40 40" focusable="false" aria-labelledby="search-close">
-      <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="#8898AA" fill-rule="evenodd"></path>
+  <button id="modal-close" type="button" class="modal-close">
+    <span class="visuallyhidden">{{ _x('Close modal', 'label') }}</span>
+    <svg width="16" height="16" viewBox="0 0 40 40" focusable="false" aria-labelledby="modal-close">
+      <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="currentColor" fill-rule="evenodd"></path>
     </svg>
   </button>
 </form>
