@@ -60,6 +60,8 @@ themes/your-theme-name/   # → Root of your theme
 │   ├── screenshot.png    # → Theme screenshot for WP admin
 │   ├── style.css         # → Theme meta information
 │   └── views/            # → Theme templates
+│       └── components/   # → Component templates
+│       └── forms/        # → Forms templates
 │       └── partials/     # → Partial templates
 └── vendor/               # → Composer packages (never edit)
 ```
