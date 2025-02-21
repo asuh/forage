@@ -11,7 +11,7 @@
 </button>
 
 <dialog id="{{ $id }}" class="dialog" aria-labelledby="{{ $id }}-title">
-    {{ $content }}
+    {!! $content !!}
 
     <button id="dialog-close" type="button" class="dialog-close" onclick="this.closest('dialog').close('close')">
         <span class="visuallyhidden">{{ _x('Close dialog', 'label') }}</span>
