@@ -18,14 +18,13 @@
         </nav>
     @endif
 
-    <header-action>
-        <button id="search-toggle" class="search-toggle" type="button">
-            <span class="visuallyhidden">{{ _x('Toggle modal containing search form', 'label') }}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" focusable="false" aria-labelledby="search-toggle">
-                <path fill="currentColor" d="M509 479L360 330a203 203 0 10-30 30l149 149c4 4 11 4 15 0l15-15c4-4 4-11 0-15zM203 363a160 160 0 110-321 160 160 0 010 321z"></path>
-            </svg>
-        </button>
-    </header-action>
+    {{-- Use this section for actions such as sign in, sign out, and sign up, toggle buttons to open modals, or links that a user needs for quick access. By default, the search form is added here and invoked using a dialog component --}}
+    @section('header-actions')
+        @include('components.dialog', [
+            'content' => get_search_form(false),
+            'id' => 'search-dialog'
+        ])
+    @endsection
 
-    {!! get_search_form(false) !!}
+    @include('components.header-actions')
 </header>
