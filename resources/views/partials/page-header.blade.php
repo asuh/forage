@@ -7,7 +7,7 @@
         <h1 class="page-title p-name">{!! sprintf(
             /* translators: %s is replaced with the search query */
             __('Search Results for %s'),
-            get_search_query()
+            get_search_query(),
         ) !!}</h1>
     </div>
 @elseif (is_404())

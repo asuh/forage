@@ -1,23 +1,19 @@
 <div class="h-card vcard">
     @php
-        $id = get_the_author_meta( 'ID' );
+        $id = get_the_author_meta('ID');
 
-        if (class_exists( 'HCard_User' )) {
-            $id  = get_option( 'iw_default_author', 0 );
+        if (class_exists('HCard_User')) {
+            $id = get_option('iw_default_author', 0);
 
-            if ( is_singular() ) $id = get_the_author_meta( 'ID' );
+            if (is_singular()) {
+                $id = get_the_author_meta('ID');
+            }
         }
     @endphp
     <a class="u-url u-uid" rel="author" href="{{ home_url('/') }}">
-        {!! get_avatar(
-                $id,
-                96,
-                '',
-                '',
-                array('class' => 'u-photo')
-            ) !!}
+        {!! get_avatar($id, 96, '', '', ['class' => 'u-photo']) !!}
         <span class="p-name fn">
-            @if (get_the_author_meta('organization') !== "")
+            @if (get_the_author_meta('organization') !== '')
                 <span class="fn org">{{ get_the_author_meta('organization', $id) }}</span>
             @else
                 <span class="p-given-name">{{ get_the_author_meta('first_name', $id) }}</span>

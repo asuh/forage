@@ -4,7 +4,7 @@
         <p>&copy; <a href="{{ home_url('/') }}" rel="me">{{ get_bloginfo('name', 'display') }}</a></p>
     </div>
     <script>
-        window.onload = function(){
+        window.onload = function() {
             setTimeout(function() {
                 window.performance = window.performance || {};
                 const timing = performance.timing || {};
