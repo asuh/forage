@@ -8,7 +8,16 @@
 
     @if (has_nav_menu('primary_navigation'))
         <nav class="nav-primary">
-            <button class="toggle-button" type="button" aria-expanded="false" aria-controls="nav-primary"><span class="visuallyhidden">Toggle Navigation</span></button>
+            <button class="toggle-button" id="toggle-button" type="button" aria-expanded="false" aria-controls="nav-primary">
+                <span class="visuallyhidden">Toggle Navigation</span>
+                <svg width="16" height="10" viewBox="0 0 16 10" focusable="false" aria-labelledby="toggle-button">
+                    <g fill="currentColor" fill-rule="evenodd">
+                      <rect y="8" width="16" height="2" rx="1"></rect>
+                      <rect y="4" width="16" height="2" rx="1"></rect>
+                      <rect width="16" height="2" rx="1"></rect>
+                    </g>
+                  </svg>
+            </button>
             {!! wp_nav_menu([
                 'theme_location' => 'primary_navigation',
                 'menu_class' => 'nav-list',
