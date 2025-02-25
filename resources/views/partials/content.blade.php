@@ -1,7 +1,7 @@
-<article @php post_class() @endphp>
+<article @php(post_class())>
     @if (has_post_thumbnail())
         <figure class="full">
-            <a class="p-name u-url" href="{{ get_permalink() }}">@php the_post_thumbnail() @endphp</a>
+            <a class="p-name u-url" href="{{ get_permalink() }}">@php(the_post_thumbnail())</a>
         </figure>
     @endif
 
@@ -12,7 +12,7 @@
     </header>
 
     <div class="main-content e-content">
-        @php the_content() @endphp
+        @php(the_content())
     </div><!-- .main-content -->
 
     <div class="entry-meta">

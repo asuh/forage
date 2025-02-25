@@ -1,10 +1,10 @@
 {
   "name": "forage",
   "private": true,
-  "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },
+  "type": "module",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
@@ -15,7 +15,7 @@
     "@biomejs/biome": "^1.9.4",
     "glob": "^11.0.1",
     "stylelint": "^16.14.1",
-    "vite": "^6.1.0"
+    "vite": "^6.2.0"
   },
   "licenses": [
     {

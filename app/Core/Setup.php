@@ -36,9 +36,19 @@ class Setup
         );
 
         /**
-         * HTML5 support
+         * Enable HTML5 markup support.
+         *
+         * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
          */
-        add_theme_support('html5', ['caption', 'comment-form', 'comment-list', 'gallery', 'search-form', 'style', 'script']);
+        add_theme_support('html5', [
+            'caption',
+            'comment-form',
+            'comment-list',
+            'gallery',
+            'search-form',
+            'script',
+            'style',
+        ]);
 
         /**
          * Remove Global Styles rendered for Gutenberg blocks
