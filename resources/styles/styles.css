@@ -1,5 +1,7 @@
 @import "common/global.css";
 @import "common/fonts.css";
+@import "partials/buttons.css";
+@import "partials/nav.css";
 
 body {
   font-family: Montserrat, sans-serif;
@@ -8,12 +10,17 @@ body {
     margin-inline: auto;
     max-width: 82ch;
   }
-}
+} 
 
 .banner {
   align-items: center;
   display: flex;
-  padding: 1rem 2rem;
+  gap: 1rem;
+  justify-content: space-between;
+
+  *:last-child {
+    flex-grow: 1;
+  }
 
   h3 {
     margin: 0;
@@ -27,6 +34,8 @@ body {
   }
 }
 
-.main {
-  padding-inline: 20px;
+header-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
 }

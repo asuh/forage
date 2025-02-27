@@ -1,0 +1,5 @@
+.toggle-button {
+  @media (width >= 48em) {
+    display: none;
+  }
+}
