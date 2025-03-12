@@ -7,7 +7,7 @@ use FM\Comments\Comments;
 use FM\Core\Config;
 use FM\Core\Hooks;
 use FM\Core\Widgets;
-use FM\Core\Setup;
+use FM\Setup;
 use FM\Integrations\Integrations;
 use FM\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
@@ -24,11 +24,11 @@ class App
 
     private Integrations $integrations;
 
+    private Setup $setup;
+
     private Templates $templates;
 
     private Widgets $widgets;
-
-    private Setup $setup;
 
     private static ?App $instance = null;
 
@@ -39,9 +39,9 @@ class App
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
         $this->integrations = self::init(new Integrations());
+        $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
         $this->widgets = self::init(new Widgets());
-        $this->setup = self::init(new Setup());
     }
 
     public function assets(): Assets
@@ -69,6 +69,11 @@ class App
         return $this->integrations;
     }
 
+    public function setup(): Setup
+    {
+        return $this->setup;
+    }
+
     public function templates(): Templates
     {
         return $this->templates;
@@ -77,11 +82,6 @@ class App
     public function widgets(): Widgets
     {
         return $this->widgets;
-    }
-
-    public function setup(): Setup
-    {
-        return $this->setup;
     }
 
     private function __clone()

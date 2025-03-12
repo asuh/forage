@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Core;
+namespace FM;
 
 class Setup
 {
@@ -99,9 +99,9 @@ class Setup
      * Register navigation menus
      * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
      *
-     * @action init
+     * @action after_setup_theme
      */
-    public function addNavMenus()
+    public function addNavMenus(): void
     {
         register_nav_menus(
             [
