@@ -4,7 +4,6 @@ namespace FM\Comments;
 
 class Comments extends \Walker_Comment
 {
-
     /**
      * Outputs a comment in the HTML5 format.
      *
@@ -16,11 +15,11 @@ class Comments extends \Walker_Comment
      */
     public function start_el(&$output, $comment, $depth = 0, $args = [], $id = 0)
     {
-        $depth++;
+        ++$depth;
         $GLOBALS['comment_depth'] = $depth;
         $GLOBALS['comment']       = $comment;
 
-        // Set up variables for WordPress functions
+        /** Set up variables for WordPress functions */
         $addBelow = 'comment';
         $commentId = get_comment_ID();
         $avatar = get_avatar($comment, 48, '', 'Author\'s gravatar', array('class' => 'u-photo comment-author'));
@@ -30,7 +29,7 @@ class Comments extends \Walker_Comment
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
-        
+
         ob_start();
         ?>
         <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent u-comment' : 'u-comment', $comment); ?>>
@@ -64,8 +63,8 @@ class Comments extends \Walker_Comment
                 </footer>
 
                 <div class="comment-content p-content p-name">
-                    <?php  
-                        comment_text();                    
+                    <?php
+                        comment_text();
                     ?>
                     <?php
                         comment_reply_link(
@@ -78,7 +77,7 @@ class Comments extends \Walker_Comment
                                     'before'    => '<div class="reply">',
                                     'after'     => '</div>',
                                 )
-                            )                            
+                            )
                         );
                     ?>
                 </div>
@@ -89,16 +88,16 @@ class Comments extends \Walker_Comment
 
     /**
      * Converts date and time to be relative to current time
-     * 
+     *
      * @param string $timestamp
      * @return string
-     * 
+     *
      */
     public function timeAgo($timestamp) {
         $currentTime = time();
         $timestampDate = strtotime($timestamp);
         $timeDiff = $currentTime - $timestampDate;
-        
+
         // Define time intervals in seconds
         $intervals = [
             'mo'  => 2592000,
@@ -106,19 +105,19 @@ class Comments extends \Walker_Comment
             'h'   => 3600,
             'm'   => 60
         ];
-        
+
         // If 12 months or more, return formatted date
         if ($timeDiff >= (31536000)) { // 365 days
             return date('m/d/Y', $timestampDate);
         }
-        
+
         if ($timeDiff < 60) {
             return 'now';
         }
-        
+
         foreach ($intervals as $interval => $seconds) {
             $diff = floor($timeDiff / $seconds);
-            
+
             if ($diff >= 1) {
                 // If it's at least a month, calculate total months
                 if ($interval === 'mo') {
@@ -128,5 +127,5 @@ class Comments extends \Walker_Comment
                 return $diff . $interval;
             }
         }
-    }  
+    }
 }

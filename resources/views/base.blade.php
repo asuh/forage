@@ -10,8 +10,8 @@
         <a class="visuallyhidden" href="#main">
             {{ __('Skip to content') }}
         </a>
-        {!! do_action('wp_body_open') !!}
-        {!! do_action('get_header') !!}
+        @php(do_action('wp_body_open'))
+        @php(do_action('get_header'))
 
         @include('partials.header')
         @include('partials/h-card')

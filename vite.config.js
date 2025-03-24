@@ -7,16 +7,21 @@ const BASE = __dirname.replace(ROOT, '');
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? `${BASE}/dist/` : BASE,
+
   build: {
     manifest: 'manifest.json',
     assetsDir: '.',
     assetsInlineLimit: 0,
-    outDir: `dist`,
+    outDir: 'dist',
     emptyOutDir: true,
     // cssMinify: 'lightningcss',
     cssTarget: 'chrome125', // Chrome 125 is arbitrary, just picking a modern browser
     rollupOptions: {
-      input: ['resources/scripts/scripts.js', 'resources/styles/styles.css', 'resources/scripts/blocks.js'],
+      input: [
+        'resources/scripts/scripts.js',
+        'resources/styles/styles.css',
+        'resources/scripts/blocks.js'
+      ],
       output: {
         entryFileNames: '[hash].js',
         assetFileNames: '[hash].[ext]',
@@ -28,7 +33,7 @@ export default defineConfig({
     copy({
       targets: [
         {
-          src: `resources/images/**/*.{png,jpg,jpeg,svg,webp,avif}`,
+          src: 'resources/images/**/*.{png,jpg,jpeg,svg,webp,avif}',
         },
       ],
     }),
