@@ -6,9 +6,10 @@ class Setup
 {
     /**
      * Loads default theme supports
+     *
      * @action after_setup_theme
      */
-    public function addThemeSupport()
+    public function addThemeSupport(): void
     {
         /**
          * Enable post thumbnails
@@ -37,7 +38,6 @@ class Setup
 
         /**
          * Enable HTML5 markup support.
-         *
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
          */
         add_theme_support('html5', [
@@ -58,21 +58,18 @@ class Setup
 
         /**
          * Enable plugins to manage the document title.
-         *
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
          */
         add_theme_support('title-tag');
 
         /**
          * Enable responsive embed support.
-         *
          * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
          */
         add_theme_support('responsive-embeds');
 
         /**
          * Enable selective refresh for widgets in customizer.
-         *
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/
          */
         add_theme_support('customize-selective-refresh-widgets');
@@ -113,9 +110,10 @@ class Setup
 
     /**
      * Wraps the_excerpt in p-summary
+     *
      * @filter the_excerpt
      */
-    public function addMF2Wrapper(string $content)
+    public function addMF2Wrapper(string $content): string
     {
         if (is_feed()) {
             return $content;
@@ -132,9 +130,10 @@ class Setup
 
     /**
      * Code that improves theme support for various plugins
+     *
      * @action init
      */
-    public function initIndieWeb()
+    public function initIndieWeb(): void
     {
         /**
          * Removes automated Syndication Links code
@@ -159,7 +158,7 @@ class Setup
      * @param array $classes Classes for the body element.
      * @return array
      */
-    public function postClasses($classes)
+    public function postClasses($classes): array
     {
         $classes = array_diff($classes, [ 'hentry' ]);
         if (! is_singular()) {
@@ -177,9 +176,10 @@ class Setup
 
     /**
      * Add <body> classes
+     *
      * @filter body_class
      */
-    public function addBodyClasses(array $classes)
+    public function addBodyClasses(array $classes): array
     {
         /** Add page slug if it doesn't exist */
         if ((is_single() || is_page()) && ! is_front_page()) {
@@ -201,9 +201,10 @@ class Setup
 
     /**
      * Add SVG to allowed file uploads
+     *
      * @add upload_mimes
      */
-    public function addFileTypesToUploads($mimeTypes)
+    public function addFileTypesToUploads($mimeTypes): array
     {
         $mimeTypes['svg'] = 'image/svg+xml';
 
