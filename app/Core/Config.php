@@ -35,6 +35,11 @@ class Config
         ];
     }
 
+    public function prettify(): array
+    {
+        return require __DIR__ . '/../config/prettify.php';
+    }
+
     public function get(string $key): mixed
     {
         $value = $this->config;
