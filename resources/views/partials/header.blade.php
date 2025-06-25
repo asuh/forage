@@ -1,4 +1,4 @@
-<header class="banner">
+<header class="banner u-container">
     @if (is_front_page() && is_home())
         <h1 class="site-title"><a class="brand u-url" href="{{ home_url('/') }}">{{ get_bloginfo('name', 'display') }}</a>
         </h1>

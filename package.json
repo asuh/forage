@@ -2,7 +2,7 @@
   "name": "forage",
   "private": true,
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "type": "module",
   "scripts": {
@@ -12,10 +12,10 @@
     "lint": "biome lint --write ./resources; stylelint **/*.{css,scss}; composer lint;"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "glob": "^11.0.2",
-    "stylelint": "^16.19.1",
-    "vite": "^6.3.5"
+    "@biomejs/biome": "^2.0.5",
+    "glob": "^11.0.3",
+    "stylelint": "^16.21.0",
+    "vite": "^7.0.0"
   },
   "licenses": [
     {

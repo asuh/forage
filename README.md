@@ -12,10 +12,10 @@ Sage is a WordPress starter theme with a modern development workflow.
 ## Features
 
 * [Blade](https://laravel.com/docs/master/blade) as a templating engine
-* [Vite](https://vitejs.dev/) for compiling assets, concatenating, and minifying files
+* [Vite](https://vite.dev/) for compiling assets, concatenating, and minifying files
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
-* [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
+* [DocHooks](https://pragmate.dev/wordpress/dochooks/) provide new functionality of class method DocBlock as hooks into WordPress API
 * [IndieWeb](https://indieweb.org/) support with baked in [Microformats2](https://microformats.org/wiki/microformats2) and [structured data](https://schema.org/)
 
 > [!NOTE]
@@ -27,10 +27,10 @@ Sage is a WordPress starter theme with a modern development workflow.
 
 Make sure all dependencies have been installed before moving on:
 
-* [WordPress](https://wordpress.org/) >= 6.5.x
-* [PHP](https://www.php.net/manual/en/install.php) >= 8.2.x
+* [WordPress](https://wordpress.org/) >= 6.8.x
+* [PHP](https://www.php.net/manual/en/install.php) >= 8.3.x
 * [Composer](https://getcomposer.org/download/)
-* [Node.js](http://nodejs.org/) >= 20.0.0
+* [Node.js](http://nodejs.org/) >= 24.0.0
 * [Yarn](https://yarnpkg.com/getting-started/install)
 
 ## Theme structure
@@ -92,8 +92,8 @@ $ composer install
 
 ### Build commands
 
-* `yarn build` — Compile and optimize the files in your assets directory
-* `yarn dev` — Compile assets when file changes are made using Vite's hot module reload
+* `yarn run build` — Compile and optimize the files in your assets directory
+* `yarn run dev` — Compile assets when file changes are made using Vite's hot module reload
 
 ### Lightning CSS (optional)
 
@@ -143,7 +143,7 @@ yarn add -D sass
 
 With anything mentioned above, if you add additional dependencies to `package.json`, make sure to update `vite.config.js` to include the necessary watch files and syntax.
 
-[Vite's documentation](https://vitejs.dev/guide/features.html) provides a lot of great info to extend the Vite config file.
+[Vite's documentation](https://vite.dev/guide/features.html) provides a lot of great info to extend the Vite config file.
 
 ## Background
 
