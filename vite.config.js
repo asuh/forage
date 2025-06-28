@@ -51,6 +51,7 @@ export default defineConfig({
     // transformer: 'lightningcss',
   },
   server: {
-    cors: true
+    cors: true,
+    https: true
   }
 });
