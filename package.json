@@ -12,10 +12,10 @@
     "lint": "biome lint --write ./resources; stylelint **/*.{css,scss}; composer lint;"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.5",
+    "@biomejs/biome": "^2.0.6",
     "glob": "^11.0.3",
-    "stylelint": "^16.21.0",
-    "vite": "^7.0.0"
+    "stylelint": "^16.21.1",
+    "vite": "^7.0.1"
   },
   "licenses": [
     {
