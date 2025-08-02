@@ -13,17 +13,21 @@
 <dialog id="{{ $id }}" class="dialog" aria-labelledby="{{ $id }}-title">
     {!! $content !!}
 
-    <button id="dialog-close" type="button" class="dialog-close" onclick="this.closest('dialog').close('close')">
-        <span class="visuallyhidden">{{ _x('Close dialog', 'label') }}</span>
-        <svg width="16" height="16" viewBox="0 0 40 40" focusable="false" aria-hidden="true" aria-labelledby="dialog-close">
-            <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="currentColor" fill-rule="evenodd"></path>
-        </svg>
-    </button>
+    <form action="#">
+        <button id="dialog-close" type="submit" class="dialog-close" formmethod="dialog">
+            <span class="visuallyhidden">{{ _x('Close dialog', 'label') }}</span>
+            <svg width="16" height="16" viewBox="0 0 40 40" focusable="false" aria-hidden="true" aria-labelledby="dialog-close">
+                <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="currentColor" fill-rule="evenodd"></path>
+            </svg>
+        </button>
+    </form>
 </dialog>
 
 <script>
+  // Necessary for inline onclick="showModal()"
   const dialog = document.querySelector('.dialog')
 
+  // Necessary for Safari <=18.5
   dialog.addEventListener('click', ({target:dialog}) => {
     if (dialog.nodeName === 'DIALOG')
       dialog.close('dismiss')
