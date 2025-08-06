@@ -27,7 +27,7 @@
   // Necessary for inline onclick="showModal()"
   const dialog = document.querySelector('.dialog')
 
-  // Necessary for Safari <=18.5
+  // Necessary for Safari <=18.5 to use light dismiss
   dialog.addEventListener('click', ({target:dialog}) => {
     if (dialog.nodeName === 'DIALOG')
       dialog.close('dismiss')
