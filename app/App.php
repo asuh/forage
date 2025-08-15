@@ -11,6 +11,9 @@ use FM\Setup;
 use FM\Integrations\Integrations;
 use FM\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
+use FM\Prettify\CleanUpModule;
+use FM\Prettify\NiceSearchModule;
+use FM\Prettify\RelativeUrlsModule;
 
 class App
 {
@@ -30,6 +33,12 @@ class App
 
     private Widgets $widgets;
 
+    private CleanUpModule $cleanUpModule;
+
+    private NiceSearchModule $niceSearchModule;
+
+    private RelativeUrlsModule $relativeUrlsModule;
+
     private static ?App $instance = null;
 
     private function __construct()
@@ -42,6 +51,9 @@ class App
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
         $this->widgets = self::init(new Widgets());
+        $this->cleanUpModule = self::init(new CleanUpModule($this, collect()));
+        $this->niceSearchModule = self::init(new NiceSearchModule($this, collect()));
+        $this->relativeUrlsModule = self::init(new RelativeUrlsModule($this, collect()));
     }
 
     public function assets(): Assets
@@ -82,6 +94,21 @@ class App
     public function widgets(): Widgets
     {
         return $this->widgets;
+    }
+
+    public function cleanUpModule(): CleanUpModule
+    {
+        return $this->cleanUpModule;
+    }
+
+    public function niceSearchModule(): NiceSearchModule
+    {
+        return $this->niceSearchModule;
+    }
+
+    public function relativeUrlsModule(): RelativeUrlsModule
+    {
+        return $this->relativeUrlsModule;
     }
 
     private function __clone()
