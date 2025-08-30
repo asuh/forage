@@ -29,6 +29,7 @@ export default defineConfig({
       },
     },
   },
+
   plugins: [
     copy({
       targets: [
@@ -46,12 +47,24 @@ export default defineConfig({
       },
     },
   ],
+
   css: {
     devSourcemap: true
     // transformer: 'lightningcss',
   },
+
   server: {
     cors: true,
     https: true
-  }
+  },
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname),
+      '@scripts': path.resolve(__dirname, './resources/scripts'),
+      '@styles': path.resolve(__dirname, './resources/styles'),
+    },
+  },
+
+  logLevel: 'warn',
 });

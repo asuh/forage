@@ -3,7 +3,7 @@
     'id' => 'dialog', // The dialog ID
 ])
 
-<button id="dialog-toggle" class="dialog-toggle" type="button" onclick="dialog.showModal()">
+<button id="dialog-toggle" class="dialog-toggle" type="button" onclick="dialog.showModal()" command="show-modal" commandfor="{{ $id }}">
     <span class="visuallyhidden">{{ _x('Show dialog', 'label') }}</span>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16" aria-hidden="true" focusable="false" aria-labelledby="dialog-toggle">
         <path fill="currentColor" d="M509 479L360 330a203 203 0 10-30 30l149 149c4 4 11 4 15 0l15-15c4-4 4-11 0-15zM203 363a160 160 0 110-321 160 160 0 010 321z"></path>
