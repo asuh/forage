@@ -1,4 +1,4 @@
-<div class="h-card vcard">
+<div class="representative h-card vcard">
     @php
         $id = get_the_author_meta('ID');
 
