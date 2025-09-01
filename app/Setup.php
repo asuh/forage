@@ -210,4 +210,17 @@ class Setup
 
         return $mimeTypes;
     }
+
+    /**
+     * Override Webmentions plugin Walker_Comment extended class
+     * 
+     * @filter wp_list_comments_args
+     */
+    public function overrideWebmentionsWalker($args): array
+    {
+        if (class_exists('Webmention\Comment_Walker')) {
+            $args['walker'] = new \FM\Comments\Comments();
+        }
+        return $args;
+    }    
 }
