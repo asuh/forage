@@ -29,7 +29,11 @@ class Comments extends \Walker_Comment
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
+        echo $comment->comment_type;
 		$type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );        
+        if ( 'comment' === $comment->comment_type ) {
+			$type = 'p-comment';
+		}
 		$commenter = wp_get_current_commenter();        
 		$show_pending_links = ! empty( $commenter['comment_author'] );
 
