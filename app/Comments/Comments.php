@@ -29,11 +29,14 @@ class Comments extends \Walker_Comment
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
+		$type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );        
+		$commenter = wp_get_current_commenter();        
+		$show_pending_links = ! empty( $commenter['comment_author'] );
 
         ob_start();
         ?>
-        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent u-comment' : 'u-comment', $comment); ?>>
-            <article class="comment-body">
+        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent p-comment' : 'p-comment', $comment); ?>>
+            <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo $type; ?>">
                 <footer class="vcard h-card u-author comment-meta">
                     <div class="avatar">
                         <?php echo $avatar; ?>
@@ -53,20 +56,22 @@ class Comments extends \Walker_Comment
                         </time>
                     </a>
 
-                    <?php if ($editLink): ?>
-                        <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit this comment</a>
-                    <?php endif; ?>
-
                     <?php if ($comment->comment_approved == '0') : ?>
                         <p class="comment-meta-item">Your comment is awaiting moderation.</p>
                     <?php endif; ?>
                 </footer>
 
                 <div class="comment-content p-content p-name">
+                    <?php comment_text(); ?>
+                </div><!-- .comment-content -->
+
+                <div class="comment-interact">
+                    <?php if ($editLink): ?>
+                        <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit</a>
+                    <?php endif; ?>
+
                     <?php
-                        comment_text();
-                    ?>
-                    <?php
+                    if ( '1' == $comment->comment_approved || $show_pending_links ) {                
                         comment_reply_link(
                             array_merge(
                                 $args,
@@ -74,13 +79,13 @@ class Comments extends \Walker_Comment
                                     'add_below' => 'div-comment',
                                     'depth'     => $depth,
                                     'max_depth' => $args['max_depth'],
-                                    'before'    => '<div class="reply">',
-                                    'after'     => '</div>',
                                 )
                             )
                         );
+                    }
                     ?>
                 </div>
+
             </article><!-- .comment-body -->
         <?php
         $output .= ob_get_clean();
