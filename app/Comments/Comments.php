@@ -29,8 +29,9 @@ class Comments extends \Walker_Comment
         $isoDate = get_comment_date('Y-m-d');
         $commentTime = get_comment_time('H:iP');
         $editLink = get_edit_comment_link();
-        echo $comment->comment_type;
-		$type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );        
+        if (class_exists('Webmention\Comment_Walker')) {
+            $type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );        
+        }
         if ( 'comment' === $comment->comment_type ) {
 			$type = 'p-comment';
 		}
@@ -41,7 +42,7 @@ class Comments extends \Walker_Comment
         ?>
         <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent p-comment' : 'p-comment', $comment); ?>>
             <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo $type; ?>">
-                <footer class="vcard h-card u-author comment-meta">
+                <footer class="comment-meta vcard h-card u-author">
                     <div class="avatar">
                         <?php echo $avatar; ?>
                     </div>
@@ -61,7 +62,7 @@ class Comments extends \Walker_Comment
                     </a>
 
                     <?php if ($comment->comment_approved == '0') : ?>
-                        <p class="comment-meta-item">Your comment is awaiting moderation.</p>
+                        <p class="comment-meta-item">Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved.</p>
                     <?php endif; ?>
                 </footer>
 
@@ -83,6 +84,8 @@ class Comments extends \Walker_Comment
                                     'add_below' => 'div-comment',
                                     'depth'     => $depth,
                                     'max_depth' => $args['max_depth'],
+                                    'before'    => '<div class="reply">',
+                                    'after'     => '</div>',
                                 )
                             )
                         );
