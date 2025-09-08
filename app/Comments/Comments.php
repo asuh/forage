@@ -2,142 +2,157 @@
 
 namespace FM\Comments;
 
-class Comments extends \Walker_Comment
-{
-    /**
-     * Outputs a comment in the HTML5 format.
-     *
-	 * @param string     $output  Used to append additional content. Passed by reference.
-     * @param WP_Comment $comment Comment to display.
-     * @param int        $depth   Optional. Depth of the current comment.
-     * @param array      $args    Optional. An array of arguments.
-     * @param int        $id      Optional. ID of the current comment.
-     */
-    public function start_el(&$output, $comment, $depth = 0, $args = [], $id = 0)
-    {
-        ++$depth;
-        $GLOBALS['comment_depth'] = $depth;
-        $GLOBALS['comment']       = $comment;
+if ( class_exists( '\Webmention\Comment_Walker' ) ) {
+    class Comments extends \Webmention\Comment_Walker {
+        protected function html5_comment( $comment, $depth, $args ) {
+            // Only call this local version for comments that are webmention based.
+            if ( 'webmention' === get_comment_meta( $comment->comment_ID, 'protocol', true ) ) {
+                parent::html5_comment( $comment, $depth, $args );
+                return; 
+            }
 
-        /** Set up variables for WordPress functions */
-        $addBelow = 'comment';
-        $commentId = get_comment_ID();
-        $avatar = get_avatar($comment, 48, '', 'Author\'s gravatar', array('class' => 'u-photo comment-author'));
-        $authorUrl = get_comment_author_url();
-        $author = get_comment_author();
-        $commentDate = get_comment_date('F jS, Y');
-        $isoDate = get_comment_date('Y-m-d');
-        $commentTime = get_comment_time('H:iP');
-        $editLink = get_edit_comment_link();
-        if (class_exists('Webmention\Comment_Walker')) {
-            $type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );        
-        }
-        if ( 'comment' === $comment->comment_type ) {
-			$type = 'p-comment';
-		}
-		$commenter = wp_get_current_commenter();        
-		$show_pending_links = ! empty( $commenter['comment_author'] );
+            $tag = ( 'div' === $args['style'] ) ? 'div' : 'li';
 
-        ob_start();
-        ?>
-        <li id="comment-<?php echo $commentId; ?>" <?php comment_class($args['has_children'] ? 'parent p-comment' : 'p-comment', $comment); ?>>
-            <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo $type; ?>">
-                <footer class="comment-meta vcard h-card u-author">
-                    <div class="avatar">
-                        <?php echo $avatar; ?>
-                    </div>
-                    <?php if (!empty($authorUrl)): ?>
-                        <a class="comment-author u-url p-name" href="<?php echo esc_url($authorUrl); ?>">
-                            <?php echo esc_html($author); ?>
-                        </a>
-                    <?php else: ?>
-                        <span class="comment-author p-name">
-                            <?php echo esc_html($author); ?>
-                        </span>
-                    <?php endif; ?>
-                    <a class="u-url comment-permalink" href="#comment-<?php echo $commentId; ?>">
-                        <time class="comment-meta-item dt-published" datetime="<?php echo $isoDate; ?>T<?php echo $commentTime; ?>" title="<?php echo $commentDate . " at " . $commentTime; ?>">
-                            <?php echo $this->timeAgo($isoDate . 'T' . $commentTime); ?>
-                        </time>
-                    </a>
+            $cite = apply_filters( 'webmention_cite', '<small>&nbsp;@&nbsp;<cite><a href="%1s">%2s</a></cite></small>' );
+            $url  = get_url_from_webmention( $comment );
+            $host = wp_parse_url( $url, PHP_URL_HOST );
+            $host = preg_replace( '/^www\./', '', $host );
+            $type = get_webmention_comment_type_attr( $comment->comment_type, 'class' );
+            if ( 'comment' === $comment->comment_type ) {
+                $type = 'p-comment';
+            }
 
-                    <?php if ($comment->comment_approved == '0') : ?>
-                        <p class="comment-meta-item">Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved.</p>
-                    <?php endif; ?>
-                </footer>
+            $commenter          = wp_get_current_commenter();
+            $show_pending_links = ! empty( $commenter['comment_author'] );
 
-                <div class="comment-content p-content p-name">
-                    <?php comment_text(); ?>
-                </div><!-- .comment-content -->
+            if ( $commenter['comment_author_email'] ) {
+                $moderation_note = __( 'Your comment is awaiting moderation.', 'default' );
+            } else {
+                $moderation_note = __( 'Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved.', 'default' );
+            }  
+            
+            ?>
+            <<?php echo $tag; ?> id="comment-<?php comment_ID(); ?>" <?php comment_class( $this->has_children ? 'parent p-comment' : 'p-comment', $comment ); ?>>
+                <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo $type; ?>">
+                    <footer class="comment-meta">
+                        <div class="comment-author vcard h-card u-author">
+                            <?php
+                            if ( 0 !== $args['avatar_size'] ) {
+                                echo get_avatar( $comment, $args['avatar_size'] );
+                            }
+                            ?>
+                            <?php
+                            $comment_author = get_comment_author_link( $comment );
 
-                <div class="comment-interact">
-                    <?php if ($editLink): ?>
-                        <a href="<?php echo esc_url($editLink); ?>" class="comment-meta-item">Edit</a>
-                    <?php endif; ?>
+                            if ( '0' === $comment->comment_approved && ! $show_pending_links ) {
+                                $comment_author = get_comment_author( $comment );
+                            }
 
-                    <?php
-                    if ( '1' == $comment->comment_approved || $show_pending_links ) {                
-                        comment_reply_link(
-                            array_merge(
-                                $args,
-                                array(
-                                    'add_below' => 'div-comment',
-                                    'depth'     => $depth,
-                                    'max_depth' => $args['max_depth'],
-                                    'before'    => '<div class="reply">',
-                                    'after'     => '</div>',
+                            printf(
+                                /* translators: %s: Comment author link. */
+                                __( '%s', 'default' ),
+                                sprintf( '<b class="fn">%s</b>', $comment_author )
+                            );
+                            if ( ! empty( $cite ) && 'webmention' === get_comment_meta( $comment->comment_ID, 'protocol', true ) ) {
+                                printf( $cite, $url, $host );
+                            }
+
+                            ?>
+                        </div><!-- .comment-author -->
+
+                        <div class="comment-metadata">
+                            <?php
+                            // Allow arbitrary additions to comment metadata.
+                            do_action( 'webmention_comment_metadata', $comment );
+                            printf(
+                                '<a class="u-url comment-permalink" href="%s"><time class="dt-published" datetime="%s">%s</time></a>',
+                                esc_url( get_comment_link( $comment, $args ) ),
+                                get_comment_time( DATE_W3C ),
+                                timeAgo(get_comment_time( DATE_W3C )),
+                            );
+                            ?>
+                        </div><!-- .comment-metadata -->
+
+                        <?php if ( '0' === $comment->comment_approved ) : ?>
+                        <em class="comment-awaiting-moderation"><?php echo $moderation_note; ?></em>
+                        <?php endif; ?>
+                    </footer><!-- .comment-meta -->
+
+                    <div class="comment-content e-content p-name">
+                        <?php comment_text(); ?>
+                    </div><!-- .comment-content -->
+
+                    <div class="comment-interact">
+                        <?php
+                        edit_comment_link( __( 'Edit', 'default' ), ' <span class="edit-link">', '</span>' );
+
+                        if ( '1' == $comment->comment_approved || $show_pending_links ) {
+                            comment_reply_link(
+                                array_merge(
+                                    $args,
+                                    array(
+                                        'add_below' => 'div-comment',
+                                        'depth'     => $depth,
+                                        'max_depth' => $args['max_depth'],
+                                        'before'    => '<div class="reply">',
+                                        'after'     => '</div>',
+                                    )
                                 )
-                            )
-                        );
-                    }
-                    ?>
-                </div>
+                            );
+                        }
+                        ?>
+                    </div><!-- .comment-interact -->
+                </article><!-- .comment-body -->
+            <?php
+        }
+    }
+} else {
+    class Comments extends \Walker_Comment {
+        protected function html5_comment( $comment, $depth, $args ) {
+            parent::html5_comment( $comment, $depth, $args );
+        }
+    }
+}
 
-            </article><!-- .comment-body -->
-        <?php
-        $output .= ob_get_clean();
+/**
+ * Converts date and time to be relative to current time
+ *
+ * @param string $timestamp
+ * @return string
+ *
+ */
+function timeAgo($timestamp) {
+    $currentTime = time();
+    $timestampDate = strtotime($timestamp);
+    $timeDiff = $currentTime - $timestampDate;
+
+    // Define time intervals in seconds
+    $intervals = [
+        'mo'  => 2592000,
+        'd'   => 86400,
+        'h'   => 3600,
+        'm'   => 60
+    ];
+
+    // If 12 months or more, return formatted date
+    if ($timeDiff >= (31536000)) { // 365 days
+        return date('m/d/Y', $timestampDate);
     }
 
-    /**
-     * Converts date and time to be relative to current time
-     *
-     * @param string $timestamp
-     * @return string
-     *
-     */
-    public function timeAgo($timestamp) {
-        $currentTime = time();
-        $timestampDate = strtotime($timestamp);
-        $timeDiff = $currentTime - $timestampDate;
+    if ($timeDiff < 60) {
+        return 'now';
+    }
 
-        // Define time intervals in seconds
-        $intervals = [
-            'mo'  => 2592000,
-            'd'   => 86400,
-            'h'   => 3600,
-            'm'   => 60
-        ];
+    foreach ($intervals as $interval => $seconds) {
+        $diff = floor($timeDiff / $seconds);
 
-        // If 12 months or more, return formatted date
-        if ($timeDiff >= (31536000)) { // 365 days
-            return date('m/d/Y', $timestampDate);
-        }
-
-        if ($timeDiff < 60) {
-            return 'now';
-        }
-
-        foreach ($intervals as $interval => $seconds) {
-            $diff = floor($timeDiff / $seconds);
-
-            if ($diff >= 1) {
-                // If it's at least a month, calculate total months
-                if ($interval === 'mo') {
-                    $totalMonths = floor($timeDiff / $intervals['mo']);
-                    return $totalMonths . 'mo';
-                }
-                return $diff . $interval;
+        if ($diff >= 1) {
+            // If it's at least a month, calculate total months
+            if ($interval === 'mo') {
+                $totalMonths = floor($timeDiff / $intervals['mo']);
+                return $totalMonths . 'mo';
             }
+            return $diff . $interval;
         }
     }
 }
