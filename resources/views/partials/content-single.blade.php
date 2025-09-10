@@ -1,6 +1,6 @@
 <article @php(post_class('h-entry'))>
     {{-- @if (has_post_thumbnail())
-        <figure class="full">@php(the_post_thumbnail())</figure>
+        <figure class="post-thumbnail full">@php(the_post_thumbnail())</figure>
     @endif --}}
 
     @if (get_the_title())
