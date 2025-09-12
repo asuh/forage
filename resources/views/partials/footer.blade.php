@@ -1,4 +1,6 @@
 <footer class="content-info">
+    @include('partials/h-card')
+
     @php(dynamic_sidebar('sidebar-footer'))
     <div class="copyright">
         <p>&copy; <a href="{{ home_url('/') }}" rel="me">{{ get_bloginfo('name', 'display') }}</a></p>
