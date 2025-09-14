@@ -1,4 +1,25 @@
 .toggle-button {
+  border: none;
+  cursor: pointer;
+
+  .toggle-menu-close,
+  .toggle-menu-open {
+    display: none;
+  }
+
+  &[aria-pressed="false"] .toggle-menu-open {
+    display: block;
+  }
+
+  &[aria-pressed="true"] .toggle-menu-close {
+    display: block;
+  }
+
+  &[aria-expanded="true"],
+  &[aria-expanded="true"]:hover {
+    background-color: var(--surface-color);
+  }
+    
   @media (width >= 48em) {
     display: none;
   }

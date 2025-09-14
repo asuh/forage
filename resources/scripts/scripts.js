@@ -5,15 +5,16 @@
  * then apply any scripts contained in this eventlistener
  *
  **/
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Load your scripts inside here
 	function toggleNavigation() {
 		const navButton = document.querySelector("button[aria-expanded]");
 
 		function handleClick(event) {
 			const expanded =
-				event.target.getAttribute("aria-expanded") === "true" || false;
+				event.currentTarget.getAttribute("aria-expanded") === "true" || false;
 			navButton.setAttribute("aria-expanded", !expanded);
+      navButton.setAttribute("aria-pressed", !expanded);
 		}
 
 		navButton.addEventListener("click", handleClick);
@@ -207,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener("resize", handleResize, { signal });
 
     document.addEventListener("click", (e) => {
+      if (isMobile) { return };
       if (!nav.contains(e.target)) { closeAllSubmenus() };
     }, { signal });
 
@@ -226,20 +228,20 @@ document.addEventListener('DOMContentLoaded', () => {
 		const searchDialog = document.getElementById("search-dialog");
 
 		function handleKeyDown(event) {
-      searchDialog.contains(document.activeElement) &&
-      event.key === "Escape" &&
-      searchDialog.open &&
-      searchDialog.close();
+			searchDialog.contains(document.activeElement) &&
+				event.key === "Escape" &&
+				searchDialog.open &&
+				searchDialog.close();
 		}
 
 		document.addEventListener("keydown", handleKeyDown);
 
 		return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    }
+			document.removeEventListener("keydown", handleKeyDown);
+		}
 	}
 
-  toggleNavigation();
-  submenuA11y();
-  closeDialog();
+	toggleNavigation();
+	submenuA11y();
+	closeDialog();
 });
