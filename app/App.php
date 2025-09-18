@@ -51,9 +51,10 @@ class App
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
         $this->widgets = self::init(new Widgets());
-        $this->cleanUpModule = self::init(new CleanUpModule($this, collect()));
-        $this->niceSearchModule = self::init(new NiceSearchModule($this, collect()));
-        $this->relativeUrlsModule = self::init(new RelativeUrlsModule($this, collect()));
+        $prettifyConfig = collect($this->config->prettify());
+        $this->cleanUpModule = self::init(new CleanUpModule($this, $prettifyConfig));
+        $this->niceSearchModule = self::init(new NiceSearchModule($this, $prettifyConfig));
+        $this->relativeUrlsModule = self::init(new RelativeUrlsModule($this, $prettifyConfig));
     }
 
     public function assets(): Assets

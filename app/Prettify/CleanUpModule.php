@@ -2,6 +2,7 @@
 
 namespace FM\Prettify;
 
+use FM\Prettify\Document;
 use Illuminate\Support\Str;
 
 class CleanUpModule extends AbstractModule
@@ -205,7 +206,7 @@ class CleanUpModule extends AbstractModule
             $disallowedClasses[] = 'page-id-'.get_option('page_on_front');
         }
 
-        return $this->collect($classes)
+        return \Illuminate\Support\Collection::make($classes)
             ->diff($disallowedClasses)
             ->values()
             ->all();

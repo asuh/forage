@@ -20,7 +20,7 @@ abstract class AbstractModule
     /**
      * Initialize the Module instance.
      */
-    public function __construct(Application $app, Collection $config)
+    public function __construct(\FM\App $app, Collection $config)
     {
         $this->app = $app;
         $this->config = collect($config->get($this->getKey(), []));
