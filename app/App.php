@@ -6,7 +6,6 @@ use FM\Assets\Assets;
 use FM\Comments\Comments;
 use FM\Core\Config;
 use FM\Core\Hooks;
-use FM\Core\Widgets;
 use FM\Setup;
 use FM\Integrations\Integrations;
 use FM\Templates\Templates;
@@ -28,8 +27,6 @@ class App
 
     private Templates $templates;
 
-    private Widgets $widgets;
-
     private static ?App $instance = null;
 
     private function __construct()
@@ -41,7 +38,6 @@ class App
         $this->integrations = self::init(new Integrations());
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
-        $this->widgets = self::init(new Widgets());
     }
 
     public function assets(): Assets
@@ -77,11 +73,6 @@ class App
     public function templates(): Templates
     {
         return $this->templates;
-    }
-
-    public function widgets(): Widgets
-    {
-        return $this->widgets;
     }
 
     private function __clone()
