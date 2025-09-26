@@ -21,11 +21,15 @@ class Config
                 'active' => $this->isLocalEnvironment() && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
             ],
             'manifest' => [
-                'path' => FM_ASSETS_PATH . '/manifest.json',
+                'path' => FM_DIST_PATH . '/manifest.json',
             ],
             'cache' => [
                 'path' => wp_upload_dir()['basedir'] . '/cache/fm',
             ],
+            'dist' => [
+                'path' => FM_DIST_PATH,
+                'uri' => FM_DIST_URI,
+            ],            
             'resources' => [
                 'path' => FM_PATH . '/resources',
             ],
