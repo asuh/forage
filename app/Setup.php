@@ -131,7 +131,7 @@ class Setup
             'name' => __('Footer'),
             'id' => 'sidebar-footer'
         ] + $config);
-    }    
+    }
 
     /**
      * Wraps the_excerpt in p-summary
@@ -238,7 +238,7 @@ class Setup
 
     /**
      * Override Webmentions plugin Walker_Comment extended class
-     * 
+     *
      * @filter wp_list_comments_args
      */
     public function overrideWebmentionsWalker($args): array
@@ -247,5 +247,43 @@ class Setup
             $args['walker'] = new \FM\Comments\Comments();
         }
         return $args;
-    }    
+    }
+
+    /** Remove the following code if you're not using Contact Form 7 plugin */
+
+    /**
+     * Conditionally disable CF7 assets on pages without CF7 forms
+     *
+     * @action wp_enqueue_scripts 1
+     */
+    public function conditionallyDisableCf7(): void
+    {
+        if (!is_singular()) {
+            return;
+        }
+
+        $hasForm = get_post_meta(get_queried_object_id(), '_cf7form', true)
+            || has_shortcode(get_post()->post_content, 'contact-form-7')
+            || has_shortcode(get_post()->post_content, 'cf7form');
+
+        if (!$hasForm) {
+            add_filter('wpcf7_load_js', '__return_false');
+            add_filter('wpcf7_load_css', '__return_false');
+
+            remove_action('wp_enqueue_scripts', 'wpcf7_recaptcha_enqueue_scripts', 20);
+        }
+    }
+
+    /**
+     * Clean up any remaining reCAPTCHA scripts when CF7 is disabled
+     *
+     * @action wp_print_scripts 99
+     */
+    public function dequeueRecaptcha(): void
+    {
+        if (!function_exists('wpcf7_load_js') || !wpcf7_load_js()) {
+            wp_dequeue_script('google-recaptcha');
+            wp_dequeue_script('wpcf7-recaptcha');
+        }
+    }
 }
