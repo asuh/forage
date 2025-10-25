@@ -28,10 +28,6 @@ class Assets
     public function admin(): void
     {
         $this->enqueue('styles/admin.css', ['handle' => 'admin']);
-
-        // if ('post' === get_current_screen()->base && has_blocks()) {
-        //     $this->front();
-        // }
     }
 
     /**
@@ -42,11 +38,6 @@ class Assets
         $preloads = apply_filters(
             'fm_assets_preload',
             [
-                [
-                    'href' => fm()->assets()->resolve('fonts/Montserrat-Regular.woff2'),
-                    'as' => 'font',
-                    'type' => 'font/woff2',
-                ],
                 [
                     'href' => fm()->assets()->resolve('styles/styles.css'),
                     'as' => 'style',
@@ -91,6 +82,6 @@ class Assets
                 '<link rel="modulepreload" href="%s" />',
                 esc_attr($item['href']),
             );
-        }        
+        }
     }
 }

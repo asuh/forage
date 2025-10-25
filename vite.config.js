@@ -20,6 +20,7 @@ export default defineConfig({
       input: [
         'resources/scripts/scripts.js',
         'resources/styles/styles.css',
+        'resources/styles/admin.css',
         'resources/scripts/blocks.js'
       ],
       output: {
