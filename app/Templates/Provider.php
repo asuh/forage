@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Templates;
+namespace Vilare\Templates;
 
 use Illuminate\Events\Dispatcher;
 use Illuminate\View\Factory;
@@ -27,7 +27,7 @@ class Provider
 
     public function generate(string $template, array $data = []): string
     {
-        return fm()->filesystem()->exists($template)
+        return vilare()->filesystem()->exists($template)
             ? $this->factory->file($template, $data)->render()
             : $this->factory->make($template, $data)->render();
     }
@@ -35,7 +35,11 @@ class Provider
     public function templateExists(string $template): bool
     {
         // Convert the dot notation (e.g., 'partials.comments') to a file path
-        $templatePath = fm()->config()->get('views.path') . '/' . str_replace('.', '/', $template) . '.blade.php';
+        $templatePath =
+            vilare()->config()->get('views.path') .
+            '/' .
+            str_replace('.', '/', $template) .
+            '.blade.php';
 
         // Check if the file exists
         return file_exists($templatePath);
@@ -43,9 +47,17 @@ class Provider
 
     private function init(): void
     {
-        $compiler = new BladeCompiler(fm()->filesystem(), fm()->config()->get('cache.path'));
+        $compiler = new BladeCompiler(
+            vilare()->filesystem(),
+            vilare()->config()->get('cache.path'),
+        );
         $resolver = new EngineResolver();
-        $finder = new FileViewFinder(fm()->filesystem(), [fm()->config()->get('views.path')]);
+        $finder = new FileViewFinder(
+            vilare()->filesystem(),
+            [
+                vilare()->config()->get('views.path'),
+            ]
+        );
         $dispatcher = new Dispatcher();
 
         $resolver->register('blade', fn() => new CompilerEngine($compiler));
@@ -61,23 +73,25 @@ class Provider
         // Check if the Blade template exists
         if ($this->templateExists($bladeTemplate)) {
             // Render the Blade template
-            $this->render($bladeTemplate, [
-                'post' => get_post(),
-                'comments_open' => comments_open(),
-                'comments' => get_comments(['post_id' => get_the_ID()]),
-                'comment_pages' => paginate_comments_links(['echo' => false]),
-                'previous_page_url' => get_previous_comments_link(),
-                'next_page_url' => get_next_comments_link(),
-            ]);
+            $this->render(
+                $bladeTemplate,
+                [
+                    'post' => get_post(),
+                    'comments_open' => comments_open(),
+                    'comments' => get_comments(['post_id' => get_the_ID()]),
+                    'comment_pages' => paginate_comments_links(['echo' => false]),
+                    'previous_page_url' => get_previous_comments_link(),
+                    'next_page_url' => get_next_comments_link(),
+                ]
+            );
 
             // Return a blank file to prevent WordPress from rendering the default template
-            return FM_PATH . '/resources/index.php';
+            return VILARE_PATH . '/resources/index.php';
         }
 
         // If the Blade template doesn't exist, fall back to the default behavior
         return $file;
     }
-
 
     public function filterSearchForm($view)
     {

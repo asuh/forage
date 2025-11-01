@@ -1,6 +1,6 @@
 <?php
 
-namespace FM;
+namespace Vilare;
 
 class Setup
 {
@@ -11,6 +11,12 @@ class Setup
      */
     public function addThemeSupport(): void
     {
+        /**
+         * Remove Global Styles rendered for Gutenberg blocks
+         * Remove the line below if you are using Gutenberg
+         */
+        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+
         /**
          * Enable post thumbnails
          * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
@@ -40,21 +46,18 @@ class Setup
          * Enable HTML5 markup support.
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
          */
-        add_theme_support('html5', [
-            'caption',
-            'comment-form',
-            'comment-list',
-            'gallery',
-            'search-form',
-            'script',
-            'style',
-        ]);
-
-        /**
-         * Remove Global Styles rendered for Gutenberg blocks
-         * Remove the line below if you are using Gutenberg
-         */
-        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+        add_theme_support(
+            'html5',
+            [
+                'caption',
+                'comment-form',
+                'comment-list',
+                'gallery',
+                'search-form',
+                'script',
+                'style',
+            ]
+        );
 
         /**
          * Enable plugins to manage the document title.
@@ -102,8 +105,8 @@ class Setup
     {
         register_nav_menus(
             [
-                'primary_navigation' => __('Primary Navigation'),
-                /** 'secondary_navigation' => __('Secondary Navigation') */
+                'primary_navigation' => __('Primary Navigation', 'vilare'),
+            /** 'secondary_navigation' => __('Secondary Navigation') */
             ]
         );
     }
@@ -119,18 +122,22 @@ class Setup
             'before_widget' => '<section class="widget %1$s %2$s">',
             'after_widget' => '</section>',
             'before_title' => '<h3>',
-            'after_title' => '</h3>'
+            'after_title' => '</h3>',
         ];
 
-        register_sidebar([
-            'name' => __('Primary'),
-            'id' => 'sidebar-primary'
-        ] + $config);
+        register_sidebar(
+            [
+                'name' => __('Primary', 'vilare'),
+                'id' => 'sidebar-primary',
+            ] + $config,
+        );
 
-        register_sidebar([
-            'name' => __('Footer'),
-            'id' => 'sidebar-footer'
-        ] + $config);
+        register_sidebar(
+            [
+                'name' => __('Footer', 'vilare'),
+                'id' => 'sidebar-footer',
+            ] + $config,
+        );
     }
 
     /**
@@ -165,14 +172,20 @@ class Setup
          * from applying to main content section
          * I'm manually adding the same in the entry meta file
          */
-        if (class_exists('Syn_Meta') && has_filter('the_content', [ 'Syn_Config', 'the_content' ])) {
-            remove_filter('the_content', [ 'Syn_Config', 'the_content' ], 30);
+        if (
+            class_exists('Syn_Meta') &&
+            has_filter('the_content', ['Syn_Config', 'the_content'])
+        ) {
+            remove_filter('the_content', ['Syn_Config', 'the_content'], 30);
         }
         /**
          * Adds support for Simple Location
          */
-        if (class_exists('Loc_View') && has_filter('the_content', [ 'Loc_View', 'location_content' ])) {
-            remove_filter('the_content', [ 'Loc_View', 'location_content' ], 12);
+        if (
+            class_exists('Loc_View') &&
+            has_filter('the_content', ['Loc_View', 'location_content'])
+        ) {
+            remove_filter('the_content', ['Loc_View', 'location_content'], 12);
         }
     }
 
@@ -185,7 +198,7 @@ class Setup
      */
     public function postClasses($classes): array
     {
-        $classes = array_diff($classes, [ 'hentry' ]);
+        $classes = array_diff($classes, ['hentry']);
         if (! is_singular()) {
             if ('venue' === get_post_type()) {
                 $classes[] = 'h-card';
@@ -216,7 +229,11 @@ class Setup
         /** Clean up class names for custom templates */
         $classes = array_map(
             function ($classname) {
-                return preg_replace(['/-blade(-php)?$/', '/^page-template-views/'], '', $classname);
+                return preg_replace(
+                    ['/-blade(-php)?$/', '/^page-template-views/'],
+                    '',
+                    $classname,
+                );
             },
             $classes
         );
@@ -244,7 +261,7 @@ class Setup
     public function overrideWebmentionsWalker($args): array
     {
         if (class_exists('Webmention\Comment_Walker')) {
-            $args['walker'] = new \FM\Comments\Comments();
+            $args['walker'] = new \Vilare\Comments\Comments();
         }
         return $args;
     }
@@ -258,19 +275,24 @@ class Setup
      */
     public function conditionallyDisableCf7(): void
     {
-        if (!is_singular()) {
+        if (! is_singular()) {
             return;
         }
 
-        $hasForm = get_post_meta(get_queried_object_id(), '_cf7form', true)
-            || has_shortcode(get_post()->post_content, 'contact-form-7')
-            || has_shortcode(get_post()->post_content, 'cf7form');
+        $hasForm =
+            get_post_meta(get_queried_object_id(), '_cf7form', true) ||
+            has_shortcode(get_post()->post_content, 'contact-form-7') ||
+            has_shortcode(get_post()->post_content, 'cf7form');
 
-        if (!$hasForm) {
+        if (! $hasForm) {
             add_filter('wpcf7_load_js', '__return_false');
             add_filter('wpcf7_load_css', '__return_false');
 
-            remove_action('wp_enqueue_scripts', 'wpcf7_recaptcha_enqueue_scripts', 20);
+            remove_action(
+                'wp_enqueue_scripts',
+                'wpcf7_recaptcha_enqueue_scripts',
+                20,
+            );
         }
     }
 
@@ -281,7 +303,7 @@ class Setup
      */
     public function dequeueRecaptcha(): void
     {
-        if (!function_exists('wpcf7_load_js') || !wpcf7_load_js()) {
+        if (! function_exists('wpcf7_load_js') || ! wpcf7_load_js()) {
             wp_dequeue_script('google-recaptcha');
             wp_dequeue_script('wpcf7-recaptcha');
         }

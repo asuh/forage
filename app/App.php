@@ -1,14 +1,14 @@
 <?php
 
-namespace FM;
+namespace Vilare;
 
-use FM\Assets\Assets;
-use FM\Comments\Comments;
-use FM\Core\Config;
-use FM\Core\Hooks;
-use FM\Setup;
-use FM\Integrations\Integrations;
-use FM\Templates\Templates;
+use Vilare\Assets\Assets;
+use Vilare\Comments\Comments;
+use Vilare\Core\Config;
+use Vilare\Core\Hooks;
+use Vilare\Setup;
+use Vilare\Integrations\Integrations;
+use Vilare\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
 
 class App

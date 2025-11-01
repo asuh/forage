@@ -19,7 +19,7 @@
                 'style' => 'ol',
                 'short_ping' => true,
                 'avatar_size' => 64,
-                'walker' => new FM\Comments\Comments(),
+                'walker' => new Vilare\Comments\Comments(),
             ]) !!}
         </ol><!-- .comment-list -->
     @endif

@@ -1,9 +1,9 @@
 <?php
 
-namespace FM\Templates;
+namespace Vilare\Templates;
 
-use FM\Templates\Provider;
-use FM\Templates\Resolver;
+use Vilare\Templates\Provider;
+use Vilare\Templates\Resolver;
 
 class Templates
 {
@@ -13,8 +13,8 @@ class Templates
 
     public function __construct()
     {
-        $this->provider = \FM\App::init(new Provider());
-        $this->resolver = \FM\App::init(new Resolver());
+        $this->provider = \Vilare\App::init(new Provider());
+        $this->resolver = \Vilare\App::init(new Resolver());
     }
 
     public function render(string $template, array $data = []): void

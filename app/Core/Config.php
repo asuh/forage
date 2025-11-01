@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Core;
+namespace Vilare\Core;
 
 class Config
 {
@@ -9,32 +9,38 @@ class Config
     public function __construct()
     {
         $this->config = [
-            'version' => $this->isLocalEnvironment() ? time() : FM_VERSION,
+            'version' => $this->isLocalEnvironment() ? time() : VILARE_VERSION,
             'env' => [
                 'type' => wp_get_environment_type(),
-                'mode' => false === strpos(FM_PATH, ABSPATH . 'wp-content/plugins') ? 'theme' : 'plugin',
+                'mode' =>
+                    false ===
+                    strpos(VILARE_PATH, ABSPATH . 'wp-content/plugins')
+                        ? 'theme'
+                        : 'plugin',
             ],
             'hmr' => [
-                'uri' => FM_HMR_HOST,
-                'client' => FM_HMR_URI . '/@vite/client',
-                'sources' => FM_HMR_URI . '/resources',
-                'active' => $this->isLocalEnvironment() && ! is_wp_error(wp_remote_get(FM_HMR_URI)),
+                'uri' => VILARE_HMR_HOST,
+                'client' => VILARE_HMR_URI . '/@vite/client',
+                'sources' => VILARE_HMR_URI . '/resources',
+                'active' =>
+                    $this->isLocalEnvironment() &&
+                    ! is_wp_error(wp_remote_get(VILARE_HMR_URI)),
             ],
             'manifest' => [
-                'path' => FM_DIST_PATH . '/manifest.json',
+                'path' => VILARE_DIST_PATH . '/manifest.json',
             ],
             'cache' => [
-                'path' => wp_upload_dir()['basedir'] . '/cache/fm',
+                'path' => wp_upload_dir()['basedir'] . '/cache/vilare',
             ],
             'dist' => [
-                'path' => FM_DIST_PATH,
-                'uri' => FM_DIST_URI,
-            ],            
+                'path' => VILARE_DIST_PATH,
+                'uri' => VILARE_DIST_URI,
+            ],
             'resources' => [
-                'path' => FM_PATH . '/resources',
+                'path' => VILARE_PATH . '/resources',
             ],
             'views' => [
-                'path' => FM_PATH . '/resources/views',
+                'path' => VILARE_PATH . '/resources/views',
             ],
         ];
     }
@@ -67,14 +73,12 @@ class Config
     /**
      * Determines if the current environment is set to 'local' or 'development'.
      *
-     * Checks the WP_ENVIRONMENT_TYPE constant and compares it to the current
-     * environment type to identify if the environment is considered local.
-     *
      * @return bool True if the environment is 'local' or 'development', false otherwise.
      */
     public function isLocalEnvironment(): bool
     {
         $env = wp_get_environment_type();
-        return defined('WP_ENVIRONMENT_TYPE') && in_array($env, ['local', 'development'], true);
+        return defined('WP_ENVIRONMENT_TYPE') &&
+            in_array($env, ['local', 'development'], true);
     }
 }

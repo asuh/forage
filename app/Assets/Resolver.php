@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Assets;
+namespace Vilare\Assets;
 
 trait Resolver
 {
@@ -11,13 +11,13 @@ trait Resolver
      */
     public function load(): void
     {
-        $path = fm()->config()->get('manifest.path');
+        $path = vilare()->config()->get('manifest.path');
 
         if (empty($path) || ! file_exists($path)) {
             wp_die('Run <code>yarn build</code> in your application root!');
         }
 
-        $data = fm()->filesystem()->get($path);
+        $data = vilare()->filesystem()->get($path);
 
         if (! empty($data)) {
             $this->manifest = json_decode($data, true);
@@ -30,8 +30,8 @@ trait Resolver
     public function module(string $tag, string $handle, string $url): string
     {
         if (
-            false !== strpos($url, fm()->config()->get('hmr.uri')) ||
-            false !== strpos($url, fm()->config()->get('dist.uri'))
+            false !== strpos($url, vilare()->config()->get('hmr.uri')) ||
+            false !== strpos($url, vilare()->config()->get('dist.uri'))
         ) {
             $tag = str_replace('<script ', '<script type="module" ', $tag);
         }
@@ -42,13 +42,21 @@ trait Resolver
     public function enqueue(string $path, array $config = []): string
     {
         $config = [
-            'handle' => ! empty($config['handle']) ? $config['handle'] : uniqid(),
+            'handle' => ! empty($config['handle'])
+                ? $config['handle']
+                : uniqid(),
             'src' => ! empty($path) ? $this->resolve($path) : $path,
             'deps' => ! empty($config['deps']) ? $config['deps'] : [],
-            'version' => ! empty($config['version']) ? $config['version'] : fm()->config()->get('version'),
+            'version' => ! empty($config['version'])
+                ? $config['version']
+                : vilare()->config()->get('version'),
             'args' => [
-                'strategy' => ! empty($config['strategy']) ? $config['strategy'] : null,
-                'footer' => isset($config['footer']) ? (bool) $config['footer'] : true,
+                'strategy' => ! empty($config['strategy'])
+                    ? $config['strategy']
+                    : null,
+                'footer' => isset($config['footer'])
+                    ? (bool) $config['footer']
+                    : true,
                 'media' => ! empty($config['media']) ? $config['media'] : 'all',
             ],
             'type' => ! empty($config['type']) ? $config['type'] : '',
@@ -68,7 +76,7 @@ trait Resolver
                     $config['deps'][] = $this->enqueue(
                         $script,
                         [
-                            'handle' => "{$config['handle']}-{$index}",
+                            'handle' => "{$config["handle"]}-{$index}",
                         ]
                     );
                 }
@@ -79,7 +87,7 @@ trait Resolver
                     $config['deps'][] = $this->enqueue(
                         $style,
                         [
-                            'handle' => "{$config['handle']}-{$index}",
+                            'handle' => "{$config["handle"]}-{$index}",
                         ]
                     );
                 }
@@ -96,9 +104,9 @@ trait Resolver
                     [
                         'strategy' => $config['args']['strategy'],
                         'in_footer' => $config['args']['footer'],
-                    ]
+                    ],
                 );
-                wp_set_script_translations($config['handle'], 'fm');
+                wp_set_script_translations($config['handle'], 'vilare');
                 break;
 
             case 'style':
@@ -107,7 +115,7 @@ trait Resolver
                     $config['src'],
                     $config['deps'],
                     $config['version'],
-                    $config['args']['media']
+                    $config['args']['media'],
                 );
                 break;
         }
@@ -125,14 +133,26 @@ trait Resolver
 
         switch ($type) {
             case 'url':
-                $url = ! empty($data['file']) ? fm()->config()->get('dist.uri') . "/{$data['file']}" : '';
+                $url = ! empty($data['file'])
+                    ? vilare()->config()->get('dist.uri') . "/{$data["file"]}"
+                    : '';
 
-                return apply_filters('fm_assets_resolver_resolve_url', $url, $path);
+                return apply_filters(
+                    'vilare_assets_resolver_resolve_url',
+                    $url,
+                    $path,
+                );
 
             case 'path':
-                $fullpath = ! empty($data['file']) ? fm()->config()->get('dist.path') . "/{$data['file']}" : '';
+                $fullpath = ! empty($data['file'])
+                    ? vilare()->config()->get('dist.path') . "/{$data["file"]}"
+                    : '';
 
-                return apply_filters('fm_assets_resolver_resolve_path', $fullpath, $path);
+                return apply_filters(
+                    'vilare_assets_resolver_resolve_path',
+                    $fullpath,
+                    $path,
+                );
         }
 
         return '';
@@ -145,17 +165,25 @@ trait Resolver
             'styles' => [],
         ];
 
-        if (fm()->config()->get('hmr.active')) {
+        if (vilare()->config()->get('hmr.active')) {
             return $assets;
         }
 
         if ($this->has($path)) {
             $assets['scripts'] = collect($this->find($path)['js'] ?? [])
-                ->map(fn($item) => fm()->config()->get('dist.uri') . '/' . $item)
+                ->map(
+                    fn($item) => vilare()->config()->get('dist.uri') .
+                        '/' .
+                        $item,
+                )
                 ->all();
 
             $assets['styles'] = collect($this->find($path)['css'] ?? [])
-                ->map(fn($item) => fm()->config()->get('dist.uri') . '/' . $item)
+                ->map(
+                    fn($item) => vilare()->config()->get('dist.uri') .
+                        '/' .
+                        $item,
+                )
                 ->all();
         }
 

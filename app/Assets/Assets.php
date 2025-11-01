@@ -1,8 +1,8 @@
 <?php
 
-namespace FM\Assets;
+namespace Vilare\Assets;
 
-use FM\Assets\Resolver;
+use Vilare\Assets\Resolver;
 
 class Assets
 {
@@ -18,7 +18,12 @@ class Assets
         $this->enqueue('scripts/blocks.js', ['handle' => 'blocks']);
 
         if (is_singular() && comments_open() && get_option('thread_comments')) {
-            $this->enqueue('scripts/comment-reply.js', ['handle' => 'comment-reply']);
+            $this->enqueue(
+                'scripts/comment-reply.js',
+                [
+                    'handle' => 'comment-reply',
+                ]
+            );
         }
     }
 
@@ -36,18 +41,28 @@ class Assets
     public function preload(): void
     {
         $preloads = apply_filters(
-            'fm_assets_preload',
+            'vilare_assets_preload',
             [
                 [
-                    'href' => fm()->assets()->resolve('styles/styles.css'),
+                    'href' => vilare()->assets()->resolve('styles/styles.css'),
                     'as' => 'style',
                     'type' => 'text/css',
-                ]
+                ],
+                /* Example webfont preload
+                [
+                    'href' => vilare()->assets()->resolve('fonts/font_name.woff2'),
+                    'as' => 'font',
+                    'type' => 'font/woff2',
+                ], */
             ]
         );
 
         foreach ($preloads as $item) {
-            if (empty($item['href']) || empty($item['as']) || empty($item['type'])) {
+            if (
+                empty($item['href']) ||
+                empty($item['as']) ||
+                empty($item['type'])
+            ) {
                 continue;
             }
 
@@ -66,10 +81,10 @@ class Assets
     public function modulepreload(): void
     {
         $preloads = apply_filters(
-            'fm_assets_module_preload',
+            'vilare_assets_module_preload',
             [
-                ['href' => fm()->assets()->resolve('scripts/scripts.js')],
-                ['href' => fm()->assets()->resolve('scripts/blocks.js')],
+                ['href' => vilare()->assets()->resolve('scripts/scripts.js')],
+                ['href' => vilare()->assets()->resolve('scripts/blocks.js')],
             ]
         );
 
