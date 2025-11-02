@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Templates;
+namespace Vilare\Blade;
 
 class Resolver
 {
@@ -32,29 +32,9 @@ class Resolver
             return $templates;
         }
 
-        $templates = array_map(
-            fn($item) => preg_replace(
-                '/^[^\/]+\/|(\.blade)?\.php$/',
-                '',
-                $item,
-            ),
-            $templates,
-        );
-        $templates = array_map(
-            fn($item) => vilare()->config()->get('views.path') .
-                '/' .
-                $item .
-                '.blade.php',
-            $templates,
-        );
-        $templates = array_map(
-            fn($item) => str_replace(
-                vilare()->config()->get('resources.path') . '/',
-                '',
-                $item,
-            ),
-            $templates,
-        ); // phpcs:ignore Generic.Files.LineLength.TooLong
+        $templates = array_map(fn($item) => preg_replace('/^[^\/]+\/|(\.blade)?\.php$/', '', $item), $templates);
+        $templates = array_map(fn($item) => vilare()->config()->get('views.path') . '/' . $item . '.blade.php', $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
+        $templates = array_map(fn($item) => str_replace(vilare()->config()->get('resources.path') . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
 
         return $templates;
     }
@@ -64,12 +44,18 @@ class Resolver
      */
     public function render(string $template): string
     {
-        if (! vilare()->config()->isTheme()) {
-            return $template;
+        $id = get_post_meta(get_the_id(), '_wp_page_template', true);
+
+        if (vilare()->templates()->has($id)) {
+            vilare()->templates()->get($id)->render();
+            return vilare()->config()->get('resources.path') . '/index.php';
         }
 
-        vilare()->templates()->render($template, []);
+        if (vilare()->config()->isTheme()) {
+            vilare()->templating()->render($template);
+            return vilare()->config()->get('resources.path') . '/index.php';
+        }
 
-        return vilare()->config()->get('resources.path') . '/index.php';
+        return $template;
     }
 }

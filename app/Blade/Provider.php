@@ -1,7 +1,10 @@
 <?php
 
-namespace Vilare\Templates;
+namespace Vilare\Blade;
 
+use Vilare\Blade\Directives;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\View\View;
 use Illuminate\Events\Dispatcher;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
@@ -22,24 +25,25 @@ class Provider
 
     public function render(string $template, array $data = []): void
     {
-        echo $this->generate($template, $data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $this->generate($template, $data); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     public function generate(string $template, array $data = []): string
     {
+        return $this->view($template, $data)->render();
+    }
+
+    public function view(string $template, array $data = []): View
+    {
         return vilare()->filesystem()->exists($template)
-            ? $this->factory->file($template, $data)->render()
-            : $this->factory->make($template, $data)->render();
+            ? $this->factory->file($template, $data)
+            : $this->factory->make($template, $data);
     }
 
     public function templateExists(string $template): bool
     {
         // Convert the dot notation (e.g., 'partials.comments') to a file path
-        $templatePath =
-            vilare()->config()->get('views.path') .
-            '/' .
-            str_replace('.', '/', $template) .
-            '.blade.php';
+        $templatePath = vilare()->config()->get('views.path') . '/' . str_replace('.', '/', $template) . '.blade.php';
 
         // Check if the file exists
         return file_exists($templatePath);
@@ -47,22 +51,29 @@ class Provider
 
     private function init(): void
     {
-        $compiler = new BladeCompiler(
-            vilare()->filesystem(),
-            vilare()->config()->get('cache.path'),
-        );
+        $compiler = new BladeCompiler(vilare()->filesystem(), vilare()->config()->get('cache.path'));
         $resolver = new EngineResolver();
-        $finder = new FileViewFinder(
-            vilare()->filesystem(),
-            [
-                vilare()->config()->get('views.path'),
-            ]
-        );
+        $finder = new FileViewFinder(vilare()->filesystem(), [vilare()->config()->get('views.path')]);
         $dispatcher = new Dispatcher();
+        $directives = new Directives();
 
+        $directives->register($compiler);
         $resolver->register('blade', fn() => new CompilerEngine($compiler));
 
+        $finder->addNamespace('blocks', vilare()->config()->get('blocks.path'));
+        $finder->addNamespace('components', vilare()->config()->get('components.path'));
+        $finder->addNamespace('templates', vilare()->config()->get('templates.path'));
+
         $this->factory = new Factory($resolver, $finder, $dispatcher);
+
+        do_action('vilare_templating_provider_init', $compiler, $finder);
+
+        Container::getInstance()->bind(
+            'Illuminate\Contracts\View\Factory',
+            function () {
+                return $this->factory;
+            }
+        );
     }
 
     public function filterCommentsTemplate($file)

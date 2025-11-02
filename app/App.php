@@ -8,6 +8,7 @@ use Vilare\Core\Config;
 use Vilare\Core\Hooks;
 use Vilare\Setup;
 use Vilare\Integrations\Integrations;
+use Vilare\Blade\Templating;
 use Vilare\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
 
@@ -27,10 +28,15 @@ class App
 
     private Templates $templates;
 
+    private Templating $templating;
+
     private static ?App $instance = null;
 
     private function __construct()
     {
+        // Ensure singleton is set early to avoid recursive App::get() during init
+        self::$instance = $this;
+
         $this->assets = self::init(new Assets());
         $this->comments = self::init(new Comments());
         $this->config = self::init(new Config());
@@ -38,6 +44,7 @@ class App
         $this->integrations = self::init(new Integrations());
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
+        $this->templating = self::init(new Templating());
     }
 
     public function assets(): Assets
@@ -75,9 +82,12 @@ class App
         return $this->templates;
     }
 
-    private function __clone()
+    public function templating(): Templating
     {
+        return $this->templating;
     }
+
+    private function __clone() {}
 
     public function __wakeup()
     {
