@@ -21,7 +21,7 @@ class Config
             'hmr' => [
                 'uri' => VILARE_HMR_HOST,
                 'client' => VILARE_HMR_URI . '/@vite/client',
-                'sources' => VILARE_HMR_URI . '/resources',
+                'resources' => VILARE_HMR_URI . '/resources',
                 'active' =>
                     $this->isLocalEnvironment() &&
                     ! is_wp_error(wp_remote_get(VILARE_HMR_URI)),
