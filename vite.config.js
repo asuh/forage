@@ -6,7 +6,7 @@ const ROOT = path.resolve('../../../');
 const BASE = __dirname.replace(ROOT, '');
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? `${BASE}/dist/` : BASE,
+  base: process.env.NODE_ENV === 'production' ? `./` : BASE,
 
   build: {
     manifest: 'manifest.json',
