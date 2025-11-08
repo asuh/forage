@@ -10,7 +10,7 @@
     </svg>
 </button>
 
-<dialog id="{{ $id }}" class="dialog" aria-labelledby="{{ $id }}-title">
+<dialog id="{{ $id }}" class="dialog" aria-labelledby="{{ $id }}-title" closedby="any">
     {!! $content !!}
 
     <form action="#">
