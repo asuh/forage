@@ -287,6 +287,7 @@ class Setup
         if (! $hasForm) {
             add_filter('wpcf7_load_js', '__return_false');
             add_filter('wpcf7_load_css', '__return_false');
+            wp_deregister_script( 'wp-i18n' );
 
             remove_action(
                 'wp_enqueue_scripts',
