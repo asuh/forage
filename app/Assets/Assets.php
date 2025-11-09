@@ -47,12 +47,14 @@ class Assets
                     'href' => vilare()->assets()->resolve('styles/styles.css'),
                     'as' => 'style',
                     'type' => 'text/css',
+                    'crossorigin' => true
                 ],
                 /* Example webfont preload
                 [
                     'href' => vilare()->assets()->resolve('fonts/font_name.woff2'),
                     'as' => 'font',
                     'type' => 'font/woff2',
+                    'crossorigin' => true,
                 ], */
             ]
         );
@@ -66,11 +68,14 @@ class Assets
                 continue;
             }
 
+            $crossorigin_attr = !empty($item['crossorigin']) ? ' crossorigin' : '';
+
             printf(
-                '<link rel="preload" href="%s" as="%s" type="%s" crossorigin="true" />',
+                '<link rel="preload" href="%s" as="%s" type="%s"%s />',
                 esc_attr($item['href']),
                 esc_attr($item['as']),
                 esc_attr($item['type']),
+                $crossorigin_attr,
             );
         }
     }
