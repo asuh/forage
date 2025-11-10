@@ -1,5 +1,5 @@
 @import "common/global.css";
-@import "common/fonts.css";
+/* @import "common/fonts.css"; */
 @import "partials/buttons.css";
 @import "partials/nav.css";
 
@@ -10,7 +10,7 @@ body {
     margin-inline: auto;
     max-width: 82ch;
   }
-} 
+}
 
 .banner {
   align-items: center;
