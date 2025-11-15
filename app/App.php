@@ -11,6 +11,9 @@ use Vilare\Integrations\Integrations;
 use Vilare\Blade\Templating;
 use Vilare\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
+use Vilare\Prettify\CleanUpModule;
+use Vilare\Prettify\NiceSearchModule;
+use Vilare\Prettify\RelativeUrlsModule;
 
 class App
 {
@@ -30,6 +33,12 @@ class App
 
     private Templating $templating;
 
+    private CleanUpModule $cleanUpModule;
+
+    private NiceSearchModule $niceSearchModule;
+
+    private RelativeUrlsModule $relativeUrlsModule;
+
     private static ?App $instance = null;
 
     private function __construct()
@@ -45,6 +54,11 @@ class App
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
         $this->templating = self::init(new Templating());
+        $this->widgets = self::init(new Widgets());
+        $prettifyConfig = collect($this->config->prettify());
+        $this->cleanUpModule = self::init(new CleanUpModule($this, $prettifyConfig));
+        $this->niceSearchModule = self::init(new NiceSearchModule($this, $prettifyConfig));
+        $this->relativeUrlsModule = self::init(new RelativeUrlsModule($this, $prettifyConfig));
     }
 
     public function assets(): Assets
@@ -87,7 +101,24 @@ class App
         return $this->templating;
     }
 
-    private function __clone() {}
+    public function cleanUpModule(): CleanUpModule
+    {
+        return $this->cleanUpModule;
+    }
+
+    public function niceSearchModule(): NiceSearchModule
+    {
+        return $this->niceSearchModule;
+    }
+
+    public function relativeUrlsModule(): RelativeUrlsModule
+    {
+        return $this->relativeUrlsModule;
+    }
+
+    private function __clone()
+    {
+    }
 
     public function __wakeup()
     {
