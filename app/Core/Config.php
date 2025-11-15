@@ -45,6 +45,11 @@ class Config
         ];
     }
 
+    public function optimizations(): array
+    {
+        return require __DIR__ . '/../config/optimizations.php';
+    }
+
     public function get(string $key): mixed
     {
         $value = $this->config;

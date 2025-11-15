@@ -8,6 +8,8 @@ use Vilare\Core\Config;
 use Vilare\Core\Hooks;
 use Vilare\Setup;
 use Vilare\Integrations\Integrations;
+use Vilare\Optimizations\Concatenator;
+use Vilare\Optimizations\JsConcatenator;
 use Vilare\Blade\Templating;
 use Vilare\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
@@ -15,6 +17,10 @@ use Illuminate\Filesystem\Filesystem;
 class App
 {
     private Assets $assets;
+
+    private Concatenator $concatenator;
+
+    private JsConcatenator $jsconcatenator;
 
     private Comments $comments;
 
@@ -38,6 +44,8 @@ class App
         self::$instance = $this;
 
         $this->assets = self::init(new Assets());
+        $this->concatenator = self::init(new Concatenator());
+        $this->jsconcatenator = self::init(new JsConcatenator());
         $this->comments = self::init(new Comments());
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
@@ -50,6 +58,16 @@ class App
     public function assets(): Assets
     {
         return $this->assets;
+    }
+
+    public function concatenator(): Concatenator
+    {
+        return $this->concatenator;
+    }
+
+    public function jsconcatenator(): JsConcatenator
+    {
+        return $this->jsconcatenator;
     }
 
     public function comments(): Comments
