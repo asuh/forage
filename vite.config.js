@@ -6,7 +6,7 @@ const ROOT = path.resolve('../../../');
 const BASE = __dirname.replace(ROOT, '');
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? `${BASE}/dist/` : BASE,
+  base: process.env.NODE_ENV === 'production' ? `./` : BASE,
 
   build: {
     manifest: 'manifest.json',
@@ -20,6 +20,7 @@ export default defineConfig({
       input: [
         'resources/scripts/scripts.js',
         'resources/styles/styles.css',
+        'resources/styles/admin.css',
         'resources/scripts/blocks.js'
       ],
       output: {
@@ -29,6 +30,7 @@ export default defineConfig({
       },
     },
   },
+
   plugins: [
     copy({
       targets: [
@@ -46,11 +48,24 @@ export default defineConfig({
       },
     },
   ],
+
   css: {
     devSourcemap: true
     // transformer: 'lightningcss',
   },
+
   server: {
-    cors: true
-  }
+    cors: true,
+    https: true
+  },
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname),
+      '@scripts': path.resolve(__dirname, './resources/scripts'),
+      '@styles': path.resolve(__dirname, './resources/styles'),
+    },
+  },
+
+  logLevel: 'warn',
 });

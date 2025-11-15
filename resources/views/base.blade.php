@@ -14,7 +14,6 @@
         @php(do_action('get_header'))
 
         @include('partials.header')
-        @include('partials/h-card')
 
         <main class="main" id="main">
             @yield('content')

@@ -1,6 +1,6 @@
 <article @php(post_class())>
     @if (has_post_thumbnail())
-        <figure class="full">
+        <figure class="post-thumbnail full">
             <a class="p-name u-url" href="{{ get_permalink() }}">@php(the_post_thumbnail())</a>
         </figure>
     @endif

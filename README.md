@@ -1,10 +1,10 @@
 <p align="center"><img src="/resources/images/Forage.png" alt="Forage" /></p>
 
 # Forage
-This theme combines two starter themes: FootMATE + Sage. [I go into more detail on my blog post about everything](https://asuh.com/forage/).
+This theme combines two starter themes: Vilare + Sage. [I go into more detail on my blog post about everything](https://asuh.com/forage/).
 
-## [FootMATE](https://github.com/przemekhernik/footmate.pro/tree/develop)
-FootMATE is a WordPress theme created as [a demo for the author's course](https://pragmate.dev/wordpress/how-to-build-solid-wordpress-applications/),  built to teach modern WordPress development.
+## [Vilare](https://github.com/pragmatedev/vilare)
+Vilare is a WordPress theme created as [a demo for the author's course](https://pragmate.dev/wordpress/how-to-build-solid-wordpress-applications/),  built to teach modern WordPress development.
 
 ## [Sage](https://roots.io/sage/)
 Sage is a WordPress starter theme with a modern development workflow.
@@ -12,10 +12,10 @@ Sage is a WordPress starter theme with a modern development workflow.
 ## Features
 
 * [Blade](https://laravel.com/docs/master/blade) as a templating engine
-* [Vite](https://vitejs.dev/) for compiling assets, concatenating, and minifying files
+* [Vite](https://vite.dev/) for compiling assets, concatenating, and minifying files
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
-* [DocHooks](https://tentyp.dev/blog/wordpress/dochooks-sugar-syntax-for-hooking-system/) provide new functionality of class method DocBlock as hooks into WordPress API
+* [DocHooks](https://pragmate.dev/wordpress/dochooks/) provide new functionality of class method DocBlock as hooks into WordPress API
 * [IndieWeb](https://indieweb.org/) support with baked in [Microformats2](https://microformats.org/wiki/microformats2) and [structured data](https://schema.org/)
 
 > [!NOTE]
@@ -27,10 +27,10 @@ Sage is a WordPress starter theme with a modern development workflow.
 
 Make sure all dependencies have been installed before moving on:
 
-* [WordPress](https://wordpress.org/) >= 6.5.x
-* [PHP](https://www.php.net/manual/en/install.php) >= 8.2.x
+* [WordPress](https://wordpress.org/) >= 6.8.x
+* [PHP](https://www.php.net/manual/en/install.php) >= 8.3.x
 * [Composer](https://getcomposer.org/download/)
-* [Node.js](http://nodejs.org/) >= 20.0.0
+* [Node.js](http://nodejs.org/) >= 24.0.0
 * [Yarn](https://yarnpkg.com/getting-started/install)
 
 ## Theme structure
@@ -92,8 +92,8 @@ $ composer install
 
 ### Build commands
 
-* `yarn build` — Compile and optimize the files in your assets directory
-* `yarn dev` — Compile assets when file changes are made using Vite's hot module reload
+* `yarn run build` — Compile and optimize the files in your assets directory
+* `yarn run dev` — Compile assets when file changes are made using Vite's hot module reload
 
 ### Lightning CSS (optional)
 
@@ -143,13 +143,13 @@ yarn add -D sass
 
 With anything mentioned above, if you add additional dependencies to `package.json`, make sure to update `vite.config.js` to include the necessary watch files and syntax.
 
-[Vite's documentation](https://vitejs.dev/guide/features.html) provides a lot of great info to extend the Vite config file.
+[Vite's documentation](https://vite.dev/guide/features.html) provides a lot of great info to extend the Vite config file.
 
 ## Background
 
 The Roots Sage project provided an excellent philosophy and approaches for a progressively developed WordPress theme, but after version 9, Sage had too many interconnected pieces, new dependencies and abstractions, and increasingly difficult to keep up with. Additionally, having focused on so many other projects and returning to an old version of this theme, Sage left much to be desired, as well as plenty of broken packages and outdated dependencies.
 
-I found FootMATE in spring of 2024 looking for an alternative to Sage. It purposely follows enough of a paradigm similar to Sage that it feels like a younger cousin. The author also decided to integrate Vite, a direction that Sage has taken in 2025. Vite is a win for productivity and DX and many projects are moving to using Vite.
+I found FootMATE (Now Vilare) in spring of 2024 looking for an alternative to Sage. It purposely followed enough of a paradigm similar to Sage that it felt like a younger cousin. The author also decided to integrate Vite, a direction that Sage took in 2025. Vite is a win for productivity as well as better developer experience and many projects have moved to using Vite.
 
 The combination of the two themes satisfies my desire for good file architecture and modern tooling without much bloat or dependencies. It just works.
 

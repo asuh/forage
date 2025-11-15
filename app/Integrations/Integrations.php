@@ -1,8 +1,8 @@
 <?php
 
-namespace FM\Integrations;
+namespace Vilare\Integrations;
 
-use FM\Integrations\Vite;
+use Vilare\Integrations\Vite;
 
 class Integrations
 {
@@ -11,8 +11,8 @@ class Integrations
      */
     public function init(): void
     {
-        if (fm()->config()->get('hmr.active')) {
-            \FM\App::init(new Vite());
+        if (vilare()->config()->get('hmr.active')) {
+            \Vilare\App::init(new Vite());
         }
     }
 }

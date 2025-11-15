@@ -1,29 +1,57 @@
 <?php
 
-namespace FM\Templates;
+namespace Vilare\Templates;
 
-use FM\Templates\Provider;
-use FM\Templates\Resolver;
+use Vilare\Templates\Template;
 
 class Templates
 {
-    private Provider $provider;
+    private array $templates = [];
 
-    private Resolver $resolver;
-
-    public function __construct()
+    /**
+     * @action after_setup_theme
+     */
+    public function init(): void
     {
-        $this->provider = \FM\App::init(new Provider());
-        $this->resolver = \FM\App::init(new Resolver());
+        $classes = collect(
+            vilare()
+                ->filesystem()
+                ->glob(VILARE_PATH . "/app/Templates/*.php"),
+        )
+            ->map(fn($path) => pathinfo($path, PATHINFO_FILENAME))
+            ->map(fn($name) => sprintf("Vilare\Templates\\%s", $name));
+
+        foreach ($classes as $class) {
+            /* $template = \Vilare\App::init(new $class());
+            $this->templates[$template->getId()] = $template; */
+        }
     }
 
-    public function render(string $template, array $data = []): void
+    public function has(string $template): bool
     {
-        $this->provider->render($template, $data);
+        return isset($this->templates[$template]);
     }
 
-    public function generate(string $template, array $data = []): string
+    public function get(string $template): Template
     {
-        return $this->provider->generate($template, $data);
+        return $this->templates[$template];
+    }
+
+    /**
+     * @filter theme_templates
+     */
+    public function add(array $templates): array
+    {
+        if (empty($this->templates)) {
+            return $templates;
+        }
+
+        foreach ($this->templates as $template) {
+            $templates[$template->getId()] = $template->getTitle();
+        }
+
+        asort($templates);
+
+        return $templates;
     }
 }

@@ -1,16 +1,21 @@
 <?php
 
-namespace FM\Core;
+namespace Vilare\Core;
 
 class Hooks
 {
-    private const PATTERN =
-        '#\* @(?P<type>filter|action|shortcode)\s+(?P<name>[a-z0-9\-\.\/_]+)(\s+(?P<priority>\d+))?#';
+    private const PATTERN = '#\* @(?P<type>filter|action|shortcode)\s+(?P<name>[a-z0-9\-\.\/_]+)(\s+(?P<priority>\d+))?#';
 
     public static function init(object $instance): object
     {
         foreach (self::extract($instance) as $config) {
-            call_user_func($config['hook'], $config['name'], $config['callback'], $config['priority'], $config['args']);
+            call_user_func(
+                $config['hook'],
+                $config['name'],
+                $config['callback'],
+                $config['priority'],
+                $config['args'],
+            );
         }
 
         return $instance;
@@ -27,7 +32,14 @@ class Hooks
         $reflector = new \ReflectionObject($instance);
 
         foreach ($reflector->getMethods() as $method) {
-            if (preg_match_all(self::PATTERN, $method->getDocComment(), $matches, PREG_SET_ORDER)) {
+            if (
+                preg_match_all(
+                    self::PATTERN,
+                    $method->getDocComment(),
+                    $matches,
+                    PREG_SET_ORDER,
+                )
+            ) {
                 foreach ($matches as $match) {
                     $handlers[] = [
                         'hook' => sprintf('add_%s', $match['type']),

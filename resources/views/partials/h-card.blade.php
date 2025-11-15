@@ -1,4 +1,4 @@
-<div class="h-card vcard">
+<div class="representative h-card vcard">
     @php
         $id = get_the_author_meta('ID');
 
@@ -11,7 +11,7 @@
         }
     @endphp
     <a class="u-url u-uid" rel="author" href="{{ home_url('/') }}">
-        {!! get_avatar($id, 96, '', '', ['class' => 'u-photo']) !!}
+        {!! get_avatar($id, 96, '', 'Profile image for ' . get_the_author_meta('display_name', $id), ['class' => 'u-photo']) !!}
         <span class="p-name fn">
             @if (get_the_author_meta('organization') !== '')
                 <span class="fn org">{{ get_the_author_meta('organization', $id) }}</span>
