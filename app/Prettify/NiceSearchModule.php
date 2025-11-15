@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Prettify;
+namespace Vilare\Prettify;
 
 class NiceSearchModule extends AbstractModule
 {

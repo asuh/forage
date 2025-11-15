@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Prettify;
+namespace Vilare\Prettify;
 
 use Illuminate\Support\Str;
 

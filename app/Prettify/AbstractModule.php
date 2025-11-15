@@ -1,6 +1,6 @@
 <?php
 
-namespace FM\Prettify;
+namespace Vilare\Prettify;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -20,7 +20,7 @@ abstract class AbstractModule
     /**
      * Initialize the Module instance.
      */
-    public function __construct(\FM\App $app, Collection $config)
+    public function __construct(\Vilare\App $app, Collection $config)
     {
         $this->app = $app;
         $this->config = collect($config->get($this->getKey(), []));

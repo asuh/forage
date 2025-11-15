@@ -11,9 +11,9 @@ use Vilare\Integrations\Integrations;
 use Vilare\Blade\Templating;
 use Vilare\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
-use FM\Prettify\CleanUpModule;
-use FM\Prettify\NiceSearchModule;
-use FM\Prettify\RelativeUrlsModule;
+use Vilare\Prettify\CleanUpModule;
+use Vilare\Prettify\NiceSearchModule;
+use Vilare\Prettify\RelativeUrlsModule;
 
 class App
 {

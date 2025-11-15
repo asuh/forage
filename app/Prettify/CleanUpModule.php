@@ -1,8 +1,8 @@
 <?php
 
-namespace FM\Prettify;
+namespace Vilare\Prettify;
 
-use FM\Prettify\Document;
+use Vilare\Prettify\Document;
 use Illuminate\Support\Str;
 
 class CleanUpModule extends AbstractModule
