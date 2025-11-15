@@ -37,7 +37,7 @@ class Config
                 'uri' => VILARE_DIST_URI,
             ],
             'resources' => [
-                'path' => VILARE_PATH . '/resources',
+                'path' => VILARE_PATH,
             ],
             'views' => [
                 'path' => VILARE_PATH . '/resources/views',
