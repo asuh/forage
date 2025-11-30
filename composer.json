@@ -9,7 +9,7 @@
     }
   },
   "require": {
-    "php": "^8.3",
+    "php": ">=8.2",
     "illuminate/view": "^12.10",
     "illuminate/support": "^12.10"
   },
@@ -19,7 +19,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
-    "wp-coding-standards/wpcs": "^3.1.0"
+    "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
     "allow-plugins": {
