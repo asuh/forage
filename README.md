@@ -124,9 +124,11 @@ Forage includes a built-in Prettify layer that handles WordPress output cleanup 
 
 * Removes generator tags, wlwmanifest, RSD, oEmbed discovery, and shortlink from `<head>`
 * Disables WordPress emoji scripts and styles
-* Dequeues Gutenberg block library CSS, extra RSS feeds, recent comments CSS, and gallery CSS
+* Dequeues Gutenberg block library CSS on pages with no block content; preserves it when blocks are present
 * Cleans up `<script>` and `<link>` tag attributes (removes `type`, redundant `id`, and `media="all"`)
 * Strips verbose classes and IDs from nav menu `<li>` items; normalises `current-menu-item` to `active`
+
+Global Styles (`wp_enqueue_global_styles`) follow the same logic: removed on pages without blocks, preserved when block content is detected. This keeps the theme lightweight for classic content while remaining compatible with AI-generated and editor-created blocks.
 
 ### Nice Search (enabled by default)
 

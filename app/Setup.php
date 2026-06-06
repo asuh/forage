@@ -12,12 +12,6 @@ class Setup
     public function addThemeSupport(): void
     {
         /**
-         * Remove Global Styles rendered for Gutenberg blocks
-         * Remove the line below if you are using Gutenberg
-         */
-        remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
-
-        /**
          * Enable post thumbnails
          * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
          */
@@ -79,6 +73,19 @@ class Setup
          * add_image_size( '424x424', 424, 424, true );
          * add_image_size( '1920', 1920, 9999 );
          */
+    }
+
+    /**
+     * Remove Global Styles when the current singular post contains no blocks.
+     * Runs at priority 9, before wp_enqueue_global_styles fires at priority 10.
+     *
+     * @action wp_enqueue_scripts 9
+     */
+    public function conditionallyRemoveGlobalStyles(): void
+    {
+        if (! (is_singular() && has_blocks())) {
+            remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
+        }
     }
 
     /**

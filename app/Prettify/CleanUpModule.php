@@ -117,7 +117,11 @@ class CleanUpModule extends AbstractModule
             return $this;
         }
 
-        add_filter('wp_enqueue_scripts', fn () => wp_dequeue_style('wp-block-library'), 200);
+        add_action('wp_enqueue_scripts', function () {
+            if (! (is_singular() && has_blocks())) {
+                wp_dequeue_style('wp-block-library');
+            }
+        }, 200);
 
         return $this;
     }
