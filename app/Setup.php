@@ -29,13 +29,6 @@ class Setup
         add_theme_support('automatic-feed-links');
 
         /**
-         * The following requires the Roots Soil plugin.
-         * Prettify handles clean-up, nice-search, and relative-urls natively.
-         * https://github.com/roots/soil
-         */
-        add_theme_support('soil', ['nav-walker']);
-
-        /**
          * Enable HTML5 markup support.
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
          */

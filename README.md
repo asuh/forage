@@ -16,6 +16,7 @@ Sage is a WordPress starter theme with a modern development workflow.
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
 * [DocHooks](https://pragmate.dev/wordpress/dochooks/) provide new functionality of class method DocBlock as hooks into WordPress API
+* **Prettify** — self-contained WordPress output cleanup, nice search URLs, and optional relative URLs (no third-party plugins required)
 * [IndieWeb](https://indieweb.org/) support with baked in [Microformats2](https://microformats.org/wiki/microformats2) and [structured data](https://schema.org/)
 
 > [!NOTE]
@@ -42,7 +43,9 @@ themes/your-theme-name/   # → Root of your theme
 │   ├── Comments/         # → Comment_Walker
 │   ├── Core/             # → Core files
 │   ├── Integrations/     # → Various integrations
-│   └── Templates/        # → Render and Compile Templates files
+│   ├── Prettify/         # → WordPress output cleanup modules
+│   ├── Templates/        # → Render and Compile Templates files
+│   └── config/           # → Theme configuration files
 ├── composer.json         # → Autoloading for `vendor/` files
 ├── composer.lock         # → Composer lock file (never edit)
 ├── dist/                 # → Built theme assets (never edit)
@@ -104,6 +107,26 @@ To enable Lightning CSS, run `yarn add --dev lightningcss` to add Lightning CSS 
 In `vite.config.js`, uncomment the two lines containing references to Lightning CSS and it'll be active by default.
 
 For more info on whether or not to add this package, you can check [Vite's official documentation for Lightning CSS](https://vite.dev/guide/features.html#lightning-css).
+
+## Prettify
+
+Forage includes a built-in Prettify layer that handles WordPress output cleanup without requiring the [Roots Soil](https://github.com/roots/soil) plugin. It is configured in `app/config/prettify.php`.
+
+### Clean Up (enabled by default)
+
+* Removes generator tags, wlwmanifest, RSD, oEmbed discovery, and shortlink from `<head>`
+* Disables WordPress emoji scripts and styles
+* Dequeues Gutenberg block library CSS, extra RSS feeds, recent comments CSS, and gallery CSS
+* Cleans up `<script>` and `<link>` tag attributes (removes `type`, redundant `id`, and `media="all"`)
+* Strips verbose classes and IDs from nav menu `<li>` items; normalises `current-menu-item` to `active`
+
+### Nice Search (enabled by default)
+
+Redirects `/?s=query` to `/search/query/`. Compatible with Yoast SEO.
+
+### Relative URLs (disabled by default)
+
+Converts absolute URLs to relative URLs across a configurable list of WordPress hooks. Enable in `app/config/prettify.php` by setting `relative-urls.enabled` to `true`.
 
 ## IndieWeb
 

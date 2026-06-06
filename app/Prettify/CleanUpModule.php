@@ -76,6 +76,9 @@ class CleanUpModule extends AbstractModule
 
         add_filter('site_icon_meta_tags', fn ($tags) => array_map([$this, 'removeSelfClosingTags'], $tags), 20);
 
+        add_filter('nav_menu_item_id', '__return_null');
+        add_filter('nav_menu_css_class', [$this, 'cleanNavMenuClasses'], 10, 2);
+
         return $this;
     }
 
@@ -237,5 +240,22 @@ class CleanUpModule extends AbstractModule
     public function removeSelfClosingTags(string|array $html): string|array
     {
         return str_replace(' />', '>', $html);
+    }
+
+    /**
+     * Clean nav menu item classes: strip verbose core classes, normalise
+     * current-* states to `active`, and add a slug-based `menu-{slug}` class.
+     */
+    public function cleanNavMenuClasses(array $classes, object $item): array
+    {
+        $slug = sanitize_title($item->title);
+
+        $classes = preg_replace('/(current(-menu-|[-_]page[-_])(item|parent|ancestor))/', 'active', $classes);
+        $classes = preg_replace('/^((menu|page)[-_\w+]+)+/', '', $classes);
+        $classes = array_filter(array_unique(array_map('trim', $classes)));
+        $classes[] = 'menu-item';
+        $classes[] = 'menu-' . $slug;
+
+        return array_values($classes);
     }
 }
