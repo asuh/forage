@@ -97,16 +97,24 @@ $ composer install
 
 * `yarn run build` — Compile and optimize the files in your assets directory
 * `yarn run dev` — Compile assets when file changes are made using Vite's hot module reload
+* `yarn run format` — Auto-format JS and CSS with Biome, PHP with PHPCS
+* `yarn run lint` — Lint JS and CSS with Biome, PHP with PHPCS
 
-### Lightning CSS (optional)
+### Network access
 
-Lightning CSS is a fast CSS parser that can be used as a great tool to manage the project's CSS. The primary benefit is in its speed and transpiling over PostCSS/ESBuild.
+`yarn dev` exposes the Vite dev server on all network interfaces. When accessing the WordPress site from another device on the same network (phone, tablet, etc.), HMR connects automatically — no configuration needed. The dev server URL is printed on startup alongside the localhost URL.
 
-To enable Lightning CSS, run `yarn add --dev lightningcss` to add Lightning CSS as a new package referenced in `devDependencies` in `package.json`.
+To override the HMR host manually (e.g. behind a reverse proxy), define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 
-In `vite.config.js`, uncomment the two lines containing references to Lightning CSS and it'll be active by default.
+```php
+define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
+```
 
-For more info on whether or not to add this package, you can check [Vite's official documentation for Lightning CSS](https://vite.dev/guide/features.html#lightning-css).
+### Lightning CSS
+
+Lightning CSS handles CSS minification during `yarn build` by default (no install required — it ships with Vite 8). Using it as a full CSS transformer is optional:
+
+To enable the transformer, uncomment `transformer: 'lightningcss'` in `vite.config.js`. For more details, see [Vite's Lightning CSS documentation](https://vite.dev/guide/features.html#lightning-css).
 
 ## Prettify
 
