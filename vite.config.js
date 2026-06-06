@@ -56,7 +56,6 @@ export default defineConfig({
 
   server: {
     cors: true,
-    https: true
   },
 
   resolve: {
