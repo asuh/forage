@@ -9,9 +9,9 @@
     }
   },
   "require": {
-    "php": ">=8.2",
-    "illuminate/view": "^12.10",
-    "illuminate/support": "^12.10"
+    "php": ">=8.3",
+    "illuminate/view": "^13",
+    "illuminate/support": "^13"
   },
   "scripts": {
     "lint": "phpcs",
