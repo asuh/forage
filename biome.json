@@ -23,9 +23,7 @@
       "!**/.output",
       "!**/*.lock",
       "!**/*-lock.json",
-      "!**/*.js",
-      "!**/*.css",
-      "!**/*.scss"
+      "!**/*.js"
     ]
   },
   "linter": {
@@ -131,6 +129,19 @@
     "formatter": {
       "indentScriptAndStyle": false,
       "selfCloseVoidElements": "always"
+    }
+  },
+  "css": {
+    "formatter": {
+      "enabled": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineEnding": "lf",
+      "lineWidth": 80,
+      "quoteStyle": "double"
+    },
+    "linter": {
+      "enabled": true
     }
   },
   "overrides": [

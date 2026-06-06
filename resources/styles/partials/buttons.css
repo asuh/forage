@@ -19,7 +19,7 @@
   &[aria-expanded="true"]:hover {
     background-color: var(--surface-color);
   }
-    
+
   @media (width >= 48em) {
     display: none;
   }

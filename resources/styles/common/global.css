@@ -5,16 +5,18 @@
 }
 
 body {
-  font-family: var(--system-ui), -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family:
+    var(--system-ui), -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   margin: 0;
 }
 
 :root {
-	/* NOTE: For Safari 17.4 (2024-05) */
+  /* NOTE: For Safari 17.4 (2024-05) */
   @supports (color: light-dark(black, white)) {
     color-scheme: light dark;
-	  --surface-color: light-dark( #ccc, #333 );
-	  --text-color: light-dark( #333, #ccc );
+    --surface-color: light-dark(#ccc, #333);
+    --text-color: light-dark(#333, #ccc);
   }
 }
 
@@ -23,12 +25,13 @@ body {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	:where(html:focus-within) {
-		scroll-behavior: smooth;
-	}
+  :where(html:focus-within) {
+    scroll-behavior: smooth;
+  }
 }
 
-button, [type="submit"] {
+button,
+[type="submit"] {
   cursor: pointer;
 }
 
