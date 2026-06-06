@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Core;
+namespace Forage\Core;
 
 class Config
 {
@@ -9,38 +9,38 @@ class Config
     public function __construct()
     {
         $this->config = [
-            'version' => $this->isLocalEnvironment() ? time() : VILARE_VERSION,
+            'version' => $this->isLocalEnvironment() ? time() : FORAGE_VERSION,
             'env' => [
                 'type' => wp_get_environment_type(),
                 'mode' =>
                     false ===
-                    strpos(VILARE_PATH, ABSPATH . 'wp-content/plugins')
+                    strpos(FORAGE_PATH, ABSPATH . 'wp-content/plugins')
                         ? 'theme'
                         : 'plugin',
             ],
             'hmr' => [
-                'uri' => VILARE_HMR_HOST,
-                'client' => VILARE_HMR_URI . '/@vite/client',
-                'resources' => VILARE_HMR_URI . '/resources',
+                'uri' => FORAGE_HMR_HOST,
+                'client' => FORAGE_HMR_URI . '/@vite/client',
+                'resources' => FORAGE_HMR_URI . '/resources',
                 'active' =>
                     $this->isLocalEnvironment() &&
-                    ! is_wp_error(wp_remote_get(VILARE_HMR_URI)),
+                    ! is_wp_error(wp_remote_get(FORAGE_HMR_URI)),
             ],
             'manifest' => [
-                'path' => VILARE_DIST_PATH . '/manifest.json',
+                'path' => FORAGE_DIST_PATH . '/manifest.json',
             ],
             'cache' => [
-                'path' => wp_upload_dir()['basedir'] . '/cache/vilare',
+                'path' => wp_upload_dir()['basedir'] . '/cache/forage',
             ],
             'dist' => [
-                'path' => VILARE_DIST_PATH,
-                'uri' => VILARE_DIST_URI,
+                'path' => FORAGE_DIST_PATH,
+                'uri' => FORAGE_DIST_URI,
             ],
             'resources' => [
-                'path' => VILARE_PATH . '/resources',
+                'path' => FORAGE_PATH . '/resources',
             ],
             'views' => [
-                'path' => VILARE_PATH . '/resources/views',
+                'path' => FORAGE_PATH . '/resources/views',
             ],
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Blade;
+namespace Forage\Blade;
 
 class TemplatingException extends \Exception
 {

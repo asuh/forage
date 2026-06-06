@@ -1,9 +1,9 @@
 <?php
 
-namespace Vilare\Blade;
+namespace Forage\Blade;
 
-use Vilare\Blade\Provider;
-use Vilare\Blade\Resolver;
+use Forage\Blade\Provider;
+use Forage\Blade\Resolver;
 
 class Templating
 {
@@ -11,8 +11,8 @@ class Templating
 
     public function __construct()
     {
-        \Vilare\App::init(new Resolver());
-        $this->provider = \Vilare\App::init(new Provider());
+        \Forage\App::init(new Resolver());
+        $this->provider = \Forage\App::init(new Provider());
     }
 
     public function render(string $template, array $data = []): void

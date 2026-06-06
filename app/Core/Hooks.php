@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Core;
+namespace Forage\Core;
 
 class Hooks
 {

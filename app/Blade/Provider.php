@@ -1,8 +1,8 @@
 <?php
 
-namespace Vilare\Blade;
+namespace Forage\Blade;
 
-use Vilare\Blade\Directives;
+use Forage\Blade\Directives;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\View\View;
 use Illuminate\Events\Dispatcher;
@@ -35,7 +35,7 @@ class Provider
 
     public function view(string $template, array $data = []): View
     {
-        return vilare()->filesystem()->exists($template)
+        return forage()->filesystem()->exists($template)
             ? $this->factory->file($template, $data)
             : $this->factory->make($template, $data);
     }
@@ -43,7 +43,7 @@ class Provider
     public function templateExists(string $template): bool
     {
         // Convert the dot notation (e.g., 'partials.comments') to a file path
-        $templatePath = vilare()->config()->get('views.path') . '/' . str_replace('.', '/', $template) . '.blade.php';
+        $templatePath = forage()->config()->get('views.path') . '/' . str_replace('.', '/', $template) . '.blade.php';
 
         // Check if the file exists
         return file_exists($templatePath);
@@ -51,22 +51,22 @@ class Provider
 
     private function init(): void
     {
-        $compiler = new BladeCompiler(vilare()->filesystem(), vilare()->config()->get('cache.path'));
+        $compiler = new BladeCompiler(forage()->filesystem(), forage()->config()->get('cache.path'));
         $resolver = new EngineResolver();
-        $finder = new FileViewFinder(vilare()->filesystem(), [vilare()->config()->get('views.path')]);
+        $finder = new FileViewFinder(forage()->filesystem(), [forage()->config()->get('views.path')]);
         $dispatcher = new Dispatcher();
         $directives = new Directives();
 
         $directives->register($compiler);
         $resolver->register('blade', fn() => new CompilerEngine($compiler));
 
-        $finder->addNamespace('blocks', vilare()->config()->get('blocks.path'));
-        $finder->addNamespace('components', vilare()->config()->get('components.path'));
-        $finder->addNamespace('templates', vilare()->config()->get('templates.path'));
+        $finder->addNamespace('blocks', forage()->config()->get('blocks.path'));
+        $finder->addNamespace('components', forage()->config()->get('components.path'));
+        $finder->addNamespace('templates', forage()->config()->get('templates.path'));
 
         $this->factory = new Factory($resolver, $finder, $dispatcher);
 
-        do_action('vilare_templating_provider_init', $compiler, $finder);
+        do_action('forage_templating_provider_init', $compiler, $finder);
 
         Container::getInstance()->bind(
             'Illuminate\Contracts\View\Factory',
@@ -97,7 +97,7 @@ class Provider
             );
 
             // Return a blank file to prevent WordPress from rendering the default template
-            return VILARE_PATH . '/resources/index.php';
+            return FORAGE_PATH . '/resources/index.php';
         }
 
         // If the Blade template doesn't exist, fall back to the default behavior

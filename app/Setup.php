@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare;
+namespace Forage;
 
 class Setup
 {
@@ -105,7 +105,7 @@ class Setup
     {
         register_nav_menus(
             [
-                'primary_navigation' => __('Primary Navigation', 'vilare'),
+                'primary_navigation' => __('Primary Navigation', 'forage'),
             /** 'secondary_navigation' => __('Secondary Navigation') */
             ]
         );
@@ -127,14 +127,14 @@ class Setup
 
         register_sidebar(
             [
-                'name' => __('Primary', 'vilare'),
+                'name' => __('Primary', 'forage'),
                 'id' => 'sidebar-primary',
             ] + $config,
         );
 
         register_sidebar(
             [
-                'name' => __('Footer', 'vilare'),
+                'name' => __('Footer', 'forage'),
                 'id' => 'sidebar-footer',
             ] + $config,
         );
@@ -261,7 +261,7 @@ class Setup
     public function overrideWebmentionsWalker($args): array
     {
         if (class_exists('Webmention\Comment_Walker')) {
-            $args['walker'] = new \Vilare\Comments\Comments();
+            $args['walker'] = new \Forage\Comments\Comments();
         }
         return $args;
     }

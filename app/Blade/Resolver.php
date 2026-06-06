@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Blade;
+namespace Forage\Blade;
 
 class Resolver
 {
@@ -28,13 +28,13 @@ class Resolver
      */
     public function relocate(array $templates): array
     {
-        if (! vilare()->config()->isTheme()) {
+        if (! forage()->config()->isTheme()) {
             return $templates;
         }
 
         $templates = array_map(fn($item) => preg_replace('/^[^\/]+\/|(\.blade)?\.php$/', '', $item), $templates);
-        $templates = array_map(fn($item) => vilare()->config()->get('views.path') . '/' . $item . '.blade.php', $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
-        $templates = array_map(fn($item) => str_replace(vilare()->config()->get('resources.path') . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
+        $templates = array_map(fn($item) => forage()->config()->get('views.path') . '/' . $item . '.blade.php', $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
+        $templates = array_map(fn($item) => str_replace(forage()->config()->get('resources.path') . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
 
         return $templates;
     }
@@ -46,23 +46,23 @@ class Resolver
     {
         $id = get_post_meta(get_the_id(), '_wp_page_template', true);
 
-        if (vilare()->templates()->has($id)) {
-            vilare()->templates()->get($id)->render();
-            return vilare()->config()->get('resources.path') . '/index.php';
+        if (forage()->templates()->has($id)) {
+            forage()->templates()->get($id)->render();
+            return forage()->config()->get('resources.path') . '/index.php';
         }
 
         if (is_singular()) {
             $type = get_post_type();
 
-            if (vilare()->templates()->has($type) && vilare()->templates()->get($type)->isPrimary()) {
-                vilare()->templates()->get($type)->render();
-                return vilare()->config()->get('resources.path') . '/index.php';
+            if (forage()->templates()->has($type) && forage()->templates()->get($type)->isPrimary()) {
+                forage()->templates()->get($type)->render();
+                return forage()->config()->get('resources.path') . '/index.php';
             }
         }
 
-        if (vilare()->config()->isTheme()) {
-            vilare()->templating()->render($template);
-            return vilare()->config()->get('resources.path') . '/index.php';
+        if (forage()->config()->isTheme()) {
+            forage()->templating()->render($template);
+            return forage()->config()->get('resources.path') . '/index.php';
         }
 
         return $template;

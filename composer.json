@@ -1,11 +1,11 @@
 {
-  "name": "vilare/theme",
-  "description": "Vilare Theme",
+  "name": "forage/theme",
+  "description": "Forage Theme",
   "version": "0.1.4",
   "license": "GPLv3",
   "autoload": {
     "psr-4": {
-      "Vilare\\": "app/"
+      "Forage\\": "app/"
     }
   },
   "require": {

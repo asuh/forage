@@ -19,7 +19,7 @@
                 'style' => 'ol',
                 'short_ping' => true,
                 'avatar_size' => 64,
-                'walker' => new Vilare\Comments\Comments(),
+                'walker' => new Forage\Comments\Comments(),
             ]) !!}
         </ol><!-- .comment-list -->
     @endif

@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Comments;
+namespace Forage\Comments;
 
 if (class_exists('\Webmention\Comment_Walker')) {
     class Comments extends \Webmention\Comment_Walker

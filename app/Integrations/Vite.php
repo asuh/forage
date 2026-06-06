@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Integrations;
+namespace Forage\Integrations;
 
 class Vite
 {
@@ -12,23 +12,23 @@ class Vite
         //phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
         printf(
             '<script type="module" src="%s"></script>',
-            esc_attr(vilare()->config()->get('hmr.client')),
+            esc_attr(forage()->config()->get('hmr.client')),
         );
     }
 
     /**
-     * @filter vilare_assets_resolver_resolve_url 1 2
+     * @filter forage_assets_resolver_resolve_url 1 2
      */
     public function url(string $current, string $path): string
     {
-        return vilare()->config()->get('hmr.resources') . "/{$path}";
+        return forage()->config()->get('hmr.resources') . "/{$path}";
     }
 
     /**
-     * @filter vilare_assets_resolver_resolve_path 1 2
+     * @filter forage_assets_resolver_resolve_path 1 2
      */
     public function path(string $current, string $path): string
     {
-        return vilare()->config()->get('resources.path') . "/{$path}";
+        return forage()->config()->get('resources.path') . "/{$path}";
     }
 }

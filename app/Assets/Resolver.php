@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Assets;
+namespace Forage\Assets;
 
 trait Resolver
 {
@@ -11,13 +11,13 @@ trait Resolver
      */
     public function load(): void
     {
-        $path = vilare()->config()->get('manifest.path');
+        $path = forage()->config()->get('manifest.path');
 
         if (empty($path) || ! file_exists($path)) {
             wp_die('Run <code>yarn build</code> in your application root!');
         }
 
-        $data = vilare()->filesystem()->get($path);
+        $data = forage()->filesystem()->get($path);
 
         if (! empty($data)) {
             $this->manifest = json_decode($data, true);
@@ -30,8 +30,8 @@ trait Resolver
     public function module(string $tag, string $handle, string $url): string
     {
         if (
-            false !== strpos($url, vilare()->config()->get('hmr.uri')) ||
-            false !== strpos($url, vilare()->config()->get('dist.uri'))
+            false !== strpos($url, forage()->config()->get('hmr.uri')) ||
+            false !== strpos($url, forage()->config()->get('dist.uri'))
         ) {
             $tag = str_replace('<script ', '<script type="module" ', $tag);
         }
@@ -49,7 +49,7 @@ trait Resolver
             'deps' => ! empty($config['deps']) ? $config['deps'] : [],
             'version' => ! empty($config['version'])
                 ? $config['version']
-                : vilare()->config()->get('version'),
+                : forage()->config()->get('version'),
             'args' => [
                 'strategy' => ! empty($config['strategy'])
                     ? $config['strategy']
@@ -106,7 +106,7 @@ trait Resolver
                         'in_footer' => $config['args']['footer'],
                     ],
                 );
-                wp_set_script_translations($config['handle'], 'vilare');
+                wp_set_script_translations($config['handle'], 'forage');
                 break;
 
             case 'style':
@@ -134,22 +134,22 @@ trait Resolver
         switch ($type) {
             case 'url':
                 $url = ! empty($data['file'])
-                    ? vilare()->config()->get('dist.uri') . "/{$data["file"]}"
+                    ? forage()->config()->get('dist.uri') . "/{$data["file"]}"
                     : '';
 
                 return apply_filters(
-                    'vilare_assets_resolver_resolve_url',
+                    'forage_assets_resolver_resolve_url',
                     $url,
                     $path,
                 );
 
             case 'path':
                 $fullpath = ! empty($data['file'])
-                    ? vilare()->config()->get('dist.path') . "/{$data["file"]}"
+                    ? forage()->config()->get('dist.path') . "/{$data["file"]}"
                     : '';
 
                 return apply_filters(
-                    'vilare_assets_resolver_resolve_path',
+                    'forage_assets_resolver_resolve_path',
                     $fullpath,
                     $path,
                 );
@@ -165,14 +165,14 @@ trait Resolver
             'styles' => [],
         ];
 
-        if (vilare()->config()->get('hmr.active')) {
+        if (forage()->config()->get('hmr.active')) {
             return $assets;
         }
 
         if ($this->has($path)) {
             $assets['scripts'] = collect($this->find($path)['js'] ?? [])
                 ->map(
-                    fn($item) => vilare()->config()->get('dist.uri') .
+                    fn($item) => forage()->config()->get('dist.uri') .
                         '/' .
                         $item,
                 )
@@ -180,7 +180,7 @@ trait Resolver
 
             $assets['styles'] = collect($this->find($path)['css'] ?? [])
                 ->map(
-                    fn($item) => vilare()->config()->get('dist.uri') .
+                    fn($item) => forage()->config()->get('dist.uri') .
                         '/' .
                         $item,
                 )

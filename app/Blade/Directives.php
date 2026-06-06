@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Blade;
+namespace Forage\Blade;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
@@ -8,8 +8,8 @@ class Directives
 {
     public function register(BladeCompiler $compiler): void
     {
-        $compiler->directive('svg', fn($exp) => "<?php echo \Vilare\Blade\Directives::svg({$exp}) ?>");
-        $compiler->directive('image', fn($exp) => "<?php echo \Vilare\Blade\Directives::image({$exp}) ?>");
+        $compiler->directive('svg', fn($exp) => "<?php echo \Forage\Blade\Directives::svg({$exp}) ?>");
+        $compiler->directive('image', fn($exp) => "<?php echo \Forage\Blade\Directives::image({$exp}) ?>");
     }
 
     public static function svg(string $name, array $args = []): string
@@ -18,21 +18,21 @@ class Directives
             throw new \Exception('Filename not resolved.');
         }
 
-        $path = vilare()->assets()->resolve("images/{$name}.svg", 'path');
+        $path = forage()->assets()->resolve("images/{$name}.svg", 'path');
 
         if (empty($path)) {
             throw new \Exception(esc_html("SVG {$name} not resolved."));
         }
 
-        if (! vilare()->filesystem()->exists($path)) {
+        if (! forage()->filesystem()->exists($path)) {
             throw new \Exception(esc_html("{$path} file not found."));
         }
 
-        if (vilare()->filesystem()->guessExtension($path) !== 'svg') {
+        if (forage()->filesystem()->guessExtension($path) !== 'svg') {
             throw new \Exception(esc_html("{$path} is not an svg file."));
         }
 
-        $content = vilare()->filesystem()->get($path);
+        $content = forage()->filesystem()->get($path);
 
         if (preg_match('/<svg[^>]*\b(width|height)="([^"]+)"[^>]*\b(width|height)="([^"]+)"[^>]*>/i', $content, $matches)) { // phpcs:ignore Generic.Files.LineLength.TooLong
             $width = 0;
@@ -84,21 +84,21 @@ class Directives
             throw new \Exception('Filename not resolved.');
         }
 
-        $path = vilare()->assets()->resolve("images/{$name}", 'path');
+        $path = forage()->assets()->resolve("images/{$name}", 'path');
 
         if (empty($path)) {
             throw new \Exception(esc_html("Image {$name} not resolved."));
         }
 
-        if (! vilare()->filesystem()->exists($path)) {
+        if (! forage()->filesystem()->exists($path)) {
             throw new \Exception(esc_html("{$path} file not found."));
         }
 
-        if (! in_array(vilare()->filesystem()->guessExtension($path), ['png', 'jpg', 'jpeg', 'webp', 'avif'])) {
+        if (! in_array(forage()->filesystem()->guessExtension($path), ['png', 'jpg', 'jpeg', 'webp', 'avif'])) {
             throw new \Exception(esc_html("{$path} file extension is not allowed."));
         }
 
-        $url = vilare()->assets()->resolve("images/{$name}");
+        $url = forage()->assets()->resolve("images/{$name}");
         $alt = ! empty($attrs['alt']) ? $attrs['alt'] : '';
         $class = ! empty($attrs['class']) ? $attrs['class'] : '';
 

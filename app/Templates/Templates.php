@@ -1,6 +1,6 @@
 <?php
 
-namespace Vilare\Templates;
+namespace Forage\Templates;
 
 class Templates
 {

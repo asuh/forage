@@ -1,8 +1,8 @@
 <?php
 
-namespace Vilare\Templates;
+namespace Forage\Templates;
 
-use Vilare\Blade\TemplatingException;
+use Forage\Blade\TemplatingException;
 use Illuminate\View\ComponentAttributeBag;
 
 abstract class Template
@@ -28,7 +28,7 @@ abstract class Template
     final public function generate(array $data = []): string
     {
         try {
-            return vilare()
+            return forage()
                 ->templating()
                 ->generate(
                     "templates::{$this->getId()}.template",
@@ -44,10 +44,10 @@ abstract class Template
     final protected function parse(array $data): array
     {
         $data = array_replace_recursive($this->getData(), $data);
-        $data = apply_filters("vilare_templates_{$this->getId()}_data", $data);
+        $data = apply_filters("forage_templates_{$this->getId()}_data", $data);
 
         if ($this->hasSchema()) {
-            $result = vilare()
+            $result = forage()
                 ->validation()
                 ->validate($data, $this->getSchema());
 
@@ -67,14 +67,14 @@ abstract class Template
 
     final public function enqueue(): void
     {
-        vilare()
+        forage()
             ->assets()
             ->enqueue("templates/{$this->getId()}/script.js", [
                 "handle" => "template-{$this->getId()}-script",
                 "deps" => ["script"],
             ]);
 
-        vilare()
+        forage()
             ->assets()
             ->enqueue("templates/{$this->getId()}/style.scss", [
                 "handle" => "template-{$this->getId()}-style",
@@ -82,10 +82,10 @@ abstract class Template
             ]);
 
         if (in_array("swiper", $this->dependencies)) {
-            vilare()
+            forage()
                 ->assets()
                 ->enqueue("scripts/swiper.js", ["handle" => "swiper"]);
-            vilare()
+            forage()
                 ->assets()
                 ->enqueue("styles/swiper.scss", ["handle" => "swiper"]);
         }

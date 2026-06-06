@@ -1,8 +1,8 @@
 <?php
 
-namespace Vilare\Assets;
+namespace Forage\Assets;
 
-use Vilare\Assets\Resolver;
+use Forage\Assets\Resolver;
 
 class Assets
 {
@@ -41,17 +41,17 @@ class Assets
     public function preload(): void
     {
         $preloads = apply_filters(
-            'vilare_assets_preload',
+            'forage_assets_preload',
             [
                 [
-                    'href' => vilare()->assets()->resolve('styles/styles.css'),
+                    'href' => forage()->assets()->resolve('styles/styles.css'),
                     'as' => 'style',
                     'type' => 'text/css',
                     'crossorigin' => true
                 ],
                 /* Example webfont preload
                 [
-                    'href' => vilare()->assets()->resolve('fonts/font_name.woff2'),
+                    'href' => forage()->assets()->resolve('fonts/font_name.woff2'),
                     'as' => 'font',
                     'type' => 'font/woff2',
                     'crossorigin' => true,
@@ -86,10 +86,10 @@ class Assets
     public function modulepreload(): void
     {
         $preloads = apply_filters(
-            'vilare_assets_module_preload',
+            'forage_assets_module_preload',
             [
-                ['href' => vilare()->assets()->resolve('scripts/scripts.js')],
-                ['href' => vilare()->assets()->resolve('scripts/blocks.js')],
+                ['href' => forage()->assets()->resolve('scripts/scripts.js')],
+                ['href' => forage()->assets()->resolve('scripts/blocks.js')],
             ]
         );
 

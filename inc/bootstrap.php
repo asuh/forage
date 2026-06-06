@@ -1,6 +1,6 @@
 <?php // phpcs:ignore PSR1.Files.SideEffects.FoundWithSymbols
 
-$composer = VILARE_PATH . '/vendor/autoload.php';
+$composer = FORAGE_PATH . '/vendor/autoload.php';
 
 if (! file_exists($composer)) {
     wp_die(
@@ -19,11 +19,11 @@ if (
 
 require $composer;
 
-if (! function_exists('vilare')) {
-    function vilare(): Vilare\App
+if (! function_exists('forage')) {
+    function forage(): Forage\App
     {
-        return Vilare\App::get();
+        return Forage\App::get();
     }
 }
 
-vilare();
+forage();

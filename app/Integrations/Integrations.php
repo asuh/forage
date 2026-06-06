@@ -1,8 +1,8 @@
 <?php
 
-namespace Vilare\Integrations;
+namespace Forage\Integrations;
 
-use Vilare\Integrations\Vite;
+use Forage\Integrations\Vite;
 
 class Integrations
 {
@@ -11,8 +11,8 @@ class Integrations
      */
     public function init(): void
     {
-        if (vilare()->config()->get('hmr.active')) {
-            \Vilare\App::init(new Vite());
+        if (forage()->config()->get('hmr.active')) {
+            \Forage\App::init(new Vite());
         }
     }
 }

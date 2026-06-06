@@ -1,15 +1,15 @@
 <?php
 
-namespace Vilare;
+namespace Forage;
 
-use Vilare\Assets\Assets;
-use Vilare\Comments\Comments;
-use Vilare\Core\Config;
-use Vilare\Core\Hooks;
-use Vilare\Setup;
-use Vilare\Integrations\Integrations;
-use Vilare\Blade\Templating;
-use Vilare\Templates\Templates;
+use Forage\Assets\Assets;
+use Forage\Comments\Comments;
+use Forage\Core\Config;
+use Forage\Core\Hooks;
+use Forage\Setup;
+use Forage\Integrations\Integrations;
+use Forage\Blade\Templating;
+use Forage\Templates\Templates;
 use Illuminate\Filesystem\Filesystem;
 
 class App
