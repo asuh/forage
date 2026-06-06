@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import copy from './.vite/copy';
 
 const ROOT = path.resolve('../../../');
-const BASE = __dirname.replace(ROOT, '');
+const BASE = import.meta.dirname.replace(ROOT, '');
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? `./` : BASE,
@@ -14,6 +14,7 @@ export default defineConfig({
     assetsInlineLimit: 0,
     outDir: 'dist',
     emptyOutDir: true,
+    cssMinify: 'lightningcss',
     rollupOptions: {
       input: [
         'resources/scripts/scripts.js',
@@ -57,9 +58,9 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname),
-      '@scripts': path.resolve(__dirname, './resources/scripts'),
-      '@styles': path.resolve(__dirname, './resources/styles'),
+      '@': path.resolve(import.meta.dirname),
+      '@scripts': path.resolve(import.meta.dirname, './resources/scripts'),
+      '@styles': path.resolve(import.meta.dirname, './resources/styles'),
     },
   },
 
