@@ -10,6 +10,9 @@ use Forage\Setup;
 use Forage\Integrations\Integrations;
 use Forage\Blade\Templating;
 use Forage\Templates\Templates;
+use Forage\Prettify\CleanUpModule;
+use Forage\Prettify\NiceSearchModule;
+use Forage\Prettify\RelativeUrlsModule;
 use Illuminate\Filesystem\Filesystem;
 
 class App
@@ -30,6 +33,12 @@ class App
 
     private Templating $templating;
 
+    private CleanUpModule $cleanUpModule;
+
+    private NiceSearchModule $niceSearchModule;
+
+    private RelativeUrlsModule $relativeUrlsModule;
+
     private static ?App $instance = null;
 
     private function __construct()
@@ -45,6 +54,11 @@ class App
         $this->setup = self::init(new Setup());
         $this->templates = self::init(new Templates());
         $this->templating = self::init(new Templating());
+
+        $prettifyConfig = collect($this->config->prettify());
+        $this->cleanUpModule = new CleanUpModule($this, $prettifyConfig);
+        $this->niceSearchModule = new NiceSearchModule($this, $prettifyConfig);
+        $this->relativeUrlsModule = new RelativeUrlsModule($this, $prettifyConfig);
     }
 
     public function assets(): Assets

@@ -78,6 +78,19 @@ class Config
         return in_array(wp_get_environment_type(), ['local', 'development'], true);
     }
 
+    public function prettify(): array
+    {
+        $path = FORAGE_PATH . '/app/config/prettify.php';
+
+        if (! file_exists($path)) {
+            return [];
+        }
+
+        $data = require $path;
+
+        return is_array($data) ? $data : [];
+    }
+
     private function isHmrActive(): bool
     {
         if (! $this->isLocalEnvironment()) {
