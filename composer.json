@@ -1,7 +1,7 @@
 {
   "name": "forage/theme",
   "description": "Forage Theme",
-  "version": "0.1.4",
+  "version": "1.0.0",
   "license": "GPLv3",
   "autoload": {
     "psr-4": {
