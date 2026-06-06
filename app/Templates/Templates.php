@@ -2,30 +2,9 @@
 
 namespace Vilare\Templates;
 
-use Vilare\Templates\Template;
-
 class Templates
 {
     private array $templates = [];
-
-    /**
-     * @action after_setup_theme
-     */
-    public function init(): void
-    {
-        $classes = collect(
-            vilare()
-                ->filesystem()
-                ->glob(VILARE_PATH . "/app/Templates/*.php"),
-        )
-            ->map(fn($path) => pathinfo($path, PATHINFO_FILENAME))
-            ->map(fn($name) => sprintf("Vilare\Templates\\%s", $name));
-
-        foreach ($classes as $class) {
-            /* $template = \Vilare\App::init(new $class());
-            $this->templates[$template->getId()] = $template; */
-        }
-    }
 
     public function has(string $template): bool
     {
