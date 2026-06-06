@@ -22,9 +22,7 @@ class Config
                 'uri' => FORAGE_HMR_HOST,
                 'client' => FORAGE_HMR_URI . '/@vite/client',
                 'resources' => FORAGE_HMR_URI . '/resources',
-                'active' =>
-                    $this->isLocalEnvironment() &&
-                    ! is_wp_error(wp_remote_get(FORAGE_HMR_URI)),
+                'active' => $this->isHmrActive(),
             ],
             'manifest' => [
                 'path' => FORAGE_DIST_PATH . '/manifest.json',
@@ -49,9 +47,9 @@ class Config
     {
         $value = $this->config;
 
-        foreach (explode('.', $key) as $key) {
-            if (isset($value[$key])) {
-                $value = $value[$key];
+        foreach (explode('.', $key) as $segment) {
+            if (is_array($value) && array_key_exists($segment, $value)) {
+                $value = $value[$segment];
             } else {
                 return null;
             }
@@ -77,8 +75,19 @@ class Config
      */
     public function isLocalEnvironment(): bool
     {
-        $env = wp_get_environment_type();
-        return defined('WP_ENVIRONMENT_TYPE') &&
-            in_array($env, ['local', 'development'], true);
+        return in_array(wp_get_environment_type(), ['local', 'development'], true);
+    }
+
+    private function isHmrActive(): bool
+    {
+        if (! $this->isLocalEnvironment()) {
+            return false;
+        }
+
+        $response = wp_remote_get(FORAGE_HMR_URI, [
+            'timeout' => 0.25,
+        ]);
+
+        return ! is_wp_error($response);
     }
 }

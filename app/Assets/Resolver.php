@@ -13,11 +13,21 @@ trait Resolver
     {
         $path = forage()->config()->get('manifest.path');
 
+        // When HMR/dev server is active we may not have a manifest file yet.
+        if (forage()->config()->get('hmr.active')) {
+            return;
+        }
+
         if (empty($path) || ! file_exists($path)) {
             wp_die('Run <code>yarn build</code> in your application root!');
         }
 
-        $data = forage()->filesystem()->get($path);
+        $data = null;
+        try {
+            $data = forage()->filesystem()->get($path);
+        } catch (\Exception $e) {
+            $data = @file_get_contents($path);
+        }
 
         if (! empty($data)) {
             $this->manifest = json_decode($data, true);
@@ -158,6 +168,16 @@ trait Resolver
         return '';
     }
 
+    public function manifest(): array
+    {
+        return $this->manifest;
+    }
+
+    public function entry(string $path): array
+    {
+        return $this->find($path);
+    }
+
     public function dependencies(string $path): array
     {
         $assets = [
@@ -192,11 +212,19 @@ trait Resolver
 
     private function find(string $path): array
     {
-        return $this->has($path) ? $this->manifest["resources/{$path}"] : [];
+        $path = ltrim($path, '/');
+
+        if (! empty($this->manifest[$path])) {
+            return $this->manifest[$path];
+        }
+
+        $resource_path = "resources/{$path}";
+
+        return $this->manifest[$resource_path] ?? [];
     }
 
     private function has(string $path): bool
     {
-        return ! empty($this->manifest["resources/{$path}"]);
+        return ! empty($this->find($path));
     }
 }
