@@ -16,7 +16,7 @@ Sage is a WordPress starter theme with a modern development workflow.
 * [Biome](https://biomejs.dev/) for linting and formatting both CSS and JS
 * Modern CSS & JavaScript - No preprocessors, libraries, or frameworks
 * [DocHooks](https://pragmate.dev/wordpress/dochooks/) provide new functionality of class method DocBlock as hooks into WordPress API
-* **Prettify** — self-contained WordPress output cleanup, nice search URLs, and optional relative URLs (no third-party plugins required)
+* **Prettify**: self-contained WordPress output cleanup, nice search URLs, and optional relative URLs (no third-party plugins required)
 * [IndieWeb](https://indieweb.org/) support with baked in [Microformats2](https://microformats.org/wiki/microformats2) and [structured data](https://schema.org/)
 
 > [!NOTE]
@@ -95,14 +95,14 @@ $ composer install
 
 ### Build commands
 
-* `yarn run build` — Compile and optimize the files in your assets directory
-* `yarn run dev` — Compile assets when file changes are made using Vite's hot module reload
-* `yarn run format` — Auto-format JS and CSS with Biome, PHP with PHPCS
-* `yarn run lint` — Lint JS and CSS with Biome, PHP with PHPCS
+* `yarn run build`: Compile and optimize the files in your assets directory
+* `yarn run dev`: Compile assets when file changes are made using Vite's hot module reload
+* `yarn run format`: Auto-format JS and CSS with Biome, PHP with PHPCS
+* `yarn run lint`: Lint JS and CSS with Biome, PHP with PHPCS
 
 ### Network access
 
-`yarn dev` exposes the Vite dev server on all network interfaces. When accessing the WordPress site from another device on the same network (phone, tablet, etc.), HMR connects automatically — no configuration needed. The dev server URL is printed on startup alongside the localhost URL.
+`yarn dev` exposes the Vite dev server on all network interfaces. When accessing the WordPress site from another device on the same network (phone, tablet, etc.), HMR connects automatically with no configuration needed. The dev server URL is printed on startup alongside the localhost URL. This provides a similar cross-device testing experience to [Browsersync](https://browsersync.io/) without the added dependency.
 
 To override the HMR host manually (e.g. behind a reverse proxy), define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 
@@ -112,7 +112,7 @@ define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
 
 ### Lightning CSS
 
-Lightning CSS handles CSS minification during `yarn build` by default (no install required — it ships with Vite 8). Using it as a full CSS transformer is optional:
+Lightning CSS handles CSS minification during `yarn build` by default (no install required; it ships with Vite 8). Using it as a full CSS transformer is optional:
 
 To enable the transformer, uncomment `transformer: 'lightningcss'` in `vite.config.js`. For more details, see [Vite's Lightning CSS documentation](https://vite.dev/guide/features.html#lightning-css).
 
