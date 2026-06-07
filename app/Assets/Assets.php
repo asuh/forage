@@ -40,6 +40,10 @@ class Assets
      */
     public function preload(): void
     {
+        if (forage()->config()->get('hmr.active')) {
+            return;
+        }
+
         $preloads = apply_filters(
             'forage_assets_preload',
             [
@@ -65,7 +69,7 @@ class Assets
 
             printf(
                 '<link rel="preload" href="%s" as="%s" type="%s"%s />',
-                esc_attr($item['href']),
+                esc_url($item['href']),
                 esc_attr($item['as']),
                 esc_attr($item['type']),
                 esc_attr($crossorigin_attr),
@@ -78,22 +82,54 @@ class Assets
      */
     public function modulepreload(): void
     {
+        if (forage()->config()->get('hmr.active')) {
+            return;
+        }
+
+        $entries = [
+            'scripts/scripts.js',
+            'scripts/blocks.js',
+        ];
+
+        $default_preloads = [];
+
+        foreach ($entries as $entry) {
+            $default_preloads[] = [
+                'href' => forage()->assets()->resolve($entry),
+                'crossorigin' => true,
+            ];
+
+            foreach (forage()->assets()->imports($entry) as $import) {
+                $default_preloads[] = [
+                    'href' => $import,
+                    'crossorigin' => true,
+                ];
+            }
+        }
+
         $preloads = apply_filters(
             'forage_assets_module_preload',
-            [
-                ['href' => forage()->assets()->resolve('scripts/scripts.js')],
-                ['href' => forage()->assets()->resolve('scripts/blocks.js')],
-            ]
+            $default_preloads
         );
+
+        $printed = [];
 
         foreach ($preloads as $item) {
             if (empty($item['href'])) {
                 continue;
             }
 
+            if (isset($printed[$item['href']])) {
+                continue;
+            }
+
+            $printed[$item['href']] = true;
+            $crossorigin_attr = ! empty($item['crossorigin']) ? ' crossorigin' : '';
+
             printf(
-                '<link rel="modulepreload" href="%s" />',
-                esc_attr($item['href']),
+                '<link rel="modulepreload" href="%s"%s />',
+                esc_url($item['href']),
+                esc_attr($crossorigin_attr),
             );
         }
     }

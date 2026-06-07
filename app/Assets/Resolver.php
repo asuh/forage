@@ -205,6 +205,28 @@ trait Resolver
         return $assets;
     }
 
+    public function imports(string $path): array
+    {
+        if (forage()->config()->get('hmr.active') || ! $this->has($path)) {
+            return [];
+        }
+
+        $imports = $this->importedChunks($this->find($path));
+
+        return collect($imports)
+            ->map(
+                fn($item) => ! empty($item['file'])
+                    ? forage()->config()->get('dist.uri') .
+                        '/' .
+                        ltrim($item['file'], '/')
+                    : '',
+            )
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
     private function find(string $path): array
     {
         $path = ltrim($path, '/');
@@ -221,5 +243,27 @@ trait Resolver
     private function has(string $path): bool
     {
         return ! empty($this->find($path));
+    }
+
+    private function importedChunks(array $chunk, array &$seen = []): array
+    {
+        $chunks = [];
+
+        foreach ($chunk['imports'] ?? [] as $import) {
+            if (isset($seen[$import]) || empty($this->manifest[$import])) {
+                continue;
+            }
+
+            $seen[$import] = true;
+            $imported = $this->manifest[$import];
+
+            $chunks = array_merge(
+                $chunks,
+                $this->importedChunks($imported, $seen),
+                [$imported],
+            );
+        }
+
+        return $chunks;
     }
 }
