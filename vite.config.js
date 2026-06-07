@@ -1,6 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import copy from './.vite/copy';
+import themeJson from './.vite/theme-json';
 
 const ROOT = path.resolve('../../../');
 const BASE = import.meta.dirname.replace(ROOT, '');
@@ -31,6 +32,7 @@ export default defineConfig({
   },
 
   plugins: [
+    themeJson(),
     copy({
       targets: [
         {

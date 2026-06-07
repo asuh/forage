@@ -1,0 +1,48 @@
+/**
+ * Forage Design Tokens
+ *
+ * This file is the source of truth for design tokens.
+ * On build (and live during `yarn dev`), .vite/theme-json.js reads
+ * this file and injects the tokens into the generated theme.json,
+ * making them available as --wp--preset--* CSS variables and as
+ * options in the block editor.
+ *
+ * Naming convention:  --{category}-{slug}: {value};
+ *
+ * Categories:
+ *   --color-{slug}      →  settings.color.palette
+ *   --font-size-{slug}  →  settings.typography.fontSizes
+ *   --space-{slug}      →  settings.spacing.spacingSizes
+ *
+ * Display names (block editor labels):
+ *   Add a single-line comment on the line immediately above the
+ *   variable to set its human-readable name. If omitted, the name
+ *   is derived from the slug (kebab-case → Title Case).
+ *
+ *   With a name comment:    displays as "Primary" in the block editor
+ *   Without a name comment: slug "primary" → "Primary" (auto-derived)
+ *
+ * Font sizes accept any CSS length, including clamp():
+ *   --font-size-large: clamp(1.25rem, 1.25rem + 0.5vw, 1.75rem);
+ *
+ * Spacing slugs are typically numeric strings (10, 20, 30…) to
+ * match WordPress's default spacing scale convention.
+ *
+ * WordPress generates these CSS variables automatically from theme.json:
+ *   --wp--preset--color--{slug}
+ *   --wp--preset--font-size--{slug}
+ *   --wp--preset--spacing--{slug}
+ */
+
+:root {
+  /* ── Colors ──────────────────────────────────────────────── */
+
+
+  /* ── Font Sizes ───────────────────────────────────────────── */
+  /* Values may be plain lengths (rem, px) or clamp() expressions. */
+
+
+  /* ── Spacing ──────────────────────────────────────────────── */
+  /* Use numeric slugs (10, 20, 30…) to match WP spacing scale.   */
+
+}
