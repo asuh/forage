@@ -22,12 +22,7 @@ trait Resolver
             wp_die('Run <code>yarn build</code> in your application root!');
         }
 
-        $data = null;
-        try {
-            $data = forage()->filesystem()->get($path);
-        } catch (\Exception $e) {
-            $data = @file_get_contents($path);
-        }
+        $data = forage()->filesystem()->get($path);
 
         if (! empty($data)) {
             $this->manifest = json_decode($data, true);

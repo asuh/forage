@@ -60,10 +60,6 @@ class Provider
         $directives->register($compiler);
         $resolver->register('blade', fn() => new CompilerEngine($compiler));
 
-        $finder->addNamespace('blocks', forage()->config()->get('blocks.path'));
-        $finder->addNamespace('components', forage()->config()->get('components.path'));
-        $finder->addNamespace('templates', forage()->config()->get('templates.path'));
-
         $this->factory = new Factory($resolver, $finder, $dispatcher);
 
         do_action('forage_templating_provider_init', $compiler, $finder);

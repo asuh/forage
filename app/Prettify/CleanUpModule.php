@@ -48,7 +48,7 @@ class CleanUpModule extends AbstractModule
             remove_filter('wp_head', $hook);
         }
 
-        add_filter('get_bloginfo_rss', fn ($value) => ! Str::is($value, __('Just another WordPress site')) ? $value : '');
+        add_filter('get_bloginfo_rss', fn ($value) => ! Str::is($value, __('Just another WordPress site', 'forage')) ? $value : '');
         add_filter('the_generator', '__return_false');
 
         return $this;
@@ -178,7 +178,9 @@ class CleanUpModule extends AbstractModule
             $link->removeAttribute('type');
             $link->removeAttribute('id');
 
-            if (($media = $link->getAttribute('media')) && $media !== 'all') {
+            $media = $link->getAttribute('media');
+
+            if ($media && 'all' !== $media) {
                 return;
             }
 
@@ -202,8 +204,10 @@ class CleanUpModule extends AbstractModule
      */
     public function bodyClass(array $classes, array $disallowedClasses = ['page-template-default']): array
     {
-        if (is_single() || is_page() && ! is_front_page()) {
-            if (! in_array($slug = basename(get_permalink()), $classes, true)) {
+        if (is_single() || (is_page() && ! is_front_page())) {
+            $slug = basename(get_permalink());
+
+            if (! in_array($slug, $classes, true)) {
                 $classes[] = $slug;
             }
         }

@@ -4,12 +4,12 @@ namespace Forage;
 
 use Forage\Assets\Assets;
 use Forage\Comments\Comments;
+use Forage\Core\Cache;
 use Forage\Core\Config;
 use Forage\Core\Hooks;
 use Forage\Setup;
 use Forage\Integrations\Integrations;
 use Forage\Blade\Templating;
-use Forage\Templates\Templates;
 use Forage\Prettify\CleanUpModule;
 use Forage\Prettify\NiceSearchModule;
 use Forage\Prettify\RelativeUrlsModule;
@@ -21,6 +21,8 @@ class App
 
     private Comments $comments;
 
+    private Cache $cache;
+
     private Config $config;
 
     private Filesystem $filesystem;
@@ -28,8 +30,6 @@ class App
     private Integrations $integrations;
 
     private Setup $setup;
-
-    private Templates $templates;
 
     private Templating $templating;
 
@@ -50,9 +50,9 @@ class App
         $this->comments = self::init(new Comments());
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
+        $this->cache = self::init(new Cache());
         $this->integrations = self::init(new Integrations());
         $this->setup = self::init(new Setup());
-        $this->templates = self::init(new Templates());
         $this->templating = self::init(new Templating());
 
         $prettifyConfig = collect($this->config->prettify());
@@ -69,6 +69,11 @@ class App
     public function comments(): Comments
     {
         return $this->comments;
+    }
+
+    public function cache(): Cache
+    {
+        return $this->cache;
     }
 
     public function config(): Config
@@ -89,11 +94,6 @@ class App
     public function setup(): Setup
     {
         return $this->setup;
-    }
-
-    public function templates(): Templates
-    {
-        return $this->templates;
     }
 
     public function templating(): Templating

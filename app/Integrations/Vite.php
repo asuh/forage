@@ -9,7 +9,7 @@ class Vite
      */
     public function client(): void
     {
-        //phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+        // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
         printf(
             '<script type="module" src="%s"></script>',
             esc_attr(forage()->config()->get('hmr.client')),

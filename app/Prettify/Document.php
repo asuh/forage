@@ -69,7 +69,13 @@ class Document
      */
     public function html(): string
     {
-        return trim(substr($this->document->saveHTML(), 23));
+        return trim(
+            preg_replace(
+                '/^(?:<\?xml[^>]*>\s*|<!--\?xml[^>]*-->\s*)/i',
+                '',
+                $this->document->saveHTML()
+            )
+        );
     }
 
     /**

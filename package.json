@@ -8,8 +8,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "format": "biome check --write ./resources; composer format;",
-    "lint": "biome lint --write ./resources; composer lint;"
+    "format": "biome check --write ./resources && composer format",
+    "lint": "biome lint ./resources && composer lint"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",

@@ -94,7 +94,7 @@ class Directives
             throw new \Exception(esc_html("{$path} file not found."));
         }
 
-        if (! in_array(forage()->filesystem()->guessExtension($path), ['png', 'jpg', 'jpeg', 'webp', 'avif'])) {
+        if (! in_array(forage()->filesystem()->guessExtension($path), ['png', 'jpg', 'jpeg', 'webp', 'avif'], true)) {
             throw new \Exception(esc_html("{$path} file extension is not allowed."));
         }
 

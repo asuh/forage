@@ -7,8 +7,14 @@
  **/
 document.addEventListener("DOMContentLoaded", () => {
   // Load your scripts inside here
+  const noop = () => undefined;
+
 	function toggleNavigation() {
 		const navButton = document.querySelector("button[aria-expanded]");
+
+		if (!navButton) {
+			return noop;
+		}
 
 		function handleClick(event) {
 			const expanded =
@@ -18,11 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		navButton.addEventListener("click", handleClick);
+
+		return () => {
+			navButton.removeEventListener("click", handleClick);
+		};
 	}
 
   function submenuA11y() {
     const nav = document.getElementById("nav-primary");
+
+    if (!nav) {
+      return noop;
+    }
+
     const menuItems = nav.querySelectorAll(".menu-item-has-children");
+
+    if (!menuItems.length) {
+      return noop;
+    }
+
     const allTopLevelItems = nav.querySelectorAll(".nav-list > .menu-item > a");
 
     const BREAKPOINT = 768;
@@ -57,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elementCache.set(menuItem, {
           link,
           submenu,
-          submenuItems: [...submenu.querySelectorAll(".menu-item a")]
+          submenuItems: submenu ? [...submenu.querySelectorAll(".menu-item a")] : []
         });
       }
       return elementCache.get(menuItem);
@@ -72,6 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const initializeMenuItems = () => {
       menuItems.forEach((menuItem) => {
         const { link } = getMenuItemElements(menuItem);
+        if (!link) {
+          return;
+        }
+
         Object.assign(link, {
           'aria-haspopup': 'true',
           'aria-expanded': 'false'
@@ -81,6 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const handleTopLevelKeydown = (e, menuItem) => {
       const { link } = getMenuItemElements(menuItem);
+      if (!link) {
+        return;
+      }
+
       const isSubmenuOpen = link.getAttribute("aria-expanded") === "true";
 
       if (e.key === KEYS.ENTER) {
@@ -127,6 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!menuItem) { return };
 
       const { link, submenuItems } = getMenuItemElements(menuItem);
+      if (!link) {
+        return;
+      }
 
       if (isOpen && currentOpenSubmenu && currentOpenSubmenu !== menuItem) {
         setSubmenuState(currentOpenSubmenu, false);
@@ -144,6 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeAllSubmenus = () => {
       menuItems.forEach(menuItem => {
         const { link } = getMenuItemElements(menuItem);
+        if (!link) {
+          return;
+        }
+
         if (link.getAttribute("aria-expanded") === "true") {
           setSubmenuState(menuItem, false);
         }
@@ -152,9 +187,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const toggleSubmenu = (menuItem) => {
       const { link } = getMenuItemElements(menuItem);
+      if (!link) {
+        return;
+      }
+
       const isOpen = link.getAttribute("aria-expanded") === "true";
 
-      menuItems.forEach(item => item !== menuItem && setSubmenuState(item, false));
+      menuItems.forEach((item) => {
+        if (item !== menuItem) {
+          setSubmenuState(item, false);
+        }
+      });
 
       setSubmenuState(menuItem, !isOpen);
     };
@@ -227,6 +270,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	function closeDialog() {
 		const searchDialog = document.getElementById("search-dialog");
 
+    if (!searchDialog) {
+      return noop;
+    }
+
 		function handleKeyDown(event) {
 			searchDialog.contains(document.activeElement) &&
 				event.key === "Escape" &&
@@ -241,7 +288,27 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	}
 
+  function appendLoadTime() {
+    const timing = window.performance?.timing;
+    const copyright = document.querySelector(".copyright");
+
+    if (!timing || !copyright) {
+      return;
+    }
+
+    const loadTime = (timing.loadEventEnd - timing.navigationStart) / 1000;
+
+    if (!Number.isFinite(loadTime) || loadTime < 0) {
+      return;
+    }
+
+    const element = document.createElement("small");
+    element.textContent = `This page loaded in ${loadTime} seconds`;
+    copyright.appendChild(element);
+  }
+
 	toggleNavigation();
 	submenuA11y();
 	closeDialog();
+  appendLoadTime();
 });

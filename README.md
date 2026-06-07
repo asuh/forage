@@ -71,14 +71,13 @@ themes/your-theme-name/   # → Root of your theme
 
 ## Environment Type
 
-Multiple features of this theme require the environment type to be set.
+Forage works without a custom `WP_ENVIRONMENT_TYPE` value. When `WP_ENVIRONMENT_TYPE` is `local` or `development`, asset versions use the current timestamp to avoid browser cache issues:
 
-* Hot Module Reload
-* Versioning
+```php
+define('WP_ENVIRONMENT_TYPE', 'local');
+```
 
-To enable these features, add or adjust `WP_ENVIRONMENT_TYPE` in `wp-config.php` located in the root of your WordPress installation. The value needs to be either `development` or `local`.
-
-`define( 'WP_ENVIRONMENT_TYPE', 'development' );`
+Hot Module Reload does not require this setting. It is enabled automatically when the Vite dev server responds.
 
 ## Theme installation
 
@@ -98,11 +97,33 @@ $ composer install
 * `yarn run build`: Compile and optimize the files in your assets directory
 * `yarn run dev`: Compile assets when file changes are made using Vite's hot module reload
 * `yarn run format`: Auto-format JS and CSS with Biome, PHP with PHPCS
-* `yarn run lint`: Lint JS and CSS with Biome, PHP with PHPCS
+* `yarn run lint`: Lint JS and CSS with Biome, PHP with PHPCS without writing changes
+
+### Deployment
+
+Built assets in `dist/` are generated and not committed. Production deploys need to install dependencies and build assets before the theme loads outside HMR:
+
+```shell
+$ composer install --no-dev --optimize-autoloader
+$ yarn install --frozen-lockfile
+$ yarn run build
+```
+
+Forage intentionally stops with a `yarn build` message when HMR is inactive and `dist/manifest.json` is missing.
+
+### Theme JSON
+
+Forage generates `theme.json` from `theme.base.json` and `resources/styles/tokens.css` during `yarn run build` and while `yarn run dev` is running.
+
+* `theme.base.json`: stable source for block editor defaults and block styles
+* `resources/styles/tokens.css`: source for color, font size, and spacing presets
+* `theme.json`: generated WordPress file; do not hand-edit unless you are intentionally syncing generated output
 
 ### Network access
 
-`yarn dev` exposes the Vite dev server on all network interfaces. When accessing the WordPress site from another device on the same network (phone, tablet, etc.), HMR connects automatically with no configuration needed. The dev server URL is printed on startup alongside the localhost URL. This provides a similar cross-device testing experience to [Browsersync](https://browsersync.io/) without the added dependency.
+`yarn dev` exposes the Vite dev server on all network interfaces. Forage first checks `http://localhost:5173`, which works for local apps such as Local where the WordPress site may run at an HTTPS domain like `https://test.local`.
+
+If localhost is unavailable, Forage checks the current site host on port `5173`. This keeps same-network testing available when the browser is on another device. The dev server URL is printed on startup alongside the localhost URL.
 
 To override the HMR host manually (e.g. behind a reverse proxy), define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 

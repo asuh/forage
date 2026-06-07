@@ -13,6 +13,7 @@ class RelativeUrlsModule extends AbstractModule
     {
         return parent::enabled()
             && ! (defined('WP_CLI') && WP_CLI)
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only sitemap compatibility check.
             && ! isset($_GET['sitemap'])
             && ! in_array($GLOBALS['pagenow'], ['wp-login.php', 'wp-register.php'], true);
     }
@@ -117,7 +118,8 @@ class RelativeUrlsModule extends AbstractModule
         }
 
         if (! $strict || ! isset($inputUrl['scheme']) || ! isset($baseUrl['scheme'])) {
-            $inputUrl['scheme'] = $baseUrl['scheme'] = 'https';
+            $inputUrl['scheme'] = 'https';
+            $baseUrl['scheme'] = 'https';
         }
 
         if (

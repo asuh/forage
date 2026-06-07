@@ -6,8 +6,12 @@ class Config
 {
     private array $config = [];
 
+    private string $hmrHost = '';
+
     public function __construct()
     {
+        $this->hmrHost = $this->resolveHmrHost();
+
         $this->config = [
             'version' => $this->isLocalEnvironment() ? time() : FORAGE_VERSION,
             'env' => [
@@ -19,9 +23,9 @@ class Config
                         : 'plugin',
             ],
             'hmr' => [
-                'uri' => FORAGE_HMR_HOST,
-                'client' => FORAGE_HMR_URI . '/@vite/client',
-                'resources' => FORAGE_HMR_URI . '/resources',
+                'uri' => $this->hmrHost,
+                'client' => $this->hmrHost . FORAGE_ROOT . '/@vite/client',
+                'resources' => $this->hmrHost . FORAGE_ROOT . '/resources',
                 'active' => $this->isHmrActive(),
             ],
             'manifest' => [
@@ -93,14 +97,50 @@ class Config
 
     private function isHmrActive(): bool
     {
-        if (! $this->isLocalEnvironment()) {
+        if (empty($this->hmrHost)) {
             return false;
         }
 
-        $response = wp_remote_get(FORAGE_HMR_URI, [
+        $response = wp_remote_get($this->hmrHost . FORAGE_ROOT, [
             'timeout' => 0.25,
         ]);
 
         return ! is_wp_error($response);
+    }
+
+    private function resolveHmrHost(): string
+    {
+        foreach ($this->hmrHosts() as $host) {
+            $response = wp_remote_get($host . FORAGE_ROOT, [
+                'timeout' => 0.25,
+            ]);
+
+            if (! is_wp_error($response)) {
+                return $host;
+            }
+        }
+
+        return $this->hmrHosts()[0];
+    }
+
+    private function hmrHosts(): array
+    {
+        if (defined('FORAGE_HMR_HOST')) {
+            return [untrailingslashit(FORAGE_HMR_HOST)];
+        }
+
+        $httpHost = sanitize_text_field(
+            wp_unslash($_SERVER['HTTP_HOST'] ?? 'localhost')
+        );
+        $httpHost = strtok($httpHost, ':');
+
+        return array_values(
+            array_unique(
+                [
+                    'http://localhost:5173',
+                    "http://{$httpHost}:5173",
+                ]
+            )
+        );
     }
 }

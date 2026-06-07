@@ -44,22 +44,6 @@ class Resolver
      */
     public function render(string $template): string
     {
-        $id = get_post_meta(get_the_id(), '_wp_page_template', true);
-
-        if (forage()->templates()->has($id)) {
-            forage()->templates()->get($id)->render();
-            return forage()->config()->get('resources.path') . '/index.php';
-        }
-
-        if (is_singular()) {
-            $type = get_post_type();
-
-            if (forage()->templates()->has($type) && forage()->templates()->get($type)->isPrimary()) {
-                forage()->templates()->get($type)->render();
-                return forage()->config()->get('resources.path') . '/index.php';
-            }
-        }
-
         if (forage()->config()->isTheme()) {
             forage()->templating()->render($template);
             return forage()->config()->get('resources.path') . '/index.php';

@@ -2,6 +2,8 @@
 
 namespace Forage\Comments;
 
+require_once __DIR__ . '/helpers.php';
+
 if (class_exists('\Webmention\Comment_Walker')) {
     class Comments extends \Webmention\Comment_Walker
     {
@@ -39,21 +41,22 @@ if (class_exists('\Webmention\Comment_Walker')) {
             if ($commenter['comment_author_email']) {
                 $moderation_note = __(
                     'Your comment is awaiting moderation.',
-                    'default',
+                    'forage',
                 );
             } else {
                 $moderation_note = __(
                     'Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved.',
-                    'default',
+                    'forage',
                 );
             }
             ?>
-            <<?php echo $tag; ?> id="comment-<?php comment_ID(); ?>" <?php comment_class($this->has_children ? 'parent p-comment' : 'p-comment', $comment); ?>>
-                <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo $type; ?>">
+            <<?php echo tag_escape($tag); ?> id="comment-<?php comment_ID(); ?>" <?php comment_class($this->has_children ? 'parent p-comment' : 'p-comment', $comment); ?>>
+                <article id="div-comment-<?php comment_ID(); ?>" class="comment-body h-cite <?php echo esc_attr($type); ?>">
                     <footer class="comment-meta">
                         <div class="comment-author vcard h-card u-author">
                             <?php
                             if (0 !== $args['avatar_size']) {
+                                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_avatar() returns WordPress-generated markup.
                                 echo get_avatar($comment, $args['avatar_size']);
                             }
                             ?>
@@ -67,14 +70,7 @@ if (class_exists('\Webmention\Comment_Walker')) {
                                 $comment_author = get_comment_author($comment);
                             }
 
-                            printf(
-                                /* translators: %s: Comment author link. */
-                                __('%s', 'default'),
-                                sprintf(
-                                    '<b class="fn">%s</b>',
-                                    $comment_author,
-                                ),
-                            );
+                            echo '<b class="fn">' . wp_kses_post($comment_author) . '</b>';
                             if (
                                 ! empty($cite) &&
                                 'webmention' ===
@@ -84,7 +80,11 @@ if (class_exists('\Webmention\Comment_Walker')) {
                                         true,
                                     )
                             ) {
-                                printf($cite, $url, $host);
+                                printf(
+                                    wp_kses_post($cite), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped format keeps allowed Webmention cite markup.
+                                    esc_url($url),
+                                    esc_html($host),
+                                );
                             }
                             ?>
                         </div><!-- .comment-author -->
@@ -96,14 +96,14 @@ if (class_exists('\Webmention\Comment_Walker')) {
                             printf(
                                 '<a class="u-url comment-permalink" href="%s"><time class="dt-published" datetime="%s">%s</time></a>',
                                 esc_url(get_comment_link($comment, $args)),
-                                get_comment_time(DATE_W3C),
-                                timeAgo(get_comment_time(DATE_W3C)),
+                                esc_attr(get_comment_time(DATE_W3C)),
+                                esc_html(timeAgo(get_comment_time(DATE_W3C))),
                             );
                             ?>
                         </div><!-- .comment-metadata -->
 
                         <?php if ('0' === $comment->comment_approved) : ?>
-                        <em class="comment-awaiting-moderation"><?php echo $moderation_note; ?></em>
+                        <em class="comment-awaiting-moderation"><?php echo esc_html($moderation_note); ?></em>
                         <?php endif; ?>
                     </footer><!-- .comment-meta -->
 
@@ -114,13 +114,13 @@ if (class_exists('\Webmention\Comment_Walker')) {
                     <div class="comment-interact">
                         <?php
                         edit_comment_link(
-                            __('Edit', 'default'),
+                            __('Edit', 'forage'),
                             ' <span class="edit-link">',
                             '</span>',
                         );
 
                         if (
-                            '1' == $comment->comment_approved ||
+                            '1' === $comment->comment_approved ||
                             $show_pending_links
                         ) {
                             comment_reply_link(
@@ -148,51 +148,6 @@ if (class_exists('\Webmention\Comment_Walker')) {
         protected function html5_comment($comment, $depth, $args)
         {
             parent::html5_comment($comment, $depth, $args);
-        }
-    }
-}
-
-/**
- * Converts date and time to be relative to current time
- *
- * @param string $timestamp
- * @return string
- *
- */
-function timeAgo($timestamp)
-{
-    $currentTime = time();
-    $timestampDate = strtotime($timestamp);
-    $timeDiff = $currentTime - $timestampDate;
-
-    // Define time intervals in seconds
-    $intervals = [
-        'mo' => 2592000,
-        'd' => 86400,
-        'h' => 3600,
-        'm' => 60,
-    ];
-
-    // If 12 months or more, return formatted date
-    if ($timeDiff >= 31536000) {
-        // 365 days
-        return date('m/d/Y', $timestampDate);
-    }
-
-    if ($timeDiff < 60) {
-        return 'now';
-    }
-
-    foreach ($intervals as $interval => $seconds) {
-        $diff = floor($timeDiff / $seconds);
-
-        if ($diff >= 1) {
-            // If it's at least a month, calculate total months
-            if ($interval === 'mo') {
-                $totalMonths = floor($timeDiff / $intervals['mo']);
-                return $totalMonths . 'mo';
-            }
-            return $diff . $interval;
         }
     }
 }
