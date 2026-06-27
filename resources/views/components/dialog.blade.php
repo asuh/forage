@@ -13,14 +13,12 @@
 <dialog id="{{ $id }}" class="dialog" aria-labelledby="{{ $id }}-title" closedby="any">
     {!! $content !!}
 
-    <form action="#">
-        <button id="dialog-close" type="submit" class="dialog-close" formmethod="dialog">
-            <span class="visuallyhidden">{{ _x('Close dialog', 'label') }}</span>
-            <svg width="16" height="16" viewBox="0 0 40 40" focusable="false" aria-hidden="true" aria-labelledby="dialog-close">
-                <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="currentColor" fill-rule="evenodd"></path>
-            </svg>
-        </button>
-    </form>
+    <button id="dialog-close" type="button" class="dialog-close" commandfor="{{ $id }}" command="close">
+        <span class="visuallyhidden">{{ _x('Close dialog', 'label') }}</span>
+        <svg width="64" height="64" viewBox="0 0 40 40" focusable="false" aria-hidden="true" aria-labelledby="dialog-close">
+            <path d="M25.6 14.3a1 1 0 0 1 0 1.4l-4.24 4.25 4.25 4.24a1 1 0 1 1-1.42 1.42l-4.24-4.25-4.24 4.25a1 1 0 0 1-1.42-1.42l4.25-4.24-4.25-4.24a1 1 0 0 1 1.42-1.42l4.24 4.25 4.24-4.25a1 1 0 0 1 1.42 0z" fill="currentColor" fill-rule="evenodd"></path>
+        </svg>
+    </button>
 </dialog>
 
 <script>
