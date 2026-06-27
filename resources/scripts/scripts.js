@@ -37,7 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return noop;
     }
 
-    const menuItems = nav.querySelectorAll(".menu-item-has-children");
+    const menuItemSelector = ".menu-item:has(> .sub-menu)";
+    const menuItems = nav.querySelectorAll(menuItemSelector);
 
     if (!menuItems.length) {
       return noop;
@@ -72,8 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const getMenuItemElements = (menuItem) => {
       if (!elementCache.has(menuItem)) {
-        const link = menuItem.querySelector("a");
-        const submenu = menuItem.querySelector(".sub-menu");
+        const link = menuItem.querySelector(":scope > a");
+        const submenu = menuItem.querySelector(":scope > .sub-menu");
         elementCache.set(menuItem, {
           link,
           submenu,
@@ -91,15 +92,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const initializeMenuItems = () => {
       menuItems.forEach((menuItem) => {
-        const { link } = getMenuItemElements(menuItem);
-        if (!link) {
+        const { link, submenu } = getMenuItemElements(menuItem);
+        if (!link || !submenu) {
           return;
         }
 
-        Object.assign(link, {
-          'aria-haspopup': 'true',
-          'aria-expanded': 'false'
-        });
+        link.setAttribute("aria-haspopup", "true");
+        link.setAttribute("aria-expanded", "false");
+        submenu.hidden = true;
       });
     };
 
@@ -154,8 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const setSubmenuState = (menuItem, isOpen, focusFirst = false) => {
       if (!menuItem) { return };
 
-      const { link, submenuItems } = getMenuItemElements(menuItem);
-      if (!link) {
+      const { link, submenu, submenuItems } = getMenuItemElements(menuItem);
+      if (!link || !submenu) {
         return;
       }
 
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       link.setAttribute("aria-expanded", String(isOpen));
+      submenu.hidden = !isOpen;
 
       currentOpenSubmenu = isOpen ? menuItem : (currentOpenSubmenu === menuItem ? null : currentOpenSubmenu);
 
@@ -211,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     nav.addEventListener("click", (e) => {
-      const menuItem = e.target.closest(".menu-item-has-children");
+      const menuItem = e.target.closest(menuItemSelector);
       if (!menuItem) { return };
 
       const { link } = getMenuItemElements(menuItem);
@@ -222,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { signal });
 
     nav.addEventListener("keydown", (e) => {
-      const menuItem = e.target.closest(".menu-item-has-children");
+      const menuItem = e.target.closest(menuItemSelector);
       if (!menuItem) { return };
 
       const { link } = getMenuItemElements(menuItem);
@@ -238,13 +239,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nav.addEventListener("mouseenter", (e) => {
       if (isMobile) { return };
-      const menuItem = e.target.closest(".menu-item-has-children");
+      const menuItem = e.target.closest(menuItemSelector);
       if (menuItem && e.target === menuItem) { setSubmenuState(menuItem, true) };
     }, { capture: true, passive: true, signal });
 
     nav.addEventListener("mouseleave", (e) => {
       if (isMobile) { return };
-      const menuItem = e.target.closest(".menu-item-has-children");
+      const menuItem = e.target.closest(menuItemSelector);
       if (menuItem && e.target === menuItem) { setSubmenuState(menuItem, false) };
     }, { capture: true, passive: true, signal });
 

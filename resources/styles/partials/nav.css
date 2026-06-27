@@ -4,3 +4,7 @@
   list-style: none;
   padding-inline-start: 0;
 }
+
+.menu-item > .sub-menu[hidden] {
+  display: none;
+}
