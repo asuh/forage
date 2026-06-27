@@ -7,7 +7,11 @@
 
     <header class="post-header">
         @if (get_the_title())
-            <h2 class="entry-title"><a class="p-name u-url" href="{{ get_permalink() }}">{!! get_the_title() !!}</a></h2>
+            <h2 class="entry-title">
+                <a class="p-name u-url" href="{{ get_permalink() }}">
+                    {!! get_the_title() !!}
+                </a>
+            </h2>
         @endif
     </header>
 

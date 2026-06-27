@@ -9,7 +9,7 @@
       class="search-field"
       id="search-field"
       placeholder="{{ esc_attr_x('Search...', 'placeholder') }}"
-      value="{{ get_search_query() }}"
+      value="{!! get_search_query() !!}"
       name="s"
     >
   </label>
