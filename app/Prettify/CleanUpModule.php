@@ -118,12 +118,36 @@ class CleanUpModule extends AbstractModule
         }
 
         add_action('wp_enqueue_scripts', function () {
-            if (! (is_singular() && has_blocks())) {
+            if (! $this->queryHasBlocks()) {
                 wp_dequeue_style('wp-block-library');
             }
         }, 200);
 
         return $this;
+    }
+
+    /**
+     * Determine if the current rendered query includes block content.
+     */
+    protected function queryHasBlocks(): bool
+    {
+        if (is_singular()) {
+            return has_blocks();
+        }
+
+        global $wp_query;
+
+        if (! $wp_query instanceof \WP_Query || empty($wp_query->posts)) {
+            return false;
+        }
+
+        foreach ($wp_query->posts as $post) {
+            if (has_blocks($post)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -194,7 +218,11 @@ class CleanUpModule extends AbstractModule
     public function cleanScriptTags(string $html): string
     {
         return Document::make($html)->each(static function ($script) {
-            $script->removeAttribute('type');
+            // Forage enqueues Vite ESM through WordPress, so preserve module scripts.
+            if ('module' !== $script->getAttribute('type')) {
+                $script->removeAttribute('type');
+            }
+
             $script->removeAttribute('id');
         })->html();
     }
