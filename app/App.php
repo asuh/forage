@@ -7,6 +7,7 @@ use Forage\Comments\Comments;
 use Forage\Core\Cache;
 use Forage\Core\Config;
 use Forage\Core\Hooks;
+use Forage\Editor\Editor;
 use Forage\Setup;
 use Forage\Integrations\Integrations;
 use Forage\Blade\Templating;
@@ -26,6 +27,8 @@ class App
     private Config $config;
 
     private Filesystem $filesystem;
+
+    private Editor $editor;
 
     private Integrations $integrations;
 
@@ -51,6 +54,7 @@ class App
         $this->config = self::init(new Config());
         $this->filesystem = new Filesystem();
         $this->cache = self::init(new Cache());
+        $this->editor = self::init(new Editor());
         $this->integrations = self::init(new Integrations());
         $this->setup = self::init(new Setup());
         $this->templating = self::init(new Templating());
@@ -84,6 +88,11 @@ class App
     public function filesystem(): Filesystem
     {
         return $this->filesystem;
+    }
+
+    public function editor(): Editor
+    {
+        return $this->editor;
     }
 
     public function integrations(): Integrations

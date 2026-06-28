@@ -42,6 +42,7 @@ themes/your-theme-name/   # → Root of your theme
 │   ├── Assets/           # → Loader and Resolver files
 │   ├── Comments/         # → Comment_Walker
 │   ├── Core/             # → Core files
+│   ├── Editor/           # → Block editor and Classic Editor support
 │   ├── Integrations/     # → Various integrations
 │   ├── Prettify/         # → WordPress output cleanup modules
 │   ├── Templates/        # → Render and Compile Templates files
@@ -116,8 +117,21 @@ Forage intentionally stops with a `yarn build` message when HMR is inactive and 
 Forage generates `theme.json` from `theme.base.json` and `resources/styles/tokens.css` during `yarn run build` and while `yarn run dev` is running.
 
 * `theme.base.json`: stable source for block editor defaults and block styles
-* `resources/styles/tokens.css`: source for color, font size, and spacing presets
+* `resources/styles/tokens.css`: source for color, font family, font size, and spacing presets
 * `theme.json`: generated WordPress file; do not hand-edit unless you are intentionally syncing generated output
+
+Forage is intentionally starter-friendly: `tokens.css` can stay mostly blank until a project defines its design system. If `theme.base.json` references a WordPress preset such as `var(--wp--preset--color--primary)` or `var:preset|font-family|heading`, add the matching token in `tokens.css`. The generator warns about missing preset references during dev/build without blocking the build.
+
+### Admin And Editor Styles
+
+Forage keeps admin chrome styles, editor canvas styles, and block editor controls separate:
+
+* `resources/styles/admin.css`: loaded with `admin_enqueue_scripts`; use for wp-admin UI chrome such as admin pages, panels, metaboxes, and plugin/theme admin interfaces
+* `resources/styles/editor.css`: injected into `block_editor_settings_all` for the block editor and registered with `add_editor_style()` for Classic Editor/TinyMCE; use for CSS that should affect authored content inside the editor canvas/iframe
+* `resources/styles/tokens.css`: source for palette, font family, font size, and spacing presets that appear in editor controls
+* `theme.base.json`: source for block editor defaults, supports, and block-level styles
+
+CSS alone does not create Styles inspector controls. Use `tokens.css`, `theme.base.json`, or block style registration when the goal is to expose options in the block editor UI.
 
 ### Network access
 

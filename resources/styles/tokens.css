@@ -10,9 +10,10 @@
  * Naming convention:  --{category}-{slug}: {value};
  *
  * Categories:
- *   --color-{slug}      →  settings.color.palette
- *   --font-size-{slug}  →  settings.typography.fontSizes
- *   --space-{slug}      →  settings.spacing.spacingSizes
+ *   --color-{slug}        →  settings.color.palette
+ *   --font-family-{slug}  →  settings.typography.fontFamilies
+ *   --font-size-{slug}    →  settings.typography.fontSizes
+ *   --space-{slug}        →  settings.spacing.spacingSizes
  *
  * Display names (block editor labels):
  *   Add a single-line comment on the line immediately above the
@@ -25,11 +26,15 @@
  * Font sizes accept any CSS length, including clamp():
  *   --font-size-large: clamp(1.25rem, 1.25rem + 0.5vw, 1.75rem);
  *
+ * Font families accept any valid CSS font-family stack:
+ *   --font-family-libre-franklin: "Libre Franklin", sans-serif;
+ *
  * Spacing slugs are typically numeric strings (10, 20, 30…) to
  * match WordPress's default spacing scale convention.
  *
  * WordPress generates these CSS variables automatically from theme.json:
  *   --wp--preset--color--{slug}
+ *   --wp--preset--font-family--{slug}
  *   --wp--preset--font-size--{slug}
  *   --wp--preset--spacing--{slug}
  */
@@ -40,6 +45,10 @@
 
   /* ── Font Sizes ───────────────────────────────────────────── */
   /* Values may be plain lengths (rem, px) or clamp() expressions. */
+
+
+  /* ── Font Families ────────────────────────────────────────── */
+  /* Use valid CSS font-family stacks starting with --font-family- */
 
 
   /* ── Spacing ──────────────────────────────────────────────── */

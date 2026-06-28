@@ -1,0 +1,15 @@
+/**
+ * Block editor canvas styles.
+ *
+ * This file is injected into `block_editor_settings_all` for the block editor
+ * and registered with `add_editor_style()` for Classic Editor/TinyMCE.
+ *
+ * Use this for editor-only presentation that should affect the authored
+ * content area in either editor. Use `admin.css` for wp-admin chrome,
+ * `tokens.css` for presets surfaced in editor controls, and `theme.base.json`
+ * for block defaults.
+ */
+
+:where(.editor-styles-wrapper) {
+  --forage-editor-styles-loaded: 1;
+}

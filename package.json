@@ -12,8 +12,8 @@
     "lint": "biome lint ./resources && composer lint"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
-    "vite": "^8.0.14"
+    "@biomejs/biome": "^2.5.1",
+    "vite": "^8.1.0"
   },
   "licenses": [
     {

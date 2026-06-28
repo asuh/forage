@@ -52,6 +52,12 @@ class Setup
         add_theme_support('responsive-embeds');
 
         /**
+         * Enable editor styles for the block editor and Classic Editor.
+         * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#editor-styles
+         */
+        add_theme_support('editor-styles');
+
+        /**
          * Enable selective refresh for widgets in customizer.
          * @link https://developer.wordpress.org/reference/functions/add_theme_support/
          */

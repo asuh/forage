@@ -21,6 +21,7 @@ export default defineConfig({
         'resources/scripts/scripts.js',
         'resources/styles/styles.css',
         'resources/styles/admin.css',
+        'resources/styles/editor.css',
         'resources/scripts/blocks.js'
       ],
       output: {
