@@ -19,7 +19,7 @@ trait Resolver
         }
 
         if (empty($path) || ! file_exists($path)) {
-            wp_die('Run <code>yarn build</code> in your application root!');
+            wp_die('Run <code>npm run build</code> in your application root!');
         }
 
         $data = forage()->filesystem()->get($path);

@@ -2,7 +2,7 @@
  * Forage Design Tokens
  *
  * This file is the source of truth for design tokens.
- * On build (and live during `yarn dev`), .vite/theme-json.js reads
+ * On build (and live during `npm run dev`), .vite/theme-json.js reads
  * this file and injects the tokens into the generated theme.json,
  * making them available as --wp--preset--* CSS variables and as
  * options in the block editor.

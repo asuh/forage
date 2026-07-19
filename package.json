@@ -9,11 +9,12 @@
     "build": "vite build",
     "dev": "vite",
     "format": "biome check --write ./resources && composer format",
-    "lint": "biome lint ./resources && composer lint"
+    "lint": "biome lint ./resources && composer lint",
+    "test": "node --test .vite/*.test.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
-    "vite": "^8.1.0"
+    "@biomejs/biome": "^2.5.4",
+    "vite": "^8.1.5"
   },
   "licenses": [
     {

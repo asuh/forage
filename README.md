@@ -32,7 +32,6 @@ Make sure all dependencies have been installed before moving on:
 * [PHP](https://www.php.net/manual/en/install.php) >= 8.3.x
 * [Composer](https://getcomposer.org/download/)
 * [Node.js](http://nodejs.org/) >= 24.0.0
-* [Yarn](https://yarnpkg.com/getting-started/install)
 
 ## Theme structure
 
@@ -45,15 +44,14 @@ themes/your-theme-name/   # → Root of your theme
 │   ├── Editor/           # → Block editor and Classic Editor support
 │   ├── Integrations/     # → Various integrations
 │   ├── Prettify/         # → WordPress output cleanup modules
-│   ├── Templates/        # → Render and Compile Templates files
 │   └── config/           # → Theme configuration files
 ├── composer.json         # → Autoloading for `vendor/` files
 ├── composer.lock         # → Composer lock file (never edit)
 ├── dist/                 # → Built theme assets (never edit)
 ├── node_modules/         # → Node.js packages (never edit)
 ├── package.json          # → Node.js dependencies and scripts
+├── package-lock.json     # → Node.js dependency lock file (never edit)
 ├── vite.config.js        # → Vite config file
-├── yarn.lock             # → Yarn lock file (never edit)
 ├── resources/            # → Theme assets and templates
 │   ├── fonts/            # → Theme fonts
 │   ├── images/           # → Theme images
@@ -72,13 +70,13 @@ themes/your-theme-name/   # → Root of your theme
 
 ## Environment Type
 
-Forage works without a custom `WP_ENVIRONMENT_TYPE` value. When `WP_ENVIRONMENT_TYPE` is `local` or `development`, asset versions use the current timestamp to avoid browser cache issues:
+Production builds work without a custom `WP_ENVIRONMENT_TYPE` value. Set it to `local` or `development` to enable automatic HMR detection and timestamp asset versions during development:
 
 ```php
 define('WP_ENVIRONMENT_TYPE', 'local');
 ```
 
-Hot Module Reload does not require this setting. It is enabled automatically when the Vite dev server responds.
+Forage only probes the local Vite server in these development environments. This keeps production requests from making unnecessary development-server checks.
 
 ## Theme installation
 
@@ -91,14 +89,19 @@ $ composer install
 
 ## Theme development
 
-* Run `yarn` from the theme directory to install dependencies
+Install dependencies from the theme directory:
+
+```shell
+$ npm install
+```
 
 ### Build commands
 
-* `yarn run build`: Compile and optimize the files in your assets directory
-* `yarn run dev`: Compile assets when file changes are made using Vite's hot module reload
-* `yarn run format`: Auto-format JS and CSS with Biome, PHP with PHPCS
-* `yarn run lint`: Lint JS and CSS with Biome, PHP with PHPCS without writing changes
+* `npm run build`: Compile and optimize the files in your assets directory
+* `npm run dev`: Compile assets when file changes are made using Vite's hot module reload
+* `npm run format`: Auto-format JS and CSS with Biome, PHP with PHPCS
+* `npm run lint`: Lint JS and CSS with Biome, PHP with PHPCS without writing changes
+* `npm test`: Run the build utility regression tests
 
 ### Deployment
 
@@ -106,15 +109,15 @@ Built assets in `dist/` are generated and not committed. Production deploys need
 
 ```shell
 $ composer install --no-dev --optimize-autoloader
-$ yarn install --frozen-lockfile
-$ yarn run build
+$ npm ci
+$ npm run build
 ```
 
-Forage intentionally stops with a `yarn build` message when HMR is inactive and `dist/manifest.json` is missing.
+Forage intentionally stops with an `npm run build` message when HMR is inactive and `dist/manifest.json` is missing.
 
 ### Theme JSON
 
-Forage generates `theme.json` from `theme.base.json` and `resources/styles/tokens.css` during `yarn run build` and while `yarn run dev` is running.
+Forage generates `theme.json` from `theme.base.json` and `resources/styles/tokens.css` during `npm run build` and while `npm run dev` is running.
 
 * `theme.base.json`: stable source for block editor defaults and block styles
 * `resources/styles/tokens.css`: source for color, font family, font size, and spacing presets
@@ -135,11 +138,9 @@ CSS alone does not create Styles inspector controls. Use `tokens.css`, `theme.ba
 
 ### Network access
 
-`yarn dev` exposes the Vite dev server on all network interfaces. Forage first checks `http://localhost:5173`, which works for local apps such as Local where the WordPress site may run at an HTTPS domain like `https://test.local`.
+`npm run dev` exposes the Vite dev server on all network interfaces. Forage first checks `http://localhost:5173`, which works for local apps such as Local where the WordPress site may run at an HTTPS domain like `https://test.local`.
 
-If localhost is unavailable, Forage checks the current site host on port `5173`. This keeps same-network testing available when the browser is on another device. The dev server URL is printed on startup alongside the localhost URL.
-
-To override the HMR host manually (e.g. behind a reverse proxy), define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
+For same-network testing, a reverse proxy, or another explicit development host, define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 
 ```php
 define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
@@ -147,7 +148,7 @@ define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
 
 ### Lightning CSS
 
-Lightning CSS handles CSS minification during `yarn build` by default (no install required; it ships with Vite 8). Using it as a full CSS transformer is optional:
+Lightning CSS handles CSS minification during `npm run build` by default (no install required; it ships with Vite 8). Using it as a full CSS transformer is optional:
 
 To enable the transformer, uncomment `transformer: 'lightningcss'` in `vite.config.js`. For more details, see [Vite's Lightning CSS documentation](https://vite.dev/guide/features.html#lightning-css).
 
@@ -163,7 +164,7 @@ Forage includes a built-in Prettify layer that handles WordPress output cleanup 
 * Cleans up `<script>` and `<link>` tag attributes (removes `type`, redundant `id`, and `media="all"`)
 * Strips verbose classes and IDs from nav menu `<li>` items; normalises `current-menu-item` to `active`
 
-Global Styles (`wp_enqueue_global_styles`) follow the same logic: removed on pages without blocks, preserved when block content is detected. This keeps the theme lightweight for classic content while remaining compatible with AI-generated and editor-created blocks.
+Forage leaves Global Styles and `theme.json` output under WordPress control. This preserves presets, custom properties, and WordPress' current on-demand loading behavior.
 
 ### Nice Search (enabled by default)
 
@@ -190,6 +191,8 @@ If you use Gutenberg, you can also try [IndieBlocks](https://wordpress.org/plugi
 
 I'm highlighting a feature called [h-card](https://microformats.org/wiki/h-card), which is a Microformats2 format for publishing data about people and a vital building block for the IndieWeb to work with WordPress.
 
+The starter h-card automatically displays a real author avatar when one is available and otherwise uses a decorative inline SVG instead of requesting Gravatar's generic image. Gravatar availability results are cached to avoid repeated server-side checks. Comment avatars continue to use WordPress' `get_avatar()` API so avatar and Webmention plugins can manage them.
+
 If you haven't already installed any of the above and want to test the waters, you can start with the IndieWeb Plugin. Generally, everything should just work out of the box.
 
 If you have more than one WordPress user on your site, to use the correct person for the h-card, go to `wp-admin/admin.php?page=iw_general_options` of your WordPress instance and make sure the Default Author is correct.
@@ -198,16 +201,16 @@ If you have more than one WordPress user on your site, to use the correct person
 
 While this theme purposely doesn't include any external dependencies for projects, anything can be added to the workflow. But, before you do this, a couple of things to keep in mind.
 
-* `.jsx`, `.tsx`, `.vue` and more are provided natively in Vite. With this support, you likely don't need an additional dependency for React or Vue.
-* `.scss`, `.less`, `.styl` and more are provided natively in Vite. The only additional thing to do is add the pre-processor itself, such as:
+* Vite transforms `.jsx` and `.tsx`, but an application still needs the relevant framework and runtime packages. Vue single-file components require Vue and `@vitejs/plugin-vue`.
+* Vite supports `.scss`, `.less`, and `.styl` after the corresponding preprocessor is installed. Use the matching file extension, such as `.scss`, after installing Sass:
 
 Scss
 
 ```
-yarn add -D sass
+npm install --save-dev sass
 ```
 
-* PostCSS is provided natively in Vite. Considering this, you can write Sass syntax in `.css` files already. If you want to support Sass specific language features like Mixins or Functions, add [postcss-scss](https://github.com/postcss/postcss-scss) in `devDependencies` and you'll get most everything you need from the Sass language processed by PostCSS.
+* Vite processes standard CSS with PostCSS when a PostCSS configuration is present. PostCSS does not make Sass syntax, mixins, or functions available in ordinary `.css` files.
 
 With anything mentioned above, if you add additional dependencies to `package.json`, make sure to update `vite.config.js` to include the necessary watch files and syntax.
 
