@@ -9,7 +9,7 @@
 
     <div class="main-content e-content">
         <div class="p-summary entry-summary">
-            <p>@php(the_excerpt())</p>
+            @php(the_excerpt())
         </div>
     </div><!-- .main-content -->
 

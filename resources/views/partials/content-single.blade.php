@@ -20,12 +20,14 @@
     <footer>
         @include('partials/entry-meta')
 
-        @if (wp_link_pages())
-            {!! wp_link_pages([
-                'echo' => 0,
-                'before' => '<nav class="page-nav"><p>' . __('Pages:'),
-                'after' => '</p></nav>',
-            ]) !!}
+        @php($pageLinks = wp_link_pages([
+            'echo' => 0,
+            'before' => '<nav class="page-nav"><p>' . __('Pages:', 'forage'),
+            'after' => '</p></nav>',
+        ]))
+
+        @if ($pageLinks)
+            {!! $pageLinks !!}
         @endif
     </footer>
 

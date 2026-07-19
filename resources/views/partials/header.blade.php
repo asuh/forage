@@ -32,7 +32,8 @@
     @section('header-actions')
         @include('components.dialog', [
             'content' => get_search_form(false),
-            'id' => 'search-dialog'
+            'id' => 'search-dialog',
+            'title' => __('Search', 'forage'),
         ])
     @endsection
 

@@ -268,48 +268,111 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-	function closeDialog() {
-		const searchDialog = document.getElementById("search-dialog");
+  function initializeDialogs() {
+    const dialogs = document.querySelectorAll("dialog[id]");
 
-    if (!searchDialog) {
+    if (!dialogs.length) {
       return noop;
     }
 
-		function handleKeyDown(event) {
-			searchDialog.contains(document.activeElement) &&
-				event.key === "Escape" &&
-				searchDialog.open &&
-				searchDialog.close();
-		}
+    if (!("HTMLDialogElement" in window)) {
+      return noop;
+    }
 
-		document.addEventListener("keydown", handleKeyDown);
+    const supportsInvokerCommands =
+      "commandForElement" in HTMLButtonElement.prototype;
+    const supportsLightDismiss =
+      "closedBy" in HTMLDialogElement.prototype;
+    const abortController = new AbortController();
+    const { signal } = abortController;
 
-		return () => {
-			document.removeEventListener("keydown", handleKeyDown);
-		}
-	}
+    document.querySelectorAll("button[commandfor]").forEach((button) => {
+      const dialog = document.getElementById(button.getAttribute("commandfor"));
+
+      if (!(dialog instanceof HTMLDialogElement) || supportsInvokerCommands) {
+        return;
+      }
+
+      const command = button.getAttribute("command");
+
+      if (command === "show-modal") {
+        button.addEventListener(
+          "click",
+          () => {
+            if (!dialog.open) {
+              dialog.showModal();
+            }
+          },
+          { signal },
+        );
+      } else if (command === "close") {
+        button.addEventListener(
+          "click",
+          () => {
+            if (dialog.open) {
+              dialog.close();
+            }
+          },
+          { signal },
+        );
+      }
+    });
+
+    if (!supportsLightDismiss) {
+      dialogs.forEach((dialog) => {
+        dialog.addEventListener(
+          "click",
+          (event) => {
+            if (event.target === dialog) {
+              dialog.close("dismiss");
+            }
+          },
+          { signal },
+        );
+      });
+    }
+
+    return () => abortController.abort();
+  }
 
   function appendLoadTime() {
-    const timing = window.performance?.timing;
-    const copyright = document.querySelector(".copyright");
+    const appendTiming = () => {
+      const navigation = window.performance
+        ?.getEntriesByType("navigation")
+        .find((entry) => entry.entryType === "navigation");
+      const copyright = document.querySelector(".copyright");
 
-    if (!timing || !copyright) {
+      if (!navigation || !copyright) {
+        return;
+      }
+
+      const loadTime = navigation.duration / 1000;
+
+      if (!Number.isFinite(loadTime) || loadTime <= 0) {
+        return;
+      }
+
+      const element = document.createElement("small");
+      element.textContent = `This page loaded in ${loadTime.toFixed(2)} seconds`;
+      copyright.appendChild(element);
+    };
+
+    if (document.readyState === "complete") {
+      appendTiming();
       return;
     }
 
-    const loadTime = (timing.loadEventEnd - timing.navigationStart) / 1000;
-
-    if (!Number.isFinite(loadTime) || loadTime < 0) {
-      return;
-    }
-
-    const element = document.createElement("small");
-    element.textContent = `This page loaded in ${loadTime} seconds`;
-    copyright.appendChild(element);
+    window.addEventListener(
+      "load",
+      () => {
+        window.setTimeout(appendTiming, 0);
+      },
+      { once: true },
+    );
   }
 
 	toggleNavigation();
 	submenuA11y();
-	closeDialog();
+  initializeDialogs();
   appendLoadTime();
 });

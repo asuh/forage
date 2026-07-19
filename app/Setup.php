@@ -4,6 +4,8 @@ namespace Forage;
 
 class Setup
 {
+    private bool $cf7AssetsRequired = true;
+
     /**
      * Loads default theme supports
      *
@@ -82,19 +84,6 @@ class Setup
     }
 
     /**
-     * Remove Global Styles when the current singular post contains no blocks.
-     * Runs at priority 9, before wp_enqueue_global_styles fires at priority 10.
-     *
-     * @action wp_enqueue_scripts 9
-     */
-    public function conditionallyRemoveGlobalStyles(): void
-    {
-        if (! (is_singular() && has_blocks())) {
-            remove_action('wp_enqueue_scripts', 'wp_enqueue_global_styles');
-        }
-    }
-
-    /**
      * Register navigation menus
      * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
      *
@@ -137,26 +126,6 @@ class Setup
                 'id' => 'sidebar-footer',
             ] + $config,
         );
-    }
-
-    /**
-     * Wraps the_excerpt in p-summary
-     *
-     * @filter the_excerpt
-     */
-    public function addMF2Wrapper(string $content): string
-    {
-        if (is_feed()) {
-            return $content;
-        }
-
-        $wrap = '<div class="entry-summary p-summary">';
-
-        if (! empty($content)) {
-            return $wrap . $content . '</div>';
-        }
-
-        return $content;
     }
 
     /**
@@ -241,18 +210,6 @@ class Setup
     }
 
     /**
-     * Add SVG to allowed file uploads
-     *
-     * @filter upload_mimes
-     */
-    public function addFileTypesToUploads($mimeTypes): array
-    {
-        $mimeTypes['svg'] = 'image/svg+xml';
-
-        return $mimeTypes;
-    }
-
-    /**
      * Override Webmentions plugin Walker_Comment extended class
      *
      * @filter wp_list_comments_args
@@ -274,37 +231,77 @@ class Setup
      */
     public function conditionallyDisableCf7(): void
     {
-        if (! is_singular()) {
+        if (! function_exists('wpcf7_load_js')) {
             return;
         }
 
-        $hasForm =
-            get_post_meta(get_queried_object_id(), '_cf7form', true) ||
-            has_shortcode(get_post()->post_content, 'contact-form-7') ||
-            has_shortcode(get_post()->post_content, 'cf7form');
+        $this->cf7AssetsRequired = (bool) apply_filters(
+            'forage_cf7_assets_required',
+            $this->queryHasCf7Form(),
+        );
 
-        if (! $hasForm) {
-            add_filter('wpcf7_load_js', '__return_false');
-            add_filter('wpcf7_load_css', '__return_false');
-
-            remove_action(
-                'wp_enqueue_scripts',
-                'wpcf7_recaptcha_enqueue_scripts',
-                20,
-            );
+        if ($this->cf7AssetsRequired) {
+            return;
         }
+
+        add_filter('wpcf7_load_js', '__return_false');
+        add_filter('wpcf7_load_css', '__return_false');
+
+        remove_action(
+            'wp_enqueue_scripts',
+            'wpcf7_recaptcha_enqueue_scripts',
+            20,
+        );
+        remove_action(
+            'wp_enqueue_scripts',
+            'wpcf7_turnstile_enqueue_scripts',
+            10,
+        );
     }
 
     /**
-     * Clean up any remaining reCAPTCHA scripts when CF7 is disabled
+     * Clean up any CF7 assets enqueued after the load filters were applied
      *
      * @action wp_print_scripts 99
+     * @action wp_print_styles 99
      */
-    public function dequeueRecaptcha(): void
+    public function dequeueCf7Assets(): void
     {
-        if (! function_exists('wpcf7_load_js') || ! wpcf7_load_js()) {
-            wp_dequeue_script('google-recaptcha');
-            wp_dequeue_script('wpcf7-recaptcha');
+        if ($this->cf7AssetsRequired) {
+            return;
         }
+
+        wp_dequeue_script('contact-form-7');
+        wp_dequeue_script('contact-form-7-html5-fallback');
+        wp_dequeue_script('wpcf7-recaptcha');
+        wp_dequeue_style('contact-form-7');
+        wp_dequeue_style('contact-form-7-rtl');
+    }
+
+    private function queryHasCf7Form(): bool
+    {
+        if (is_singular()) {
+            $posts = [get_post()];
+        } else {
+            global $wp_query;
+
+            $posts = $wp_query instanceof \WP_Query ? $wp_query->posts : [];
+        }
+
+        foreach ($posts as $post) {
+            if ($post instanceof \WP_Post && $this->postHasCf7Form($post)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function postHasCf7Form(\WP_Post $post): bool
+    {
+        return (bool) get_post_meta($post->ID, '_cf7form', true) ||
+            has_shortcode($post->post_content, 'contact-form-7') ||
+            has_shortcode($post->post_content, 'cf7form') ||
+            has_block('contact-form-7/contact-form-selector', $post);
     }
 }

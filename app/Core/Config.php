@@ -8,9 +8,13 @@ class Config
 
     private string $hmrHost = '';
 
+    private bool $hmrActive = false;
+
     public function __construct()
     {
-        $this->hmrHost = $this->resolveHmrHost();
+        $hmr = $this->resolveHmr();
+        $this->hmrHost = $hmr['host'];
+        $this->hmrActive = $hmr['active'];
 
         $this->config = [
             'version' => $this->isLocalEnvironment() ? time() : FORAGE_VERSION,
@@ -26,7 +30,7 @@ class Config
                 'uri' => $this->hmrHost,
                 'client' => $this->hmrHost . FORAGE_ROOT . '/@vite/client',
                 'resources' => $this->hmrHost . FORAGE_ROOT . '/resources',
-                'active' => $this->isHmrActive(),
+                'active' => $this->hmrActive,
             ],
             'manifest' => [
                 'path' => FORAGE_DIST_PATH . '/manifest.json',
@@ -95,52 +99,61 @@ class Config
         return is_array($data) ? $data : [];
     }
 
-    private function isHmrActive(): bool
+    private function resolveHmr(): array
     {
-        if (empty($this->hmrHost)) {
-            return false;
+        $hosts = $this->hmrHosts();
+        $fallback = $hosts[0] ?? 'http://localhost:5173';
+
+        if (! defined('FORAGE_HMR_HOST') && ! $this->isLocalEnvironment()) {
+            return [
+                'host' => $fallback,
+                'active' => false,
+            ];
         }
 
-        $response = wp_remote_get($this->hmrHost . FORAGE_ROOT, [
-            'timeout' => 0.25,
-        ]);
-
-        return ! is_wp_error($response);
-    }
-
-    private function resolveHmrHost(): string
-    {
-        foreach ($this->hmrHosts() as $host) {
-            $response = wp_remote_get($host . FORAGE_ROOT, [
+        foreach ($hosts as $host) {
+            $response = wp_remote_get($host . FORAGE_ROOT . '/@vite/client', [
                 'timeout' => 0.25,
+                'redirection' => 0,
             ]);
+            $status = wp_remote_retrieve_response_code($response);
 
-            if (! is_wp_error($response)) {
-                return $host;
+            if (
+                ! is_wp_error($response) &&
+                $status >= 200 &&
+                $status < 300
+            ) {
+                return [
+                    'host' => $host,
+                    'active' => true,
+                ];
             }
         }
 
-        return $this->hmrHosts()[0];
+        return [
+            'host' => $fallback,
+            'active' => false,
+        ];
     }
 
     private function hmrHosts(): array
     {
         if (defined('FORAGE_HMR_HOST')) {
-            return [untrailingslashit(FORAGE_HMR_HOST)];
+            $host = untrailingslashit(
+                esc_url_raw((string) FORAGE_HMR_HOST)
+            );
+            $parts = wp_parse_url($host);
+
+            if (
+                isset($parts['scheme'], $parts['host']) &&
+                in_array($parts['scheme'], ['http', 'https'], true)
+            ) {
+                return [$host];
+            }
+
+            return [];
         }
 
-        $httpHost = sanitize_text_field(
-            wp_unslash($_SERVER['HTTP_HOST'] ?? 'localhost')
-        );
-        $httpHost = strtok($httpHost, ':');
-
-        return array_values(
-            array_unique(
-                [
-                    'http://localhost:5173',
-                    "http://{$httpHost}:5173",
-                ]
-            )
-        );
+        return ['http://localhost:5173'];
     }
 }
