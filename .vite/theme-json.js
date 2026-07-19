@@ -19,7 +19,7 @@ function slugToName(slug) {
  * above a variable becomes its display name; otherwise the name is
  * derived from the slug.
  */
-function parseTokens(css) {
+export function parseTokens(css) {
   const palette = []
   const fontFamilies = []
   const fontSizes = []
@@ -34,7 +34,7 @@ function parseTokens(css) {
 
   // Match: optional /* Name */ comment, then --category-slug: value;
   const re =
-    /(?:\/\*\s*([^*\n]+?)\s*\*\/\s*\n\s*)?--(color|font-family|font-size|space)-([a-z0-9-]+)\s*:\s*([^;]+);/g
+    /(?:\/\*[ \t]*([^*\n]+?)[ \t]*\*\/[ \t]*\r?\n[ \t]*)?--(color|font-family|font-size|space)-([a-z0-9-]+)\s*:\s*([^;]+);/g
 
   for (const [, comment, category, slug, raw] of stripped.matchAll(re)) {
     const name = comment?.trim() ?? slugToName(slug)
@@ -45,7 +45,7 @@ function parseTokens(css) {
     } else if (category === 'font-family') {
       fontFamilies.push({ slug, fontFamily: value, name })
     } else if (category === 'font-size') {
-      fontSizes.push({ slug, size: value, name, fluid: false })
+      fontSizes.push({ slug, size: value, name })
     } else if (category === 'space') {
       spacingSizes.push({ slug, size: value, name })
     }
