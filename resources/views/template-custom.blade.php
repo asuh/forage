@@ -1,7 +1,3 @@
-{{--
-  Template Name: Custom Template
---}}
-
 @extends('base')
 
 @section('content')

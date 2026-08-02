@@ -34,7 +34,7 @@ class Resolver
 
         $templates = array_map(fn($item) => preg_replace('/^[^\/]+\/|(\.blade)?\.php$/', '', $item), $templates);
         $templates = array_map(fn($item) => forage()->config()->get('views.path') . '/' . $item . '.blade.php', $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
-        $templates = array_map(fn($item) => str_replace(forage()->config()->get('resources.path') . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
+        $templates = array_map(fn($item) => str_replace(FORAGE_PATH . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
 
         return $templates;
     }
@@ -46,7 +46,7 @@ class Resolver
     {
         if (forage()->config()->isTheme()) {
             forage()->templating()->render($template);
-            return forage()->config()->get('resources.path') . '/index.php';
+            return FORAGE_PATH . '/index.php';
         }
 
         return $template;

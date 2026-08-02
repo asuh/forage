@@ -93,7 +93,7 @@ class Provider
             );
 
             // Return a blank file to prevent WordPress from rendering the default template
-            return FORAGE_PATH . '/resources/index.php';
+            return FORAGE_PATH . '/index.php';
         }
 
         // If the Blade template doesn't exist, fall back to the default behavior

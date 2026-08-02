@@ -4,7 +4,9 @@
 
     <file>app</file>
     <file>inc</file>
-    <file>resources/functions.php</file>
+    <file>functions.php</file>
+    <file>index.php</file>
+    <file>template-custom.php</file>
 
     <exclude-pattern>vendor/*</exclude-pattern>
     <exclude-pattern>node_modules/*</exclude-pattern>

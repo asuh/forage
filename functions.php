@@ -1,9 +1,9 @@
 <?php // phpcs:ignore PSR1.Files.SideEffects.FoundWithSymbols
 
 define('FORAGE_VERSION', '1.0.0');
-define('FORAGE_ROOT', str_replace(ABSPATH, '/', dirname(__DIR__, 1)));
-define('FORAGE_PATH', dirname(__DIR__, 1));
-define('FORAGE_URI', home_url(FORAGE_ROOT));
+define('FORAGE_PATH', __DIR__);
+define('FORAGE_ROOT', str_replace(ABSPATH, '/', FORAGE_PATH));
+define('FORAGE_URI', get_template_directory_uri());
 
 define('FORAGE_DIST_PATH', FORAGE_PATH . '/dist');
 define('FORAGE_DIST_URI', FORAGE_URI . '/dist');
