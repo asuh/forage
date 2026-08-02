@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import copy from './.vite/copy';
-import themeJson from './.vite/theme-json';
+import copy from './.vite/copy.js';
+import themeJson from './.vite/theme-json.js';
 
 const ROOT = path.resolve('../../../');
 const BASE = import.meta.dirname.replace(ROOT, '');

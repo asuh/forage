@@ -13,8 +13,8 @@
     "test": "node --test .vite/*.test.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.4",
-    "vite": "^8.1.5"
+    "@biomejs/biome": "^2.5.6",
+    "vite": "^8.2.0"
   },
   "licenses": [
     {
