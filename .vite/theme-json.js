@@ -109,34 +109,40 @@ function warnAboutMissingPresetReferences(themeJson) {
   )
 }
 
-function generate(tokensPath, basePath, outputPath) {
-  const css = fs.readFileSync(tokensPath, 'utf-8')
-  const base = JSON.parse(fs.readFileSync(basePath, 'utf-8'))
-  const { palette, fontFamilies, fontSizes, spacingSizes } = parseTokens(css)
+export function applyTokens(base, tokens) {
+  const { palette, fontFamilies, fontSizes, spacingSizes } = tokens
 
   if (palette.length) {
     base.settings ??= {}
     base.settings.color ??= {}
-    base.settings.color.palette = { theme: palette }
+    base.settings.color.palette = palette
   }
 
   if (fontFamilies.length) {
     base.settings ??= {}
     base.settings.typography ??= {}
-    base.settings.typography.fontFamilies = { theme: fontFamilies }
+    base.settings.typography.fontFamilies = fontFamilies
   }
 
   if (fontSizes.length) {
     base.settings ??= {}
     base.settings.typography ??= {}
-    base.settings.typography.fontSizes = { theme: fontSizes }
+    base.settings.typography.fontSizes = fontSizes
   }
 
   if (spacingSizes.length) {
     base.settings ??= {}
     base.settings.spacing ??= {}
-    base.settings.spacing.spacingSizes = { theme: spacingSizes }
+    base.settings.spacing.spacingSizes = spacingSizes
   }
+
+  return base
+}
+
+function generate(tokensPath, basePath, outputPath) {
+  const css = fs.readFileSync(tokensPath, 'utf-8')
+  const base = JSON.parse(fs.readFileSync(basePath, 'utf-8'))
+  applyTokens(base, parseTokens(css))
 
   warnAboutMissingPresetReferences(base)
   fs.writeFileSync(outputPath, JSON.stringify(base, null, 2) + '\n')

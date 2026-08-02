@@ -7,7 +7,7 @@ trait Resolver
     private array $manifest = [];
 
     /**
-     * @action init
+     * @action after_setup_theme 1
      */
     public function load(): void
     {

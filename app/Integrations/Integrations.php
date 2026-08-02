@@ -19,7 +19,7 @@ class Integrations
     }
 
     /**
-     * @action init
+     * @action after_setup_theme 2
      */
     public function init(): void
     {

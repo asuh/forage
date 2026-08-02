@@ -3,21 +3,11 @@
   "version": 3,
   "settings": {
     "appearanceTools": true,
-    "color": {
-      "defaultDuotone": false,
-      "defaultPalette": false,
-      "defaultGradients": false,
-      "duotone": [],
-      "gradients": []
-    },
     "layout": {
       "contentSize": "620px",
       "wideSize": "1280px"
     },
     "spacing": {
-      "spacingScale": {
-        "steps": 0
-      },
       "units": [
         "%",
         "px",
@@ -28,67 +18,8 @@
       ]
     },
     "typography": {
-      "fluid": true,
-      "fontFamilies": [],
-      "writingMode": true
+      "fluid": true
     },
     "useRootPaddingAwareAlignments": true
-  },
-  "styles": {
-    "spacing": {
-      "blockGap": "1.2rem"
-    }
-  },
-  "templateParts": [
-    {
-      "area": "header",
-      "name": "header",
-      "title": "Header"
-    },
-    {
-      "area": "footer",
-      "name": "footer",
-      "title": "Footer"
-    },
-    {
-      "area": "uncategorized",
-      "name": "sidebar",
-      "title": "Sidebar"
-    },
-    {
-      "area": "uncategorized",
-      "name": "post-meta",
-      "title": "Post Meta"
-    }
-  ],
-  "customTemplates": [
-    {
-      "name": "page-no-title",
-      "postTypes": [
-        "page"
-      ],
-      "title": "Page No Title"
-    },
-    {
-      "name": "page-with-sidebar",
-      "postTypes": [
-        "page"
-      ],
-      "title": "Page With Sidebar"
-    },
-    {
-      "name": "page-wide",
-      "postTypes": [
-        "page"
-      ],
-      "title": "Page with wide Image"
-    },
-    {
-      "name": "single-with-sidebar",
-      "postTypes": [
-        "post"
-      ],
-      "title": "Single with Sidebar"
-    }
-  ]
+  }
 }
