@@ -27,6 +27,22 @@ The generator converts them to native `theme.json` preset arrays. WordPress then
 
 If `theme.base.json` references a preset such as `var(--wp--preset--color--primary)` or `var:preset|font-family|heading`, add the matching token to `tokens.css`. Missing preset references produce a development/build warning without stopping the build.
 
+### Runtime Custom Properties
+
+The generator reads `tokens.css`, but Vite does not automatically include that file in a browser stylesheet. WordPress exposes generated presets as `--wp--preset--*` custom properties through `theme.json`; the original properties such as `--color-primary` only exist at runtime when `tokens.css` is imported by a CSS entry.
+
+Import it where the original properties are needed:
+
+```css
+/* resources/styles/styles.css */
+@import "tokens.css";
+
+/* resources/styles/editor.css */
+@import "tokens.css";
+```
+
+Import it into both entries when frontend and authored editor content use the original properties. No import is necessary when project CSS only uses the WordPress-generated `--wp--preset--*` properties.
+
 ## Loading Fonts
 
 A font-family token registers the family name and editor option, but it does not load font files.

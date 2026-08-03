@@ -7,6 +7,12 @@
  * making them available as --wp--preset--* CSS variables and as
  * options in the block editor.
  *
+ * The generator parses this file but does not add it to a browser
+ * stylesheet. Import it from styles.css and/or editor.css when the
+ * original --color-*, --font-*, or --space-* properties are needed
+ * at runtime. No import is needed when CSS only uses WordPress's
+ * generated --wp--preset--* properties.
+ *
  * Naming convention:  --{category}-{slug}: {value};
  *
  * Categories:
