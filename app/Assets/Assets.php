@@ -51,7 +51,7 @@ class Assets
                     'href' => forage()->assets()->resolve('styles/styles.css'),
                     'as' => 'style',
                     'type' => 'text/css',
-                    'crossorigin' => true,
+                    'crossorigin' => false,
                 ],
             ]
         );

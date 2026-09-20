@@ -93,12 +93,18 @@ If the development server cannot be reached, Forage falls back to `dist/manifest
 
 ## Production Assets
 
-Production builds preload the main stylesheet and add `modulepreload` hints for JavaScript entries and imported chunks. Vite manages these dependencies during HMR, so Forage omits the production hints while the development server is active.
+Production builds preload the main stylesheet and add `modulepreload` hints for JavaScript entries and imported chunks. Manifest assets use their hashed filenames without an additional version query, so preloads and enqueued assets request the same URL. Copied images use content hashes and keep their URLs across builds until their contents change.
+
+The asset resolver enqueues CSS from entries and their static imports, including nested imports, and deduplicates shared styles. JavaScript imports load through native ES modules; CSS handles are kept out of WordPress's script dependency list. Dynamic imports remain lazy. Vite manages these dependencies during HMR, so Forage omits the production hints while the development server is active.
+
+An explicit `version` passed to `enqueue()` is preserved, including `null` and `false`. If overriding a preloaded entry's version, update its preload URL through the filters below to match. External assets retain the configured theme version by default.
 
 Use these filters to customize or remove generated hints:
 
 * `forage_assets_preload`: filters stylesheet and other standard preload entries
 * `forage_assets_module_preload`: filters JavaScript module preload entries
+
+Run `npm test` for build utility regressions and `composer test` for asset resolver regressions. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.
 
 Forage keeps `dist/` out of version control. Deployments must run:
 

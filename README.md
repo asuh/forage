@@ -76,6 +76,7 @@ npm run dev
 * `npm run format`: format CSS and JavaScript with Biome and PHP with PHPCBF
 * `npm run lint`: lint CSS and JavaScript with Biome and PHP with PHPCS
 * `npm test`: run build utility regression tests
+* `composer test`: run PHP asset resolver regression tests
 
 ## Deployment
 

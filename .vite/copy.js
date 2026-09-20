@@ -36,12 +36,16 @@ class Plugin {
   }
 
   resolve() {
+    this.entries = [];
+
     for (const target of this.targets) {
+      target.files = [];
+
       for (const file of globSync([target.src])) {
         const info = path.parse(file);
         const name = target.rename
           .replace('[name]', info.name)
-          .replace('[hash]', crypto.randomBytes(4).toString('hex'))
+          .replace('[hash]', crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 16))
           .replace('[ext]', info.ext.substring(1));
 
         target.files.push({

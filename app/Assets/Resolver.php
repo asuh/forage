@@ -52,9 +52,11 @@ trait Resolver
                 : uniqid(),
             'src' => ! empty($path) ? $this->resolve($path) : $path,
             'deps' => ! empty($config['deps']) ? $config['deps'] : [],
-            'version' => ! empty($config['version'])
+            'version' => array_key_exists('version', $config)
                 ? $config['version']
-                : forage()->config()->get('version'),
+                : ((! forage()->config()->get('hmr.active') && $this->has($path))
+                    ? null
+                    : forage()->config()->get('version')),
             'args' => [
                 'strategy' => ! empty($config['strategy'])
                     ? $config['strategy']
@@ -76,25 +78,19 @@ trait Resolver
         if (! filter_var($path, FILTER_VALIDATE_URL)) {
             $dependencies = $this->dependencies($path);
 
-            if (! empty($dependencies['scripts'])) {
-                foreach ($dependencies['scripts'] as $index => $script) {
-                    $config['deps'][] = $this->enqueue(
-                        $script,
-                        [
-                            'handle' => "{$config["handle"]}-{$index}",
-                        ]
-                    );
-                }
-            }
+            // ESM imports load through the browser. Extracted CSS needs its own queue.
+            foreach ($dependencies['styles'] as $style) {
+                $handle = $this->enqueue(
+                    $style,
+                    [
+                        'handle' => 'forage-css-' . md5($style),
+                        'version' => null,
+                    ]
+                );
 
-            if (! empty($dependencies['styles'])) {
-                foreach ($dependencies['styles'] as $index => $style) {
-                    $config['deps'][] = $this->enqueue(
-                        $style,
-                        [
-                            'handle' => "{$config["handle"]}-{$index}",
-                        ]
-                    );
+                // WordPress script and style dependencies use separate registries.
+                if ('style' === $config['type']) {
+                    $config['deps'][] = $handle;
                 }
             }
         }
@@ -185,21 +181,17 @@ trait Resolver
         }
 
         if ($this->has($path)) {
-            $assets['scripts'] = collect($this->find($path)['js'] ?? [])
-                ->map(
-                    fn($item) => forage()->config()->get('dist.uri') .
-                        '/' .
-                        $item,
-                )
-                ->all();
+            $entry = $this->find($path);
+            $chunks = [$entry, ...$this->importedChunks($entry)];
 
-            $assets['styles'] = collect($this->find($path)['css'] ?? [])
-                ->map(
-                    fn($item) => forage()->config()->get('dist.uri') .
-                        '/' .
-                        $item,
-                )
-                ->all();
+            foreach ($chunks as $chunk) {
+                foreach ($chunk['css'] ?? [] as $file) {
+                    $assets['styles'][] = forage()->config()->get('dist.uri') .
+                        '/' . ltrim($file, '/');
+                }
+            }
+
+            $assets['styles'] = array_values(array_unique($assets['styles']));
         }
 
         return $assets;

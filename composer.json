@@ -13,6 +13,7 @@
     "illuminate/support": "^13"
   },
   "scripts": {
+    "test": "php tests/assets.php",
     "lint": "phpcs",
     "format": "phpcbf"
   },
