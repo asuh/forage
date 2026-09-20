@@ -104,36 +104,34 @@ class Config
         $hosts = $this->hmrHosts();
         $fallback = $hosts[0] ?? 'http://localhost:5173';
 
-        if (! defined('FORAGE_HMR_HOST') && ! $this->isLocalEnvironment()) {
-            return [
-                'host' => $fallback,
-                'active' => false,
-            ];
+        $inactive = ['host' => $fallback, 'active' => false];
+        $hotFile = FORAGE_PATH . '/.vite/hot';
+
+        if (! $this->isLocalEnvironment() || ! is_readable($hotFile)) {
+            return $inactive;
         }
 
-        foreach ($hosts as $host) {
-            $response = wp_remote_get($host . FORAGE_ROOT . '/@vite/client', [
-                'timeout' => 0.25,
-                'redirection' => 0,
-            ]);
-            $status = wp_remote_retrieve_response_code($response);
+        // A heartbeat expires after an unclean Vite shutdown, without HTTP probes.
+        $modified = filemtime($hotFile);
 
-            if (
-                ! is_wp_error($response) &&
-                $status >= 200 &&
-                $status < 300
-            ) {
-                return [
-                    'host' => $host,
-                    'active' => true,
-                ];
-            }
+        if (false === $modified || time() - $modified > 30) {
+            return $inactive;
         }
 
-        return [
-            'host' => $fallback,
-            'active' => false,
-        ];
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local Vite status file.
+        $contents = file_get_contents($hotFile);
+        $host = defined('FORAGE_HMR_HOST') ? ($hosts[0] ?? '') : trim((string) $contents);
+        $parts = wp_parse_url($host);
+
+        if (
+            ! filter_var($host, FILTER_VALIDATE_URL) ||
+            ! isset($parts['scheme'], $parts['host']) ||
+            ! in_array($parts['scheme'], ['http', 'https'], true)
+        ) {
+            return $inactive;
+        }
+
+        return ['host' => untrailingslashit($host), 'active' => true];
     }
 
     private function hmrHosts(): array

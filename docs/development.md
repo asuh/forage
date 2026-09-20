@@ -77,11 +77,11 @@ Production builds work without a custom `WP_ENVIRONMENT_TYPE` value. Set it to `
 define('WP_ENVIRONMENT_TYPE', 'local');
 ```
 
-Forage only probes the Vite server in these development environments. This prevents production requests from performing unnecessary development-server checks.
+Forage only enables HMR in these development environments. Production ignores the development-server status file.
 
 ## HMR And Network Access
 
-`npm run dev` exposes Vite on all network interfaces. Forage first checks `http://localhost:5173`, which works for local applications where WordPress is served from another domain, such as `https://test.local`.
+`npm run dev` exposes Vite on all network interfaces and writes its origin and actual port to `.vite/hot`. PHP reads this file without making an HTTP request. Vite refreshes its modification time every ten seconds and removes it on normal shutdown. If Vite crashes, the file expires after thirty seconds and Forage falls back to built assets. The file is ignored by Git and must not be included in deployments.
 
 For same-network testing, a reverse proxy, or another explicit host, define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 
@@ -89,7 +89,7 @@ For same-network testing, a reverse proxy, or another explicit host, define `FOR
 define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
 ```
 
-If the development server cannot be reached, Forage falls back to `dist/manifest.json` in every environment. Run `npm run build` when the theme must work without an active Vite server.
+The override changes the browser-facing origin; it still requires a fresh `.vite/hot` file and a `local` or `development` environment. Vite and PHP must share the theme directory. Remove `.vite/hot` to force an immediate fallback after an unclean shutdown. Run `npm run build` when the theme must work without an active Vite server.
 
 ## Production Assets
 
@@ -104,7 +104,7 @@ Use these filters to customize or remove generated hints:
 * `forage_assets_preload`: filters stylesheet and other standard preload entries
 * `forage_assets_module_preload`: filters JavaScript module preload entries
 
-Run `npm test` for build utility regressions and `composer test` for asset resolver regressions. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.
+Run `npm test` for build utility and Vite lifecycle regressions and `composer test` for PHP regressions. The Vite test briefly starts a loopback development server. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.
 
 Forage keeps `dist/` out of version control. Deployments must run:
 

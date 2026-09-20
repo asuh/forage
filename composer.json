@@ -15,7 +15,8 @@
   "scripts": {
     "test": [
       "php tests/assets.php",
-      "php tests/gravatar.php"
+      "php tests/gravatar.php",
+      "php tests/config.php"
     ],
     "lint": "phpcs",
     "format": "phpcbf"
