@@ -76,7 +76,7 @@ npm run dev
 * `npm run format`: format CSS and JavaScript with Biome and PHP with PHPCBF
 * `npm run lint`: lint CSS and JavaScript with Biome and PHP with PHPCS
 * `npm test`: run build utility regression tests
-* `composer test`: run PHP asset resolver regression tests
+* `composer test`: run PHP regression tests
 
 ## Deployment
 
@@ -112,7 +112,7 @@ Forage includes [Microformats2](https://microformats.org/wiki/microformats2) and
 
 ### h-card
 
-The starter [h-card](https://microformats.org/wiki/h-card) displays a real author avatar when available and otherwise uses a local inline SVG instead of requesting Gravatar's generic image. Gravatar availability results are cached to avoid repeated server-side checks.
+The starter [h-card](https://microformats.org/wiki/h-card) displays a real author avatar when available and otherwise uses a local inline SVG instead of requesting Gravatar's generic image. Gravatar availability is checked in the background through WP-Cron and cached. On a cache miss, the placeholder appears immediately; later page requests can show the avatar after the scheduled check completes. Sites that disable automatic WP-Cron must run scheduled events through their own cron runner.
 
 Comment avatars continue through WordPress's `get_avatar()` API so avatar and Webmention plugins can manage them.
 
