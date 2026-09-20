@@ -1,5 +1,11 @@
 # Upgrading Forage
 
+## Comments View Data
+
+The comments provider now passes only `post` and `comments_open`. Custom comments views should use WordPress's prepared comment loop through `have_comments()` and `wp_list_comments()` instead of the former `comments` array. The unused `comment_pages` value has also been removed.
+
+Generate previous and next links inside the pagination condition with `get_previous_comments_link()` and `get_next_comments_link()`. These functions return complete anchor markup, not URLs; the starter view now renders that markup directly and omits unavailable links.
+
 ## Root Theme Layout
 
 Forage previously kept `style.css`, `functions.php`, `index.php`, and `screenshot.png` under `resources/`. WordPress therefore identified an installation using a nested stylesheet slug such as `forage/resources`.

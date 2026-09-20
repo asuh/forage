@@ -85,10 +85,6 @@ class Provider
                 [
                     'post' => get_post(),
                     'comments_open' => comments_open(),
-                    'comments' => get_comments(['post_id' => get_the_ID()]),
-                    'comment_pages' => paginate_comments_links(['echo' => false]),
-                    'previous_page_url' => get_previous_comments_link(),
-                    'next_page_url' => get_next_comments_link(),
                 ]
             );
 

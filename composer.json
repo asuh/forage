@@ -17,7 +17,8 @@
       "php tests/assets.php",
       "php tests/gravatar.php",
       "php tests/config.php",
-      "php tests/prettify.php"
+      "php tests/prettify.php",
+      "php tests/comments.php"
     ],
     "lint": "phpcs",
     "format": "phpcbf"

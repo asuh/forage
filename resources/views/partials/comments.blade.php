@@ -25,16 +25,20 @@
     @endif
 
     @if (get_comment_pages_count() > 1 && get_option('page_comments'))
+        @php
+            $previousCommentsLink = get_previous_comments_link(__('← Older comments', 'forage'));
+            $nextCommentsLink = get_next_comments_link(__('Newer comments →', 'forage'));
+        @endphp
         <nav>
             <ul class="pager">
-                @if (isset($previous_page_url))
+                @if ($previousCommentsLink)
                     <li class="previous">
-                        <a href="{{ $previous_page_url }}">&larr; Older comments</a>
+                        {!! $previousCommentsLink !!}
                     </li>
                 @endif
-                @if (isset($next_page_url))
+                @if ($nextCommentsLink)
                     <li class="next">
-                        <a href="{{ $next_page_url }}">Newer comments &rarr;</a>
+                        {!! $nextCommentsLink !!}
                     </li>
                 @endif
             </ul>
