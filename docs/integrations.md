@@ -11,10 +11,12 @@ Enabled by default, Clean Up:
 * Removes generator tags, wlwmanifest, RSD, oEmbed discovery, and shortlink output
 * Disables WordPress emoji scripts and styles
 * Dequeues Gutenberg block-library CSS when the rendered query has no block content
-* Removes redundant script and stylesheet attributes while preserving `type="module"`
+* Preserves native script and stylesheet tags without reparsing them
 * Simplifies navigation menu classes and normalizes the current item to `active`
 
 Forage leaves Global Styles and `theme.json` output under WordPress control so presets, custom properties, and current on-demand behavior remain intact.
+
+Set `clean-up.clean-asset-tags` to `true` to restore cosmetic script and stylesheet attribute cleanup. This opt-in also requires `clean-html5-markup` to remain enabled. Navigation class normalization and the other HTML cleanup remain enabled by default.
 
 ### Nice Search
 

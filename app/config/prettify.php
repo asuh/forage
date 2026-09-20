@@ -30,6 +30,12 @@ return [
         'clean-html5-markup' => true,
 
         /**
+         * Parse script and stylesheet tags to remove cosmetic attributes.
+         * Disabled by default to avoid DOM parsing during asset output.
+         */
+        'clean-asset-tags' => false,
+
+        /**
          * Disable WordPress emojis.
          */
         'disable-emojis' => true,

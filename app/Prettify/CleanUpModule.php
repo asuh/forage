@@ -66,13 +66,17 @@ class CleanUpModule extends AbstractModule
         $this
             ->filter('body_class', 'bodyClass')
             ->filter('language_attributes', 'languageAttributes')
-            ->filter('style_loader_tag', 'cleanStylesheetLinks')
-            ->filter('script_loader_tag', 'cleanScriptTags')
             ->filters([
                 'get_avatar',
                 'comment_id_fields',
                 'post_thumbnail_html',
             ], 'removeSelfClosingTags');
+
+        if ($this->config->get('clean-asset-tags', false)) {
+            $this
+                ->filter('style_loader_tag', 'cleanStylesheetLinks')
+                ->filter('script_loader_tag', 'cleanScriptTags');
+        }
 
         add_filter('site_icon_meta_tags', fn ($tags) => array_map([$this, 'removeSelfClosingTags'], $tags), 20);
 
