@@ -119,9 +119,10 @@ $preload = output([$assets, 'preload']);
 check(str_contains($preload, 'href="' . $styles['style']['src'] . '"'), 'Stylesheet preload must match its enqueue URL.');
 check(! str_contains($preload, 'crossorigin'), 'CSS preload must match the stylesheet request mode.');
 $modules = output([$assets, 'modulepreload']);
-foreach (['app', 'blocks'] as $handle) {
+foreach (['app'] as $handle) {
     check(str_contains($modules, 'href="' . $scripts[$handle]['src'] . '"'), 'Module preload must match its enqueue URL.');
 }
+check(! str_contains($modules, 'blocks-123.js'), 'Optional block entries must not be preloaded globally.');
 check(substr_count($modules, 'shared-123.js') === 1, 'Shared module preloads must be deduplicated.');
 check(str_contains($modules, 'nested-123.js'), 'Nested static imports must be preloaded.');
 check(! str_contains($modules, 'lazy-123'), 'Dynamic imports must remain lazy.');

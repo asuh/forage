@@ -15,7 +15,6 @@ class Assets
     {
         $this->enqueue('styles/styles.css', ['handle' => 'style']);
         $this->enqueue('scripts/scripts.js', ['handle' => 'script']);
-        $this->enqueue('scripts/blocks.js', ['handle' => 'blocks']);
 
         if (is_singular() && comments_open() && get_option('thread_comments')) {
             $this->enqueue(
@@ -88,7 +87,6 @@ class Assets
 
         $entries = [
             'scripts/scripts.js',
-            'scripts/blocks.js',
         ];
 
         $default_preloads = [];

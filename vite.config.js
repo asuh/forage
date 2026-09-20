@@ -22,7 +22,6 @@ export default defineConfig({
         'resources/styles/styles.css',
         'resources/styles/admin.css',
         'resources/styles/editor.css',
-        'resources/scripts/blocks.js'
       ],
       output: {
         entryFileNames: '[hash].js',
