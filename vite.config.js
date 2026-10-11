@@ -11,6 +11,7 @@ export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? `./` : BASE,
 
   build: {
+    target: 'esnext',
     manifest: 'manifest.json',
     assetsDir: '.',
     assetsInlineLimit: 0,

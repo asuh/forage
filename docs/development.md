@@ -131,6 +131,23 @@ resources/views/template-example.blade.php
 
 The root PHP file owns the `Template Name` header. The Blade resolver maps the selected PHP template name to its view.
 
+## Browser Targets
+
+`vite.config.js` sets `build.target` to `'esnext'`, which assumes modern JavaScript support and performs minimal transpilation. CSS inherits this target, so Lightning CSS preserves modern syntax such as `light-dark()` while still minifying it. This setting does not define a specific browser support window.
+
+To target minimum browser versions for both JavaScript and CSS, replace `build.target` with an array, for example:
+
+```js
+build: {
+  target: ['chrome152', 'edge152', 'firefox155', 'safari26.5', 'ios26.5'],
+  // Keep the other build options.
+},
+```
+
+Choose versions for your project's browser support policy and update them manually as needed. To give CSS a separate target while keeping JavaScript at `'esnext'`, set `build.cssTarget` to a browser-version array instead. Rebuild with `npm run build` after changing either option.
+
+See Vite's [`build.target`](https://vite.dev/config/build-options.html#build-target) and [`build.cssTarget`](https://vite.dev/config/build-options.html#build-csstarget) documentation for supported values and behavior.
+
 ## Lightning CSS
 
 Lightning CSS handles minification during `npm run build`. To use it as the full CSS transformer, add `transformer: 'lightningcss'` to `vite.config.js`:
