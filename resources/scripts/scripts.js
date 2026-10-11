@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const allTopLevelItems = nav.querySelectorAll(".nav-list > .menu-item > a");
 
-    const BREAKPOINT = 768;
+    const mobileQuery = window.matchMedia("(width < 48em)");
     const KEYS = {
       ENTER: 'Enter',
       ARROW_DOWN: 'ArrowDown',
@@ -57,19 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
       TAB: 'Tab'
     };
 
-    let isMobile = window.innerWidth <= BREAKPOINT;
+    let isMobile = mobileQuery.matches;
     let currentOpenSubmenu = null;
     const elementCache = new WeakMap();
     const abortController = new AbortController();
     const { signal } = abortController;
-
-    const debounce = (func, wait) => {
-      let timeout;
-      return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-      };
-    };
 
     const getMenuItemElements = (menuItem) => {
       if (!elementCache.has(menuItem)) {
@@ -84,23 +76,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return elementCache.get(menuItem);
     };
 
-    const handleResize = debounce(() => {
-      const wasMobile = isMobile;
-      isMobile = window.innerWidth <= BREAKPOINT;
-      if (wasMobile && !isMobile) { closeAllSubmenus() };
-    }, 100);
-
     const initializeMenuItems = () => {
+      currentOpenSubmenu = null;
+
       menuItems.forEach((menuItem) => {
         const { link, submenu } = getMenuItemElements(menuItem);
         if (!link || !submenu) {
           return;
         }
 
-        link.setAttribute("aria-haspopup", "true");
-        link.setAttribute("aria-expanded", "false");
-        submenu.hidden = true;
+        link.removeAttribute("aria-haspopup");
+
+        if (isMobile) {
+          link.removeAttribute("aria-expanded");
+          submenu.hidden = false;
+        } else {
+          link.setAttribute("aria-expanded", "false");
+          submenu.hidden = true;
+        }
       });
+
+      // Resizing can leave the pointer over an item without firing mouseenter.
+      if (!isMobile) {
+        const hoveredMenuItem = [...menuItems].find((menuItem) => menuItem.matches(":hover"));
+        if (hoveredMenuItem) {
+          setSubmenuState(hoveredMenuItem, true);
+        }
+      }
     };
 
     const handleTopLevelKeydown = (e, menuItem) => {
@@ -113,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (e.key === KEYS.ENTER) {
         e.preventDefault();
-        setSubmenuState(menuItem, isMobile ? !isSubmenuOpen : !isSubmenuOpen, !isMobile && !isSubmenuOpen);
+        setSubmenuState(menuItem, !isSubmenuOpen, !isSubmenuOpen);
       } else if (e.key === KEYS.ESCAPE) {
         setSubmenuState(menuItem, false);
         link.focus();
@@ -152,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const setSubmenuState = (menuItem, isOpen, focusFirst = false) => {
-      if (!menuItem) { return };
+      if (isMobile || !menuItem) { return };
 
       const { link, submenu, submenuItems } = getMenuItemElements(menuItem);
       if (!link || !submenu) {
@@ -186,23 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    const toggleSubmenu = (menuItem) => {
-      const { link } = getMenuItemElements(menuItem);
-      if (!link) {
-        return;
-      }
-
-      const isOpen = link.getAttribute("aria-expanded") === "true";
-
-      menuItems.forEach((item) => {
-        if (item !== menuItem) {
-          setSubmenuState(item, false);
-        }
-      });
-
-      setSubmenuState(menuItem, !isOpen);
-    };
-
     const navigateToSiblingMenu = (currentLink, goRight) => {
       const currentIndex = [...allTopLevelItems].indexOf(currentLink);
       const targetIndex = currentIndex + (goRight ? 1 : -1);
@@ -211,18 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
       targetLink?.focus();
     };
 
-    nav.addEventListener("click", (e) => {
-      const menuItem = e.target.closest(menuItemSelector);
-      if (!menuItem) { return };
-
-      const { link } = getMenuItemElements(menuItem);
-      if (e.target === link && link.href.endsWith("#") && isMobile) {
-        e.preventDefault();
-        toggleSubmenu(menuItem);
-      }
-    }, { signal });
-
     nav.addEventListener("keydown", (e) => {
+      if (isMobile) { return };
       const menuItem = e.target.closest(menuItemSelector);
       if (!menuItem) { return };
 
@@ -232,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (isTopLevelLink) {
         handleTopLevelKeydown(e, menuItem);
-      } else if (isSubmenuItem && !isMobile) {
+      } else if (isSubmenuItem) {
         handleSubmenuKeydown(e, menuItem, e.target);
       }
     }, { signal });
@@ -249,7 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (menuItem && e.target === menuItem) { setSubmenuState(menuItem, false) };
     }, { capture: true, passive: true, signal });
 
-    window.addEventListener("resize", handleResize, { signal });
+    mobileQuery.addEventListener("change", (event) => {
+      isMobile = event.matches;
+      initializeMenuItems();
+    }, { signal });
 
     document.addEventListener("click", (e) => {
       if (isMobile) { return };
@@ -261,10 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return () => {
       abortController.abort();
       currentOpenSubmenu = null;
-
-      if (handleResize.timeout) {
-        clearTimeout(handleResize.timeout);
-      }
     };
   }
 
