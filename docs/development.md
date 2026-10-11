@@ -8,6 +8,7 @@ Forage keeps WordPress-facing theme files at the project root while application 
 forage/
 |-- .vite/                  # Vite plugins and build utility tests
 |   |-- copy.js             # Copies static theme files into build output
+|   |-- wordpress-proxy.js  # Optional Local/WordPress network preview
 |   |-- theme-json.js       # Generates theme.json presets from CSS tokens
 |   `-- theme-json.test.js  # Theme JSON generator regression tests
 |-- app/                    # Theme PHP application code
@@ -83,13 +84,37 @@ Forage only enables HMR in these development environments. Production ignores th
 
 `npm run dev` exposes Vite on all network interfaces and writes its origin and actual port to `.vite/hot`. PHP reads this file without making an HTTP request. Vite refreshes its modification time every ten seconds and removes it on normal shutdown. If Vite crashes, the file expires after thirty seconds and Forage falls back to built assets. The file is ignored by Git and must not be included in deployments.
 
-For same-network testing, a reverse proxy, or another explicit host, define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
+### WordPress Preview On A Phone
+
+Create `.env.development.local` in the theme directory (it is ignored by Git):
+
+```ini
+WP_DEV_PROXY_TARGET=http://test.local
+```
+
+Use the working WordPress origin shown in Local, including its scheme and port if needed. Start the site in Local, then run `npm run dev` **from the theme directory used by that WordPress installation**. If you sync this repository into Local, also copy the ignored `.env.development.local` file or create it in the destination. Vite and PHP must share the same `.vite/hot` file.
+
+Continue using `http://test.local` on desktop. On a phone on the same LAN, open the `WordPress preview` address printed by Vite, for example `http://192.168.50.214:5173/`. Use the computer's Wi-Fi or Ethernet address; loopback, VPN, and virtual-machine interfaces may also appear. The preview starts at `/`, without `/wp-content/themes/forage`. The port is Vite's actual listening port, including when 5173 is already occupied.
+
+The development plugin forwards WordPress pages, uploads, REST, login, and admin requests to Local. Vite continues to handle theme source assets and its own WebSocket connection. CSS updates, JavaScript updates or reloads, and PHP-triggered page reloads use that connection. No manual production rebuild or changes to `WP_HOME` or `WP_SITEURL` are needed.
+
+For proxied responses, the plugin rewrites the configured WordPress origin and the Vite origin published by the hot-file plugin to the address used by the browser. It covers absolute, protocol-relative, JSON slash-escaped, and URL-encoded forms in UTF-8/ASCII HTML, CSS, JavaScript, JSON, XML, SVG, and plain text. Redirects and relevant URL headers are rewritten too; cookies for the upstream domain become host-only preview cookies. External origins are left alone. Compressed text is decoded, transformed responses get fresh lengths, and preview responses use `Cache-Control: no-store`. Binary files, attachments, non-UTF-8 text, and partial responses pass through without body rewriting. Text rewriting has a 16 MiB limit; failures return a 502 with details in the Vite terminal.
+
+Only the configured origins are rewritten. Set the target to WordPress's canonical origin to avoid HTTP/HTTPS redirects back into the same preview URL. Additional domains introduced by plugins or a CDN require their own configuration. Custom `FORAGE_HMR_HOST` overrides that differ from Vite's published origin are not automatically rewritten; remove that override for this workflow.
+
+For an HTTPS upstream, Node must trust Local's certificate (for example, supply the issuing certificate using `NODE_EXTRA_CA_CERTS` when starting Vite). Certificate verification stays enabled. Secure cookies retain their `Secure`, `HttpOnly`, and `SameSite` attributes, so an HTTP LAN preview cannot provide an authenticated session that requires secure cookies. That case needs an HTTPS Vite preview with a certificate trusted by the phone. Verify login on the actual device before relying on it.
+
+Remove the target setting and restart Vite to return to asset-only serving. The plugin does not run during production builds and adds no dependencies.
+
+### Explicit Asset Host
+
+For another browser-facing asset origin, define `FORAGE_HMR_HOST` in `wp-config.php` before the theme loads:
 
 ```php
 define('FORAGE_HMR_HOST', 'http://192.168.1.42:5173');
 ```
 
-The override changes the browser-facing origin; it still requires a fresh `.vite/hot` file and a `local` or `development` environment. Vite and PHP must share the theme directory. Remove `.vite/hot` to force an immediate fallback after an unclean shutdown. Run `npm run build` when the theme must work without an active Vite server.
+The override changes only the browser-facing asset origin; it does **not** proxy the complete WordPress site. It still requires a fresh `.vite/hot` file and a `local` or `development` environment. Vite and PHP must share the theme directory. Remove `.vite/hot` to force an immediate fallback after an unclean shutdown. Run `npm run build` when the theme must work without an active Vite server.
 
 ## Production Assets
 
