@@ -37,48 +37,6 @@ class Assets
     /**
      * @action wp_head
      */
-    public function preload(): void
-    {
-        if (forage()->config()->get('hmr.active')) {
-            return;
-        }
-
-        $preloads = apply_filters(
-            'forage_assets_preload',
-            [
-                [
-                    'href' => forage()->assets()->resolve('styles/styles.css'),
-                    'as' => 'style',
-                    'type' => 'text/css',
-                    'crossorigin' => false,
-                ],
-            ]
-        );
-
-        foreach ($preloads as $item) {
-            if (
-                empty($item['href']) ||
-                empty($item['as']) ||
-                empty($item['type'])
-            ) {
-                continue;
-            }
-
-            $crossorigin_attr = ! empty($item['crossorigin']) ? ' crossorigin' : '';
-
-            printf(
-                '<link rel="preload" href="%s" as="%s" type="%s"%s />',
-                esc_url($item['href']),
-                esc_attr($item['as']),
-                esc_attr($item['type']),
-                esc_attr($crossorigin_attr),
-            );
-        }
-    }
-
-    /**
-     * @action wp_head
-     */
     public function modulepreload(): void
     {
         if (forage()->config()->get('hmr.active')) {

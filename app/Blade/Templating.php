@@ -9,10 +9,29 @@ class Templating
 {
     private Provider $provider;
 
+    private ?string $selectedTemplate = null;
+
     public function __construct()
     {
         \Forage\App::init(new Resolver());
         $this->provider = \Forage\App::init(new Provider());
+    }
+
+    public function selectTemplate(string $template): void
+    {
+        $this->selectedTemplate = $template;
+    }
+
+    public function renderSelectedTemplate(): void
+    {
+        if (null === $this->selectedTemplate) {
+            return;
+        }
+
+        $template = $this->selectedTemplate;
+        $this->selectedTemplate = null;
+
+        $this->render($template);
     }
 
     public function render(string $template, array $data = []): void

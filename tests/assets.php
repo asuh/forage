@@ -115,9 +115,6 @@ foreach ([...array_values($scripts), ...array_values($styles)] as $asset) {
     check($asset['version'] === null, 'Manifest assets must use their hashed URL without a version query.');
 }
 
-$preload = output([$assets, 'preload']);
-check(str_contains($preload, 'href="' . $styles['style']['src'] . '"'), 'Stylesheet preload must match its enqueue URL.');
-check(! str_contains($preload, 'crossorigin'), 'CSS preload must match the stylesheet request mode.');
 $modules = output([$assets, 'modulepreload']);
 foreach (['app'] as $handle) {
     check(str_contains($modules, 'href="' . $scripts[$handle]['src'] . '"'), 'Module preload must match its enqueue URL.');
@@ -143,7 +140,6 @@ $settings['hmr.active'] = true;
 $assets->enqueue('scripts/scripts.js', ['handle' => 'dev']);
 check($scripts['dev']['version'] === '1.0', 'HMR must retain development versioning.');
 check($assets->dependencies('scripts/scripts.js') === ['scripts' => [], 'styles' => []], 'Vite must manage HMR dependencies.');
-check(output([$assets, 'preload']) === '', 'Production CSS preloads must be disabled in HMR.');
 check(output([$assets, 'modulepreload']) === '', 'Production module preloads must be disabled in HMR.');
 
 echo "Asset resolver regression checks passed.\n";

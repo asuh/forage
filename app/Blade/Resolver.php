@@ -40,13 +40,15 @@ class Resolver
     }
 
     /**
+     * Select the view without emitting HTML before WordPress includes its template.
+     *
      * @filter template_include
      */
     public function render(string $template): string
     {
-        if (forage()->config()->isTheme()) {
-            forage()->templating()->render($template);
-            return FORAGE_PATH . '/index.php';
+        if (forage()->config()->isTheme() && '' !== $template) {
+            forage()->templating()->selectTemplate($template);
+            return FORAGE_PATH . '/inc/render-template.php';
         }
 
         return $template;

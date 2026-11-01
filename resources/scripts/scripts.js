@@ -348,5 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	toggleNavigation();
 	submenuA11y();
   initializeDialogs();
-  appendLoadTime();
+  if (import.meta.env.DEV) {
+    appendLoadTime();
+  }
 });

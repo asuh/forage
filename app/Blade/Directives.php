@@ -94,14 +94,39 @@ class Directives
             throw new \Exception(esc_html("{$path} file not found."));
         }
 
-        if (! in_array(forage()->filesystem()->guessExtension($path), ['png', 'jpg', 'jpeg', 'webp', 'avif'], true)) {
-            throw new \Exception(esc_html("{$path} file extension is not allowed."));
+        if (! in_array(wp_get_image_mime($path), ['image/png', 'image/jpeg', 'image/webp', 'image/avif'], true)) {
+            throw new \Exception(esc_html("{$path} image type is not allowed."));
         }
 
-        $url = forage()->assets()->resolve("images/{$name}");
-        $alt = ! empty($attrs['alt']) ? $attrs['alt'] : '';
-        $class = ! empty($attrs['class']) ? $attrs['class'] : '';
+        if (! array_key_exists('width', $attrs) || ! array_key_exists('height', $attrs)) {
+            $dimensions = wp_getimagesize($path);
 
-        return "<img src=\"{$url}\" alt=\"{$alt}\" class=\"{$class}\" />";
+            if ($dimensions && $dimensions[0] > 0 && $dimensions[1] > 0) {
+                [$width, $height] = $dimensions;
+
+                // Preserve the aspect ratio when only one dimension is supplied.
+                if (isset($attrs['width']) && is_numeric($attrs['width']) && $attrs['width'] > 0) {
+                    $height = max(1, (int) round($height * $attrs['width'] / $width));
+                } elseif (isset($attrs['height']) && is_numeric($attrs['height']) && $attrs['height'] > 0) {
+                    $width = max(1, (int) round($width * $attrs['height'] / $height));
+                }
+
+                $attrs += ['width' => $width, 'height' => $height];
+            }
+        }
+
+        // Do not lazy-load by default: this may be the page's main image.
+        $attrs += ['alt' => '', 'class' => '', 'decoding' => 'async'];
+        $html = '<img src="' . esc_url(forage()->assets()->resolve("images/{$name}")) . '"';
+
+        foreach (['alt', 'class', 'id', 'title', 'width', 'height', 'srcset', 'sizes', 'loading', 'decoding', 'fetchpriority'] as $attribute) {
+            if (! isset($attrs[$attribute]) || false === $attrs[$attribute]) {
+                continue;
+            }
+
+            $html .= ' ' . $attribute . '="' . esc_attr((string) $attrs[$attribute]) . '"';
+        }
+
+        return $html . ' />';
     }
 }

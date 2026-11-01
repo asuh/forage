@@ -18,7 +18,6 @@ class Provider
 
     public function __construct()
     {
-        add_action('after_setup_theme', fn() => $this->init());
         add_filter('comments_template', [$this, 'filterCommentsTemplate']);
         add_filter('get_search_form', [$this, 'filterSearchForm']);
     }
@@ -35,6 +34,8 @@ class Provider
 
     public function view(string $template, array $data = []): View
     {
+        $this->init();
+
         return forage()->filesystem()->exists($template)
             ? $this->factory->file($template, $data)
             : $this->factory->make($template, $data);
@@ -51,6 +52,10 @@ class Provider
 
     private function init(): void
     {
+        if (null !== $this->factory) {
+            return;
+        }
+
         $compiler = new BladeCompiler(forage()->filesystem(), forage()->config()->get('cache.path'));
         $resolver = new EngineResolver();
         $finder = new FileViewFinder(forage()->filesystem(), [forage()->config()->get('views.path')]);
@@ -62,14 +67,14 @@ class Provider
 
         $this->factory = new Factory($resolver, $finder, $dispatcher);
 
-        do_action('forage_templating_provider_init', $compiler, $finder);
-
         Container::getInstance()->bind(
             'Illuminate\Contracts\View\Factory',
             function () {
                 return $this->factory;
             }
         );
+
+        do_action('forage_templating_provider_init', $compiler, $finder);
     }
 
     public function filterCommentsTemplate($file)
