@@ -22,11 +22,20 @@ Forage is a classic WordPress starter theme adapted from [Vilare](https://github
 ## Requirements
 
 * [WordPress](https://wordpress.org/) >= 6.8
-* [PHP](https://www.php.net/manual/en/install.php) >= 8.3 with the DOM extension
+* [PHP](https://www.php.net/manual/en/install.php) 8.4.27+ within PHP 8.4, or 8.5.12+ within PHP 8.5, with the DOM extension
 * [Composer](https://getcomposer.org/download/)
-* [Node.js](https://nodejs.org/) >= 24.0.0
+* [Node.js](https://nodejs.org/) 24.22.1+ within the 24.x LTS branch (`^24.22.1`)
 
 If PHP OPcache is enabled, `opcache.save_comments` must also be enabled because Forage uses DocBlock annotations to register WordPress hooks.
+
+Use the latest patched release in either supported PHP branch. Composer resolves dependencies against PHP 8.4.27 to preserve that minimum; this platform setting does not upgrade the installed PHP runtime. Run `composer check-platform-reqs --lock` against the deployment runtime to check its actual compatibility. WordPress's `Requires PHP` header records the lowest supported version; Composer enforces the branch-specific requirements.
+
+Both `.nvmrc` and `mise.toml` select Node 24.22.1. Use nvm on macOS/Linux or mise on Windows, macOS, or Linux:
+
+* **nvm:** run `nvm install`, `nvm use`, then `npm ci`.
+* **mise:** run `mise trust`, `mise install`, then `mise exec -- npm ci`. Prefix subsequent npm commands with `mise exec --` when using this workflow.
+
+Both managers are optional. See [Node version managers](docs/development.md#node-version-managers) for setup and [deployment security notes](docs/development.md#deployment-security) for runtime verification and PHP advisory follow-ups.
 
 ## Theme Structure
 

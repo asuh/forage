@@ -24,7 +24,8 @@ forage/
 |   `-- Setup.php           # WordPress theme setup and front-end hooks
 |-- docs/                   # Extended project documentation
 |-- inc/
-|   `-- bootstrap.php       # Composer and application bootstrap
+|   |-- bootstrap.php       # Composer and application bootstrap
+|   `-- render-template.php # Renders the selected Blade page when WordPress includes it
 |-- resources/              # Uncompiled source assets and Blade views
 |   |-- fonts/              # Project font files, when added
 |   |-- images/             # Source images
@@ -69,6 +70,30 @@ For a complete project rename, update these values consistently:
 The PHP namespace and `FORAGE_*` constants can remain unchanged when they are treated as starter-theme internals rather than project branding.
 
 Generated dependency lock files should be committed whenever dependencies change, but should not be edited manually.
+
+## Node Version Managers
+
+Forage supports both [nvm](https://github.com/nvm-sh/nvm) on macOS/Linux and [mise](https://mise.jdx.dev/installing-mise.html) on Windows, macOS, and Linux. Choose the manager you prefer, or install a compatible Node runtime directly. `.nvmrc` and `mise.toml` both select Node 24.22.1; keep these pins synchronized when updating the project runtime. The supported version range remains in `package.json` under `engines.node`.
+
+With nvm, run these commands from the theme directory:
+
+```shell
+nvm install
+nvm use
+npm ci
+npm run dev
+```
+
+For mise on Windows, install it with `winget install jdx.mise` in PowerShell. From the theme directory, the same project commands work on every platform:
+
+```shell
+mise trust
+mise install
+mise exec -- npm ci
+mise exec -- npm run dev
+```
+
+`mise exec --` selects the project runtime for that command without requiring shell activation. Use it for other commands too, such as `mise exec -- npm test` and `mise exec -- npm run build`. The project mise configuration manages Node; PHP and Composer use the runtimes provided by your WordPress development environment or installation.
 
 ## Environment Type
 
@@ -118,16 +143,13 @@ The override changes only the browser-facing asset origin; it does **not** proxy
 
 ## Production Assets
 
-Production builds preload the main stylesheet and add `modulepreload` hints for JavaScript entries and imported chunks. Manifest assets use their hashed filenames without an additional version query, so preloads and enqueued assets request the same URL. Copied images use content hashes and keep their URLs across builds until their contents change.
+Production builds load the main stylesheet normally and add `modulepreload` hints for JavaScript entries and imported chunks. There is no default stylesheet preload. Manifest assets use their hashed filenames without an additional version query, so custom preloads and enqueued assets can request the same URL. Copied images use content hashes and keep their URLs across builds until their contents change.
 
 The asset resolver enqueues CSS from entries and their static imports, including nested imports, and deduplicates shared styles. JavaScript imports load through native ES modules; CSS handles are kept out of WordPress's script dependency list. Dynamic imports remain lazy. Vite manages these dependencies during HMR, so Forage omits the production hints while the development server is active.
 
-An explicit `version` passed to `enqueue()` is preserved, including `null` and `false`. If overriding a preloaded entry's version, update its preload URL through the filters below to match. External assets retain the configured theme version by default.
+An explicit `version` passed to `enqueue()` is preserved, including `null` and `false`. If overriding a module-preloaded entry's version, update its preload URL through `forage_assets_module_preload` to match. External assets retain the configured theme version by default.
 
-Use these filters to customize or remove generated hints:
-
-* `forage_assets_preload`: filters stylesheet and other standard preload entries
-* `forage_assets_module_preload`: filters JavaScript module preload entries
+Use `forage_assets_module_preload` to customize or remove generated JavaScript module hints. For project-specific font or image preloads, output the appropriate `<link>` tags through WordPress's `wp_head` action. That hook provides the insertion point; it does not choose or optimize preloads automatically. Add hints only when measurements justify them, escape their URLs and attributes, and match the eventual resource request.
 
 Run `npm test` for build utility and Vite lifecycle regressions and `composer test` for PHP regressions. The Vite test briefly starts a loopback development server. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.
 
@@ -139,9 +161,63 @@ npm ci
 npm run build
 ```
 
+## Deployment Security
+
+Use the latest patched versions in Forage's supported PHP and Node branches. PHP 8.4.27 and 8.5.12 include the October 2026 PHP2Shell fixes; Node 24.22.1 includes the October security fixes affecting Brotli, TLS, DNS, and HTTP handling. Raising requirements in the theme does not update an installed runtime. Node is needed for development and builds; deployments that ship prebuilt assets do not need a running Node process.
+
+Check the CLI versions with `php --version` and `node --version`, and run `composer check-platform-reqs --lock` with the PHP binary used for deployment. Independently verify the PHP version and package build serving WordPress through the hosting panel or server configuration; CLI and web PHP can differ. After a PHP update, restart or recreate the relevant workers, services, or containers so requests use the patched runtime. See the [PHP advisory](https://www.php.net/archive/2026.php#2026-10-21-5) and [Node release notes](https://nodejs.org/en/blog/release/v24.22.1).
+
+PHP's October 23 follow-up for CVE-2026-115560 concerns applications configured with `session.serialize_handler=php_binary` or `php_serialize` that switch to `php` using `ini_set()` before `session_start()`, with upload progress enabled. Forage does not use this pattern; review plugins and server configuration separately. For affected applications, PHP recommends `session.upload_progress.enabled=0` until the follow-up fix is available. Configure it in `php.ini` or the server's PHP configuration before request parsing, then restart workers; a theme-level `ini_set()` is too late. Follow the [session upload progress advisory](https://www.php.net/archive/2026.php#2026-10-23-1) for current guidance.
+
+For Windows PHP distributions, use the October 26 package rebuilds (`8.4.27-1` or `8.5.12-1`), or newer patched builds, which also update the bundled Brotli decoder for CVE-2026-111497. The rebuild suffix does not change the PHP runtime version, so Composer cannot identify that package distinction. On other platforms, verify the host or distribution's Brotli/cURL package updates. See the [Windows build announcement](https://www.php.net/archive/2026.php#2026-10-26-1).
+
+Run `composer audit --locked` and `npm audit` when updating dependencies. Production deployments should omit Composer development dependencies as shown above; this keeps PHP lint tools out of the deployed dependency set.
+
 ## Blade Cache
 
 Compiled Blade views are stored in the WordPress uploads directory at `uploads/cache/forage`. Forage creates this directory when the theme is activated and removes it when the theme is switched off. The uploads directory must be writable by PHP.
+
+The Blade compiler and view factory initialize on the first `view()`, `generate()`, or `render()` call. Requests that do not use Blade avoid that initialization. Register extensions through `forage_templating_provider_init`; it runs once per provider, before the first view is created, and receives the compiler and view finder.
+
+## WordPress Template Lifecycle
+
+The `template_include` filter selects the Blade page and returns `inc/render-template.php` without rendering HTML. WordPress then includes that PHP bridge, which renders the selected view once. This lets WordPress 6.9+ start its template enhancement output buffer before Blade renders, so core can process the resulting document when enhancements are enabled. The same bridge works on WordPress 6.8 and when buffering is disabled; Forage does not start or manage core's buffer itself.
+
+The root `index.php` remains an empty fallback because the comments provider also returns it after rendering the comments partial. Keeping it separate from the page bridge prevents comments from triggering a second page render. Direct calls to the templating API still render immediately. Block CSS loading policy is independent of this lifecycle integration.
+
+## Images In Blade
+
+Use `@image` for theme-owned raster files under `resources/images`:
+
+```blade
+@image('hero.avif', [
+    'alt' => 'A wooded trail',
+    'loading' => 'eager',
+    'fetchpriority' => 'high',
+])
+```
+
+The helper resolves the production or development URL, escapes attributes, and includes the file's intrinsic width and height. Supplying one dimension calculates the other using the original aspect ratio; supplying both avoids reading image dimensions. It defaults to `decoding="async"` and does not force lazy loading, because an image may be the page's main visible content. Use `loading => 'lazy'` for images below the initial viewport. Reserve high fetch priority for an image identified as critical to the page.
+
+Supported attributes are `alt`, `class`, `id`, `title`, `width`, `height`, `srcset`, `sizes`, `loading`, `decoding`, and `fetchpriority`. Pass `false` or `null` to omit an attribute. The `src` always comes from the asset resolver. Responsive variants are not generated automatically: supply a `srcset` of resolved URLs and a `sizes` value matching the layout when variants exist.
+
+For WordPress media-library attachments, use `wp_get_attachment_image()` or `the_post_thumbnail()` so WordPress can supply responsive sources and its loading optimizations:
+
+```blade
+{!! wp_get_attachment_image($attachment_id, 'large', false, ['class' => 'article-image']) !!}
+```
+
+## Performance Checks
+
+The footer load-time label is only included while Vite serves development assets. A production build removes its timing code. It reports the navigation load event, not Core Web Vitals; use the following process to assess a change:
+
+1. Build with `npm run build`, stop Vite, and use a running WordPress installation with representative content and plugins. Check a home/archive page, a long article with images and comments, and a page with blocks or forms.
+2. Record mobile Lighthouse runs before and after under the same browser, throttling, viewport, and login state. Run each page three times and compare medians. Keep browser-cache state consistent, and distinguish cold server caches from warmed page/Blade caches.
+3. Track LCP (main content becoming visible), CLS (layout shifts), transferred CSS/JS/image bytes, and request count. Exercise navigation, search dialogs, and forms with a Performance recording; use field INP data when available to assess responsiveness beyond a lab run.
+4. For PHP changes, profile uncached requests separately from page-cache hits. Compare response time, peak memory, and queries for frontend, admin, and REST requests. Confirm that requests without Blade output skip the provider initialization hook.
+5. Check the actual resource waterfall before adding preload hints. Confirm that hero images are not lazy-loaded and responsive image requests match their displayed size. Preserve comparable reports outside the theme's production output.
+
+Deployment also determines performance: verify page-cache behavior, compression, and long-lived cache headers for hashed assets on the actual server. Changes to these settings are separate from the theme build.
 
 ## Custom Page Templates
 
@@ -207,7 +283,6 @@ Imported npm dependencies do not need to be added to `vite.config.js`. Update Vi
 
 Forage exposes a small set of WordPress hooks for project-specific behavior:
 
-* `forage_templating_provider_init`: receives the Blade compiler and view finder after initialization
-* `forage_assets_preload`: filters standard production preload entries
+* `forage_templating_provider_init`: receives the Blade compiler and view finder on first use, before the first view is created
 * `forage_assets_module_preload`: filters production module preload entries
 * `forage_cf7_assets_required`: overrides automatic Contact Form 7 asset detection

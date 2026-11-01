@@ -2,7 +2,7 @@
   "name": "forage",
   "private": true,
   "engines": {
-    "node": ">=24.0.0"
+    "node": "^24.22.1"
   },
   "type": "module",
   "scripts": {
@@ -13,8 +13,8 @@
     "test": "node --test .vite/*.test.js"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
-    "vite": "^8.3.4"
+    "@biomejs/biome": "^2.6.4",
+    "vite": "^8.3.5"
   },
   "licenses": [
     {
