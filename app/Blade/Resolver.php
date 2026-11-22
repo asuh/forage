@@ -46,7 +46,7 @@ class Resolver
      */
     public function render(string $template): string
     {
-        if (forage()->config()->isTheme() && '' !== $template) {
+        if (forage()->config()->isTheme() && str_ends_with($template, '.blade.php')) {
             forage()->templating()->selectTemplate($template);
             return FORAGE_PATH . '/inc/render-template.php';
         }
