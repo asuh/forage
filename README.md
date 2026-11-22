@@ -51,8 +51,7 @@ themes/your-theme-name/
 ├── screenshot.png        # WordPress theme screenshot
 ├── style.css             # WordPress theme metadata
 ├── template-custom.php   # Example custom-template registration
-├── theme.base.json       # Hand-edited theme.json source
-├── theme.json            # Generated and tracked WordPress settings
+├── theme.json            # WordPress settings with CSS design values synced at build time
 └── vite.config.js        # Vite configuration
 ```
 
@@ -81,7 +80,7 @@ npm run dev
 ## Commands
 
 * `npm run dev`: start Vite with hot module replacement
-* `npm run build`: generate `theme.json` and compile production assets
+* `npm run build`: sync design tokens into `theme.json` and compile production assets
 * `npm run format`: format CSS and JavaScript with Biome and PHP with PHPCBF
 * `npm run lint`: lint CSS and JavaScript with Biome and PHP with PHPCS
 * `npm test`: run build utility regression tests

@@ -6,9 +6,11 @@
  *
  * Use this for editor-only presentation that should affect the authored
  * content area in either editor. Use `admin.css` for wp-admin chrome,
- * `tokens.css` for presets surfaced in editor controls, and `theme.base.json`
- * for block defaults.
+ * `tokens.css` for shared presets and defaults, and `theme.json` for
+ * WordPress editor settings.
  */
+
+@import "tokens.css";
 
 :where(.editor-styles-wrapper) {
   --forage-editor-styles-loaded: 1;

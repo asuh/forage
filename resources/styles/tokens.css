@@ -1,63 +1,83 @@
 /**
  * Forage Design Tokens
  *
- * This file is the source of truth for design tokens.
- * On build (and live during `npm run dev`), .vite/theme-json.js reads
- * this file and injects the tokens into the generated theme.json,
- * making them available as --wp--preset--* CSS variables and as
- * options in the block editor.
+ * Both the frontend and editor CSS bundles include this file. During builds
+ * and development, Vite syncs its presets and mapped defaults to theme.json.
  *
- * The generator parses this file but does not add it to a browser
- * stylesheet. Import it from styles.css and/or editor.css when the
- * original --color-*, --font-*, or --space-* properties are needed
- * at runtime. No import is needed when CSS only uses WordPress's
- * generated --wp--preset--* properties.
- *
- * Naming convention:  --{category}-{slug}: {value};
- *
- * Categories:
+ * Preset prefixes:
  *   --color-{slug}        →  settings.color.palette
  *   --font-family-{slug}  →  settings.typography.fontFamilies
  *   --font-size-{slug}    →  settings.typography.fontSizes
  *   --space-{slug}        →  settings.spacing.spacingSizes
  *
- * Display names (block editor labels):
- *   Add a single-line comment on the line immediately above the
- *   variable to set its human-readable name. If omitted, the name
- *   is derived from the slug (kebab-case → Title Case).
+ * A single-line comment immediately above a preset supplies its display
+ * name. Without a comment, the build derives the name from the slug.
+ * For example, the "Medium" comment above --space-50 below makes the
+ * WordPress picker show "Medium". Without that comment, it shows "50".
+ * The preset slug stays "50" either way.
  *
- *   With a name comment:    displays as "Primary" in the block editor
- *   Without a name comment: slug "primary" → "Primary" (auto-derived)
+ * Declare the fallback first, then add any responsive overrides later.
+ * Numeric spacing slugs match WordPress's standard preset convention.
  *
- * Font sizes accept any CSS length, including clamp():
- *   --font-size-large: clamp(1.25rem, 1.25rem + 0.5vw, 1.75rem);
- *
- * Font families accept any valid CSS font-family stack:
- *   --font-family-libre-franklin: "Libre Franklin", sans-serif;
- *
- * Spacing slugs are typically numeric strings (10, 20, 30…) to
- * match WordPress's default spacing scale convention.
- *
- * WordPress generates these CSS variables automatically from theme.json:
- *   --wp--preset--color--{slug}
- *   --wp--preset--font-family--{slug}
- *   --wp--preset--font-size--{slug}
- *   --wp--preset--spacing--{slug}
+ * The layout and style defaults below have explicit mappings in the Vite
+ * generator. A style default can reference one of the presets with var().
+ * See docs/editor.md for the generated fields and examples.
  */
 
-:root {
+/* WordPress defines preset variables on :root. Including the editor wrapper
+ * keeps the root selector intact when WordPress scopes the canvas stylesheet. */
+:where(:root, .editor-styles-wrapper) {
+  --content-measure: 46rem;
+  --wide-content-measure: 80rem;
+  --default-block-gap: var(--space-50);
+  --default-font-family: var(--font-family-body);
+
   /* ── Colors ──────────────────────────────────────────────── */
 
+  /* ── Font Sizes ──────────────────────────────────────────── */
+  /* Font sizes accept CSS lengths and fluid expressions. */
 
-  /* ── Font Sizes ───────────────────────────────────────────── */
-  /* Values may be plain lengths (rem, px) or clamp() expressions. */
+  /* ── Font Families ───────────────────────────────────────── */
+  /* Use valid font family stacks for --font-family-* tokens. */
 
+  /* Body */
+  --font-family-body: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 
-  /* ── Font Families ────────────────────────────────────────── */
-  /* Use valid CSS font-family stacks starting with --font-family- */
+  /* ── Spacing ─────────────────────────────────────────────── */
+  /* Numeric slugs match WordPress's standard spacing scale. */
 
+  /* 2X-Small */
+  --space-20: calc(0.375rem + var(--forage-spacing-progress, 0) * (0.44rem - 0.375rem));
+  /* X-Small */
+  --space-30: calc(0.5rem + var(--forage-spacing-progress, 0) * (0.67rem - 0.5rem));
+  /* Small */
+  --space-40: calc(0.75rem + var(--forage-spacing-progress, 0) * (1rem - 0.75rem));
+  /* Medium */
+  --space-50: calc(1rem + var(--forage-spacing-progress, 0) * (1.5rem - 1rem));
+  /* Large */
+  --space-60: calc(1.5rem + var(--forage-spacing-progress, 0) * (2.25rem - 1.5rem));
+  /* X-Large */
+  --space-70: calc(2.25rem + var(--forage-spacing-progress, 0) * (3.38rem - 2.25rem));
+  /* 2X-Large */
+  --space-80: calc(3.25rem + var(--forage-spacing-progress, 0) * (5.06rem - 3.25rem));
+}
 
-  /* ── Spacing ──────────────────────────────────────────────── */
-  /* Use numeric slugs (10, 20, 30…) to match WP spacing scale.   */
+/* Browsers without progress() step through the same interpolation range. */
+@media (min-width: 50rem) {
+  :where(:root, .editor-styles-wrapper) {
+    --forage-spacing-progress: 0.5;
+  }
+}
 
+@media (min-width: 80rem) {
+  :where(:root, .editor-styles-wrapper) {
+    --forage-spacing-progress: 1;
+  }
+}
+
+@supports (opacity: progress(100vw, 20rem, 80rem)) {
+  :where(:root, .editor-styles-wrapper) {
+    --forage-spacing-progress: progress(100vw, 20rem, 80rem);
+  }
 }

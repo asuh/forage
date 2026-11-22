@@ -9,7 +9,7 @@ forage/
 |-- .vite/                  # Vite plugins and build utility tests
 |   |-- copy.js             # Copies static theme files into build output
 |   |-- wordpress-proxy.js  # Optional Local/WordPress network preview
-|   |-- theme-json.js       # Generates theme.json presets from CSS tokens
+|   |-- theme-json.js       # Syncs theme.json presets and defaults from CSS
 |   `-- theme-json.test.js  # Theme JSON generator regression tests
 |-- app/                    # Theme PHP application code
 |   |-- Assets/             # Asset registration, resolution, and preload hints
@@ -45,8 +45,7 @@ forage/
 |-- style.css               # Theme metadata and WordPress stylesheet
 |-- screenshot.png          # WordPress theme screenshot
 |-- template-custom.php     # Example custom page-template registration
-|-- theme.base.json         # Stable editor and block defaults
-|-- theme.json              # Generated WordPress theme configuration
+|-- theme.json              # WordPress settings with CSS-owned fields synced at build time
 |-- vite.config.js          # Development server and production build
 |-- composer.json           # PHP dependencies and autoloading
 |-- package.json            # Front-end dependencies and npm commands
@@ -54,7 +53,7 @@ forage/
 `-- biome.json              # JavaScript and CSS lint configuration
 ```
 
-Generated directories should not be edited or committed. Edit `theme.base.json` for stable WordPress defaults and `resources/styles/tokens.css` for generated design presets; see [Editor Styling And Theme JSON](editor.md) for the complete workflow.
+Generated directories should not be edited or committed. Edit `theme.json` for WordPress options and `resources/styles/tokens.css` for presets, layout widths, and style defaults. See [Editor Styling And Theme JSON](editor.md) for the complete workflow.
 
 ## Starting A Project
 

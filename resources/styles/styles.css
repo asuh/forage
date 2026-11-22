@@ -1,21 +1,18 @@
+@import "tokens.css";
 @import "common/global.css";
 /* @import "common/fonts.css"; */
 @import "partials/buttons.css";
 @import "partials/nav.css";
 
-body {
-  font-family: Montserrat, sans-serif;
-
-  > *:not(#wpadminbar) {
-    margin-inline: auto;
-    max-width: 82ch;
-  }
+body > *:not(#wpadminbar) {
+  margin-inline: auto;
+  max-width: var(--content-measure);
 }
 
 .banner {
   align-items: center;
   display: flex;
-  gap: 1rem;
+  gap: var(--space-40);
   justify-content: space-between;
 
   *:last-child {
@@ -27,7 +24,7 @@ body {
   }
 
   img {
-    margin-right: 1rem;
+    margin-right: var(--space-40);
     max-height: 2.5rem;
     max-width: 2.5rem;
     object-fit: contain;
@@ -36,6 +33,6 @@ body {
 
 header-actions {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-40);
   justify-content: end;
 }

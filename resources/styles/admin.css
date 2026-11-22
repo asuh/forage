@@ -6,7 +6,6 @@
  *
  * It does not style the block editor canvas iframe and it does not create
  * block editor Styles inspector controls. Use `editor.css` for block editor
- * canvas and Classic Editor content presentation, `tokens.css` for
- * palette/font-size/spacing presets, and `theme.base.json` for block editor
- * defaults.
+ * canvas and Classic Editor content presentation, `tokens.css` for shared
+ * presets and defaults, and `theme.json` for WordPress editor settings.
  */

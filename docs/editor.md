@@ -1,47 +1,60 @@
 # Editor And Theme JSON
 
-## Sources Of Truth
+## Source Files
 
-Forage generates the root `theme.json` from two hand-edited sources during `npm run build` and while `npm run dev` is running:
+Define presets, layout widths, and shared style defaults in `resources/styles/tokens.css`. Edit WordPress options such as `appearanceTools`, the list of allowed spacing units, and `defaultSpacingSizes` directly in the root `theme.json`.
 
-* `theme.base.json`: block editor defaults and supports
-* `resources/styles/tokens.css`: color, font-family, font-size, and spacing presets
-* `theme.json`: generated and tracked output loaded natively by WordPress
-
-Do not hand-edit `theme.json`; the next build will overwrite it. Commit the regenerated file whenever either source changes so WordPress settings remain available before someone runs the frontend toolchain.
+Vite updates the CSS-owned fields in that same file during `npm run build` and `npm run dev`. The build preserves other fields, including handmade block settings and theme metadata. Commit `theme.json` with token changes so the WordPress configuration is ready to use after checkout.
 
 ## Design Tokens
 
-`tokens.css` can remain mostly blank until a project defines its design system. Tokens use these naming conventions:
+Both the frontend and editor stylesheets import `tokens.css`. The generator automatically exports tokens with the `--color-*`, `--font-family-*`, `--font-size-*`, and `--space-*` prefixes. An optional comment immediately above a token sets its display name. Otherwise, the generator derives the name from the slug.
 
 ```css
-:root {
+:where(:root, .editor-styles-wrapper) {
+  --content-measure: 46rem;
+  /* Primary */
   --color-primary: #1d4ed8;
   --font-family-heading: "Example Sans", sans-serif;
   --font-size-large: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  /* Small */
   --space-40: 1rem;
 }
 ```
 
-The generator converts them to native `theme.json` preset arrays. WordPress then creates variables such as `--wp--preset--color--primary` and exposes the presets through controls supported by the selected block.
+The part after the prefix is the preset slug. For example, `--color-deep-blue` has the slug `deep-blue` and gets the label **Deep Blue** when there is no label comment. The label can change while the slug stays the same.
 
-If `theme.base.json` references a preset such as `var(--wp--preset--color--primary)` or `var:preset|font-family|heading`, add the matching token to `tokens.css`. Missing preset references produce a development/build warning without stopping the build.
+WordPress creates the following CSS custom properties from the generated presets and offers the presets in supported block controls.
 
-### Runtime Custom Properties
+| Source token | WordPress CSS custom property |
+| --- | --- |
+| `--color-{slug}` | `--wp--preset--color--{slug}` |
+| `--font-family-{slug}` | `--wp--preset--font-family--{slug}` |
+| `--font-size-{slug}` | `--wp--preset--font-size--{slug}` |
+| `--space-{slug}` | `--wp--preset--spacing--{slug}` |
 
-The generator reads `tokens.css`, but Vite does not automatically include that file in a browser stylesheet. WordPress exposes generated presets as `--wp--preset--*` custom properties through `theme.json`; the original properties such as `--color-primary` only exist at runtime when `tokens.css` is imported by a CSS entry.
+The CSS imports make the original tokens available in both bundles, including values such as `--content-measure` that have no WordPress preset. Some generated presets also rely on those imports at runtime. Forage's fluid spacing presets, for example, use the shared progress variable from `tokens.css`.
 
-Import it where the original properties are needed:
+### Block Defaults
 
-```css
-/* resources/styles/styles.css */
-@import "tokens.css";
+Forage uses Small (`--space-40`) for its banner and navigation spacing. The spacing scale uses `progress()` to get a shared ratio between viewport widths of `20rem` and `80rem`. Each preset uses `calc()` to interpolate between its two `rem` endpoints. Browsers without `progress()` use the minimum below `50rem`, the midpoint from `50rem`, and the maximum from `80rem`.
 
-/* resources/styles/editor.css */
-@import "tokens.css";
-```
+When defining a preset with separate responsive overrides, declare its base value first and put overrides later in the file. WordPress then uses the CSS custom property with the base value as a fallback.
 
-Import it into both entries when frontend and authored editor content use the original properties. No import is necessary when project CSS only uses the WordPress-generated `--wp--preset--*` properties.
+In addition to the four preset lists, the build owns these fields in `theme.json`.
+
+| CSS token | WordPress field |
+| --- | --- |
+| `--content-measure` | `settings.layout.contentSize` |
+| `--wide-content-measure` | `settings.layout.wideSize` |
+| `--default-block-gap` | `styles.spacing.blockGap` |
+| `--default-font-family` | `styles.typography.fontFamily` |
+
+Forage sets `--default-block-gap: var(--space-50)` in CSS. The build emits `"var:preset|spacing|50"` so WordPress uses Medium as the default gap. The body font follows the same pattern. Add entries to `designFields` in `.vite/theme-json.js` for new defaults that map to WordPress style fields. Keep rules that depend on theme markup or component states in their stylesheets.
+
+Both layout widths use `rem` so they respond to the root font size and stay consistent across elements with different font sizes, such as the editable title.
+
+The build removes a generated field or preset when its source token is removed. It warns when `theme.json` references a preset absent from Forage's lists.
 
 ## Loading Fonts
 
@@ -65,9 +78,9 @@ Forage separates WordPress administration chrome, authored editor content, and e
 
 * `resources/styles/admin.css`: loaded with `admin_enqueue_scripts` for wp-admin UI, panels, metaboxes, and plugin/theme administration screens
 * `resources/styles/editor.css`: registered with `add_editor_style()` for the block editor and Classic Editor/TinyMCE
-* `resources/styles/tokens.css`: source for presets exposed in supported editor controls
-* `theme.base.json`: source for block defaults and editor supports
+* `resources/styles/tokens.css`: source for shared layout widths, presets, and mapped block defaults
+* `theme.json`: WordPress settings and synced design values
 
 The block editor canvas may use an iframe. CSS loaded in `admin.css` remains in the parent administration document and does not cross into that canvas. Use `editor.css` for authored content presentation.
 
-CSS alone does not create inspector controls. Use tokens, `theme.base.json`, or block style registration when a setting must appear in the editor UI.
+Enable inspector controls in `theme.json` and define their preset values in `tokens.css`.
