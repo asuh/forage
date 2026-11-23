@@ -84,3 +84,19 @@ Forage separates WordPress administration chrome, authored editor content, and e
 The block editor canvas may use an iframe. CSS loaded in `admin.css` remains in the parent administration document and does not cross into that canvas. Use `editor.css` for authored content presentation.
 
 Enable inspector controls in `theme.json` and define their preset values in `tokens.css`.
+
+## Matching The Published Layout
+
+Compare the published page and editing canvas at the same content viewport width. The WordPress admin sidebar can shrink the iframe, so use the iframe width for the comparison.
+
+Forage's `rem` width resolves consistently across headings and body text. If your theme uses a `ch` measure, apply it to wrappers with the same font family and size in both views. Applying it directly to a larger editable title gives that title a wider column.
+
+If your typography or gutters use viewport units, check how each document reserves scrollbar space. A published page with a persistent vertical scrollbar can resolve those values differently from an iframe with automatic overflow. Check both views at a narrow and a wide width before adopting the same scrollbar behavior in the canvas.
+
+## WordPress Editor Smoke Test
+
+1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active.
+2. Paste [the smoke test script](../tests/editor-canvas.js) into the browser's developer console with the top-level WordPress page selected as the console context.
+3. Run it at a narrow and a wide canvas width, for example around 600px and 1300px. The script reports the canvas width and Medium spacing in pixels. The spacing should grow at the wider width.
+
+The script throws if WordPress failed to register the compiled stylesheet, the iframe failed to apply it, or the WordPress preset resolves to a different value than the CSS token. It leaves the page content alone.
