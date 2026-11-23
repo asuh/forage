@@ -39,18 +39,22 @@ export function mapEditorContent(code, from, to = from) {
 export default function editorContent() {
   let source;
   let entry;
+  let serving;
 
   return {
     name: 'forage-editor-content',
     enforce: 'pre',
-    configResolved({ root }) {
+    configResolved({ root, command }) {
+      serving = command === 'serve';
       source = path.resolve(root, 'resources/styles/common/content.css');
       entry = normalizePath(path.resolve(root, 'resources/styles/editor.css'));
     },
     transform(code, id) {
       if (id.split('?')[0] !== entry) return;
       this.addWatchFile(source);
-      return `${code}\n${mapEditorContent(readFileSync(source), source, entry)}`;
+      // Tag this stylesheet so WordPress's other theme and block CSS stays in place.
+      const marker = serving ? '\n:root { --forage-editor-live-css: 1; }' : '';
+      return `${code}\n${mapEditorContent(readFileSync(source), source, entry)}${marker}`;
     },
   };
 }

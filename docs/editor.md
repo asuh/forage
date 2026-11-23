@@ -97,6 +97,10 @@ Forage's `rem` width resolves consistently across headings and body text. If you
 
 If your typography or gutters use viewport units, check how each document reserves scrollbar space. A published page with a persistent vertical scrollbar can resolve those values differently from an iframe with automatic overflow. Check both views at a narrow and a wide width before adopting the same scrollbar behavior in the canvas.
 
+## Live Editor CSS In Development
+
+With Vite running and detected by WordPress, open the block editor as usual. A visible editor tab checks for updated CSS about once a second and refreshes the canvas styles in place. Your unsaved post edits stay in the same session. Reload the editor when changing WordPress options or preset definitions in `theme.json`.
+
 ## WordPress Editor Smoke Test
 
 1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active. Use a page with a Quote block to check the shared quote rule as well.

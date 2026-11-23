@@ -17,6 +17,20 @@ class Vite
     }
 
     /**
+     * @action enqueue_block_editor_assets
+     */
+    public function editorStyles(): void
+    {
+        wp_enqueue_script(
+            'forage-editor-live-css',
+            forage()->assets()->resolve('scripts/editor-live-css.js'),
+            ['wp-editor'],
+            null,
+            true
+        );
+    }
+
+    /**
      * @filter forage_assets_resolver_resolve_url 1 2
      */
     public function url(string $current, string $path): string
