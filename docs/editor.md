@@ -91,6 +91,8 @@ Write shared content and block styles in `resources/styles/common/content.css` u
 
 Use `.main-content` to scope rules to the published article. The build maps it to the editable block list with enough specificity for rules like `.main-content .wp-block-quote` to override Gutenberg's generic wrapping. These editor classes come from Gutenberg's markup, so check the mapped styles in the editor when upgrading WordPress.
 
+The editor replaces browser margins with its block gap, centres blocks at the content width, and wraps long words. `content.css` applies the same rules to the published article. Top-level blocks get `--default-block-gap` above them and no other vertical margin, quotes lose the browser's side indent, and long words such as URLs wrap. The editor has nothing below the article, so `styles.css` adds the same gap below `.main-content` on the published page.
+
 Compare the published page and editing canvas at the same content viewport width. The WordPress admin sidebar can shrink the iframe, so use the iframe width for the comparison.
 
 Forage's `rem` width resolves consistently across headings and body text. If your theme uses a `ch` measure, apply it to wrappers with the same font family and size in both views. Applying it directly to a larger editable title gives that title a wider column.

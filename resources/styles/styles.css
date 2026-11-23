@@ -11,6 +11,10 @@ body > *:not(#wpadminbar) {
   max-width: var(--content-measure);
 }
 
+.main-content {
+  margin-block-end: var(--default-block-gap);
+}
+
 .banner {
   align-items: center;
   display: flex;
