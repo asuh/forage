@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "dev": "vite",
+    "start": "vite",
     "format": "biome check --write ./resources && composer format",
     "lint": "biome lint ./resources && composer lint",
     "test": "node --test .vite/*.test.js"
