@@ -4,13 +4,13 @@
  * This file is registered with `add_editor_style()` for the block editor and
  * Classic Editor/TinyMCE. WordPress loads it in the authored content document.
  *
- * Use this for editor-only presentation that should affect the authored
- * content area in either editor. Use `admin.css` for wp-admin chrome,
- * `tokens.css` for shared presets and defaults, and `theme.json` for
- * WordPress editor settings.
+ * Import shared content rules here and in `styles.css`. Use this file for
+ * editor-specific selectors and `admin.css` for wp-admin chrome. Shared
+ * presets and defaults come from `tokens.css`.
  */
 
 @import "tokens.css";
+@import "common/typography.css";
 
 :where(.editor-styles-wrapper) {
   --forage-editor-styles-loaded: 1;
