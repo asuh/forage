@@ -99,8 +99,8 @@ If your typography or gutters use viewport units, check how each document reserv
 
 ## WordPress Editor Smoke Test
 
-1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active.
+1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active. Use a page with a Quote block to check the shared quote rule as well.
 2. Paste [the smoke test script](../tests/editor-canvas.js) into the browser's developer console with the top-level WordPress page selected as the console context.
 3. Run it at a narrow and a wide canvas width, for example around 600px and 1300px. The script reports the canvas width and Medium spacing in pixels. The spacing should grow at the wider width.
 
-The script throws if WordPress failed to register the compiled stylesheet, the iframe failed to apply it, or the WordPress preset resolves to a different value than the CSS token. It leaves the page content alone.
+The script checks that WordPress registers and applies the compiled stylesheet, that the spacing preset resolves to the CSS token, and that the shared title and quote rules win in the canvas. It leaves the page content alone.

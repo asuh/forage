@@ -20,6 +20,22 @@
     throw new Error('The compiled Forage stylesheet was registered but did not apply inside the editor iframe.');
   }
 
+  const title = canvas.querySelector('.editor-post-title__input');
+  if (!title || !compiled.css.includes('.editor-post-title__input')) {
+    throw new Error('The shared page title rule did not map to the editable title.');
+  }
+  const titleStyle = view.getComputedStyle(title);
+  const titleLineHeight = parseFloat(titleStyle.lineHeight) / parseFloat(titleStyle.fontSize);
+  if (!(Math.abs(titleLineHeight - 1.15) < 0.01)) {
+    throw new Error('The shared page title line height did not apply to the editable title.');
+  }
+
+  const quote = canvas.querySelector('blockquote.wp-block-quote');
+  const quoteWrapping = quote ? view.getComputedStyle(quote).overflowWrap : null;
+  if (quote && quoteWrapping !== 'anywhere') {
+    throw new Error('The shared article quote rule did not override the editor wrapping default.');
+  }
+
   const probe = canvas.createElement('div');
   probe.style.position = 'absolute';
   probe.style.visibility = 'hidden';
@@ -34,7 +50,7 @@
       throw new Error('The Medium WordPress spacing preset did not resolve to the Forage CSS token.');
     }
 
-    return { canvasWidth: view.innerWidth, mediumSpacingPx: preset };
+    return { canvasWidth: view.innerWidth, mediumSpacingPx: preset, titleLineHeight, quoteWrapping };
   } finally {
     probe.remove();
   }
