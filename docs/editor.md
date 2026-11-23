@@ -105,10 +105,22 @@ With Vite running and detected by WordPress, open the block editor as usual. A v
 
 If Vite stops for about 30 seconds, the editor stops checking and logs a message in the browser console. Reload the editor after restarting Vite.
 
-## WordPress Editor Smoke Test
+## Editor Browser Test
 
-1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active. Use a page with a Quote block to check the shared quote rule as well.
-2. Paste [the smoke test script](../tests/editor-canvas.js) into the browser's developer console with the top-level WordPress page selected as the console context.
-3. Run it at a narrow and a wide canvas width, for example around 600px and 1300px. The script reports the canvas width and Medium spacing in pixels. The spacing should grow at the wider width.
+`npm run test:editor` opens a post in headless Firefox and compares the block editor with the published page. It needs Firefox and a local WordPress site with Forage active. Add these settings to `.env.development.local`, which Git ignores:
 
-The script checks that WordPress registers and applies the compiled stylesheet, that the spacing preset resolves to the CSS token, and that the shared title and quote rules win in the canvas. It leaves the page content alone.
+```shell
+WP_TEST_URL=https://example.local
+WP_TEST_USER=admin
+WP_TEST_PASSWORD=local-password
+WP_TEST_POST=123
+```
+
+`WP_TEST_URL` defaults to `WP_DEV_PROXY_TARGET`. Choose a published post with paragraphs, a heading, a list, and a Quote block. Set `WP_TEST_WIDTHS` to change the default `680,1300` browser widths, or `FIREFOX_PATH` when Firefox is not in the standard location.
+
+* `npm run build`, stop Vite, then `npm run test:editor`: runs [the editor smoke test](../tests/editor-canvas.js), then compares the title, text, list, quote, and link styles, plus block widths and the gaps between blocks. The published page is laid out at the width of the editor canvas. The test fails with a list of the differences.
+* `npm start`, then `npm run test:editor -- --live`: edits the post title without saving, temporarily adds a rule to `common/content.css`, and checks that the editor applies and removes it without reloading. The file is restored afterwards, including after Ctrl+C.
+
+Neither mode saves the post. Run both after upgrading WordPress, because the editor style mappings depend on Gutenberg markup.
+
+To check the canvas by hand, paste the smoke test into the browser console with the top-level WordPress page selected as the console context. It checks that WordPress registers and applies the compiled stylesheet, that the spacing preset resolves to the CSS token, and that the shared title and quote rules apply in the canvas.

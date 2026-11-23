@@ -86,6 +86,7 @@ npm run dev
 * `npm test`: run build utility regression tests
 * `composer test`: run PHP regression tests
 * `npm run check`: run all tests and linters, as CI does
+* `npm run test:editor`: compare the block editor with the published page in Firefox; see [the editor docs](docs/editor.md#editor-browser-test)
 
 ## Deployment
 

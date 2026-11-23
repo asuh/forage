@@ -12,6 +12,7 @@
     "lint": "biome lint ./resources && composer lint",
     "test": "node --test .vite/*.test.js",
     "check": "npm test && npm run lint && composer test",
+    "test:editor": "node tests/editor-browser.mjs",
     "dev": "vite"
   },
   "devDependencies": {
