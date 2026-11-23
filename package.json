@@ -10,7 +10,9 @@
     "start": "vite",
     "format": "biome check --write ./resources && composer format",
     "lint": "biome lint ./resources && composer lint",
-    "test": "node --test .vite/*.test.js"
+    "test": "node --test .vite/*.test.js",
+    "check": "npm test && npm run lint && composer test",
+    "dev": "vite"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.8",

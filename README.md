@@ -79,12 +79,13 @@ npm run dev
 
 ## Commands
 
-* `npm run dev`: start Vite with hot module replacement
+* `npm run dev` or `npm start`: start Vite with hot module replacement
 * `npm run build`: sync design tokens into `theme.json` and compile production assets
 * `npm run format`: format CSS and JavaScript with Biome and PHP with PHPCBF
 * `npm run lint`: lint CSS and JavaScript with Biome and PHP with PHPCS
 * `npm test`: run build utility regression tests
 * `composer test`: run PHP regression tests
+* `npm run check`: run all tests and linters, as CI does
 
 ## Deployment
 
