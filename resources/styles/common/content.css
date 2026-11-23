@@ -1,0 +1,12 @@
+/* Published content styles also compiled for the editor canvas. */
+.wp-block-quote {
+  hyphens: auto;
+}
+
+.main-content .wp-block-quote {
+  overflow-wrap: anywhere;
+}
+
+.page-title {
+  line-height: 1.15;
+}

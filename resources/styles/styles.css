@@ -2,6 +2,7 @@
 @import "common/global.css";
 /* @import "common/fonts.css"; */
 @import "common/typography.css";
+@import "common/content.css";
 @import "partials/buttons.css";
 @import "partials/nav.css";
 

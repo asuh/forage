@@ -87,6 +87,10 @@ Enable inspector controls in `theme.json` and define their preset values in `tok
 
 ## Matching The Published Layout
 
+Write shared content and block styles in `resources/styles/common/content.css` using published selectors. Vite includes that file in both stylesheets. Block selectors such as `.wp-block-quote` work in both views, and the build maps `.page-title` to WordPress's editable title. If a template uses different markup in each view, its selector mapping belongs in `.vite/editor-content.js`.
+
+Use `.main-content` to scope rules to the published article. The build maps it to the editable block list with enough specificity for rules like `.main-content .wp-block-quote` to override Gutenberg's generic wrapping. These editor classes come from Gutenberg's markup, so check the mapped styles in the editor when upgrading WordPress.
+
 Compare the published page and editing canvas at the same content viewport width. The WordPress admin sidebar can shrink the iframe, so use the iframe width for the comparison.
 
 Forage's `rem` width resolves consistently across headings and body text. If your theme uses a `ch` measure, apply it to wrappers with the same font family and size in both views. Applying it directly to a larger editable title gives that title a wider column.

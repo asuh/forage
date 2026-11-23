@@ -4,9 +4,8 @@
  * This file is registered with `add_editor_style()` for the block editor and
  * Classic Editor/TinyMCE. WordPress loads it in the authored content document.
  *
- * Import shared content rules here and in `styles.css`. Use this file for
- * editor-specific selectors and `admin.css` for wp-admin chrome. Shared
- * presets and defaults come from `tokens.css`.
+ * Vite adds shared rules from `common/content.css` during compilation. Use
+ * this file for editor-specific overrides and `admin.css` for wp-admin chrome.
  */
 
 @import "tokens.css";

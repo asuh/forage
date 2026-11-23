@@ -1,6 +1,7 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import copy from './.vite/copy.js';
+import editorContent from './.vite/editor-content.js';
 import themeJson from './.vite/theme-json.js';
 import hot from './.vite/hot.js';
 import wordpressProxy from './.vite/wordpress-proxy.js';
@@ -38,6 +39,7 @@ export default defineConfig(({ mode }) => {
     },
 
     plugins: [
+      editorContent(),
       hot(),
       wordpressProxy({ target: env.WP_DEV_PROXY_TARGET }),
       themeJson(),
