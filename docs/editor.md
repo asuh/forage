@@ -103,6 +103,8 @@ If your typography or gutters use viewport units, check how each document reserv
 
 With Vite running and detected by WordPress, open the block editor as usual. A visible editor tab checks for updated CSS about once a second and refreshes the canvas styles in place. Your unsaved post edits stay in the same session. Reload the editor when changing WordPress options or preset definitions in `theme.json`.
 
+If Vite stops for about 30 seconds, the editor stops checking and logs a message in the browser console. Reload the editor after restarting Vite.
+
 ## WordPress Editor Smoke Test
 
 1. Run `npm run build` and stop Vite. Open an existing page in the block editor on a local WordPress install with Forage active. Use a page with a Quote block to check the shared quote rule as well.

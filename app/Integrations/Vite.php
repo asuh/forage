@@ -21,7 +21,6 @@ class Vite
      */
     public function editorStyles(): void
     {
-        // Vite serves this development-only file directly, so a version query is unnecessary.
         wp_enqueue_script(
             'forage-editor-live-css',
             forage()->assets()->resolve('scripts/editor-live-css.js'),

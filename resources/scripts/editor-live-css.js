@@ -2,6 +2,8 @@
   const stylesheet = new URL('../styles/editor.css?direct=1', import.meta.url);
   const marker = '--forage-editor-live-css';
   const store = 'core/editor';
+  const maxFailures = 6;
+  let failures = 0;
 
   async function refresh() {
     let interval = 1000;
@@ -19,10 +21,12 @@
 
       const response = await fetch(stylesheet, { cache: 'no-cache' });
       if (!response.ok || !response.headers.get('content-type')?.startsWith('text/css')) {
+        failures += 1;
         interval = 5000;
         return;
       }
 
+      failures = 0;
       const css = await response.text();
       if (!css.includes(marker)) {
         return;
@@ -34,10 +38,14 @@
         update({ styles: styles.map(style => style === current ? { ...style, css } : style) });
       }
     } catch {
-      // Retry after Vite restarts without clearing the stylesheet or reloading WordPress.
+      failures += 1;
       interval = 5000;
     } finally {
-      window.setTimeout(refresh, interval);
+      if (failures < maxFailures) {
+        window.setTimeout(refresh, interval);
+      } else {
+        console.info('Forage live editor CSS stopped because Vite is unavailable. Reload the editor after restarting Vite.');
+      }
     }
   }
 
