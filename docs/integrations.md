@@ -10,7 +10,7 @@ Enabled by default, Clean Up:
 
 * Removes generator tags, wlwmanifest, RSD, oEmbed discovery, and shortlink output
 * Disables WordPress emoji scripts and styles
-* Dequeues Gutenberg block-library CSS when the rendered query has no block content
+* On WordPress 6.8, dequeues Gutenberg block-library CSS when the rendered query has no block content and no sidebar has block widgets. WordPress 6.9+ already loads only the styles of rendered blocks, so Forage leaves block CSS to WordPress there.
 * Preserves native script and stylesheet tags without reparsing them
 * Simplifies navigation menu classes and normalizes the current item to `active`
 

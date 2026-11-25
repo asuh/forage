@@ -17,12 +17,7 @@ class Assets
         $this->enqueue('scripts/scripts.js', ['handle' => 'script']);
 
         if (is_singular() && comments_open() && get_option('thread_comments')) {
-            $this->enqueue(
-                'scripts/comment-reply.js',
-                [
-                    'handle' => 'comment-reply',
-                ]
-            );
+            wp_enqueue_script('comment-reply');
         }
     }
 

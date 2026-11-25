@@ -10,17 +10,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const noop = () => undefined;
 
 	function toggleNavigation() {
-		const navButton = document.querySelector("button[aria-expanded]");
+		const navButton = document.querySelector(
+			'button[aria-expanded][aria-controls="nav-primary"]',
+		);
 
 		if (!navButton) {
 			return noop;
 		}
 
+		navButton.hidden = false;
+
 		function handleClick(event) {
 			const expanded =
 				event.currentTarget.getAttribute("aria-expanded") === "true" || false;
 			navButton.setAttribute("aria-expanded", !expanded);
-      navButton.setAttribute("aria-pressed", !expanded);
 		}
 
 		navButton.addEventListener("click", handleClick);

@@ -7,11 +7,11 @@
     display: none;
   }
 
-  &[aria-pressed="false"] .toggle-menu-open {
+  &[aria-expanded="false"] .toggle-menu-open {
     display: block;
   }
 
-  &[aria-pressed="true"] .toggle-menu-close {
+  &[aria-expanded="true"] .toggle-menu-close {
     display: block;
   }
 

@@ -5,6 +5,12 @@
   padding-inline-start: 0;
 }
 
+@media (width < 48em) {
+  .toggle-button:not([hidden])[aria-expanded="false"] + .nav-list {
+    display: none;
+  }
+}
+
 .menu-item > .sub-menu[hidden] {
   display: none;
 }

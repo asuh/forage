@@ -7,7 +7,7 @@
     </head>
 
     <body @php(body_class())>
-        <a class="visuallyhidden" href="#main">
+        <a class="skip-link visuallyhidden" href="#main">
             {{ __('Skip to content') }}
         </a>
         @php(do_action('wp_body_open'))

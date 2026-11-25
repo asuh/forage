@@ -32,7 +32,8 @@ button,
   cursor: pointer;
 }
 
-.visuallyhidden {
+.visuallyhidden,
+.screen-reader-text {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
@@ -40,4 +41,18 @@ button,
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+.skip-link:focus {
+  background-color: Canvas;
+  clip: auto;
+  clip-path: none;
+  color: LinkText;
+  height: auto;
+  inset-block-start: var(--space-30);
+  inset-inline-start: var(--space-30);
+  padding: var(--space-30) var(--space-40);
+  position: fixed;
+  width: auto;
+  z-index: 100000;
 }

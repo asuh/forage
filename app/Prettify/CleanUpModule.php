@@ -122,12 +122,37 @@ class CleanUpModule extends AbstractModule
         }
 
         add_action('wp_enqueue_scripts', function () {
-            if (! $this->queryHasBlocks()) {
+            // WordPress 6.9+ already loads block styles on demand in classic themes.
+            if (wp_should_load_block_assets_on_demand()) {
+                return;
+            }
+
+            if (! $this->queryHasBlocks() && ! $this->hasBlockWidgets()) {
                 wp_dequeue_style('wp-block-library');
             }
         }, 200);
 
         return $this;
+    }
+
+    /**
+     * Determine if any sidebar contains block widgets, which need block styles.
+     */
+    protected function hasBlockWidgets(): bool
+    {
+        foreach (wp_get_sidebars_widgets() as $sidebar => $widgets) {
+            if ('wp_inactive_widgets' === $sidebar || ! is_array($widgets)) {
+                continue;
+            }
+
+            foreach ($widgets as $widget) {
+                if (str_starts_with((string) $widget, 'block-')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
