@@ -15,6 +15,16 @@ body > *:not(#wpadminbar) {
   margin-block-end: var(--default-block-gap);
 }
 
+.post-header {
+  position: relative;
+}
+
+.post-header > .entry-title > a::after {
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
 .banner {
   align-items: center;
   display: flex;

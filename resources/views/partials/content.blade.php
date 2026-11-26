@@ -1,11 +1,9 @@
 <article @php(post_class())>
-    @if (has_post_thumbnail())
-        <figure class="post-thumbnail full">
-            <a class="p-name u-url" href="{{ get_permalink() }}">@php(the_post_thumbnail())</a>
-        </figure>
-    @endif
-
     <header class="post-header">
+        @if (has_post_thumbnail())
+            <figure class="post-thumbnail full">@php(the_post_thumbnail())</figure>
+        @endif
+
         @if (get_the_title())
             <h2 class="entry-title">
                 <a class="p-name u-url" href="{{ get_permalink() }}">
