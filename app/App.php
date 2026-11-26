@@ -13,6 +13,7 @@ use Forage\Integrations\Integrations;
 use Forage\Navigation\Navigation;
 use Forage\Blade\Templating;
 use Forage\Prettify\CleanUpModule;
+use Forage\Prettify\DisableRandomContentModule;
 use Forage\Prettify\NiceSearchModule;
 use Forage\Prettify\RelativeUrlsModule;
 use Illuminate\Filesystem\Filesystem;
@@ -59,6 +60,7 @@ class App
 
         $prettifyConfig = collect($this->config->prettify());
         new CleanUpModule($this, $prettifyConfig);
+        new DisableRandomContentModule($this, $prettifyConfig);
         new NiceSearchModule($this, $prettifyConfig);
         new RelativeUrlsModule($this, $prettifyConfig);
     }

@@ -28,6 +28,10 @@ check(isset($filters['script_loader_tag'], $filters['style_loader_tag']), 'Optin
 $script = $module->cleanScriptTags('<script type="module" id="app" src="/app.js"></script>');
 check(str_contains($script, 'type="module"'), 'Opt-in cleanup must preserve module scripts.');
 check(! str_contains($script, 'id="app"'), 'Opt-in cleanup must remove cosmetic IDs.');
+$scripts = $module->cleanScriptTags("<script src=\"/a.js\" id=\"a-js\"></script>\n<script id=\"a-js-after\">var x = \"<meta charset=windows-1252><p>é</p>\" && 1 < 2;</script>");
+check($scripts === "<script src=\"/a.js\"></script>\n<script>var x = \"<meta charset=windows-1252><p>é</p>\" && 1 < 2;</script>", 'Opt-in cleanup must keep adjacent and inline scripts intact.');
+$styles = $module->cleanStylesheetLinks('<link rel="stylesheet" id="x-css" href="/x.css?ver=1&amp;y=2" media="all" />');
+check($styles === '<link rel="stylesheet" href="/x.css?ver=1&amp;y=2">', 'Opt-in cleanup must keep escaped stylesheet URLs.');
 
 $actions = [];
 $onDemand = false;
@@ -61,5 +65,13 @@ $sidebars = [];
 $onDemand = true;
 $dequeueBlockCss();
 check($dequeued === [], 'On-demand block styles must stay under WordPress control.');
+
+$filters = [];
+$app = (new ReflectionClass(Forage\App::class))->newInstanceWithoutConstructor();
+new Forage\Prettify\DisableRandomContentModule($app, collect($defaults));
+check(($filters['wp_enable_random_content_redirect'] ?? null) === '__return_false', 'Random content redirects must be disabled by default, including in the admin.');
+$filters = [];
+new Forage\Prettify\DisableRandomContentModule($app, collect(['disable-random-content' => ['enabled' => false]]));
+check(! isset($filters['wp_enable_random_content_redirect']), 'Random content redirects must stay available when the module is disabled.');
 
 echo "Prettify regression checks passed.\n";

@@ -2,38 +2,21 @@
 
 namespace Forage\Prettify;
 
-use DOMDocument;
-use DOMNodeList;
-use DOMXPath;
-use Illuminate\Support\Str;
+use Dom\HTMLDocument;
 
 class Document
 {
     /**
-     * The DOMDocument instance.
+     * The HTML5 document instance.
      */
-    protected DOMDocument $document;
-
-    /**
-     * The XML encoding tag.
-     */
-    protected string $encoding = '<?xml encoding="UTF-8">';
+    protected HTMLDocument $document;
 
     /**
      * Initialize the Document instance.
      */
-    public function __construct(string $html)
+    final public function __construct(string $html)
     {
-        $this->document = new DOMDocument();
-
-        $this->suppress();
-
-        $this->document->loadHTML(
-            Str::start($html, $this->encoding),
-            \LIBXML_HTML_NOIMPLIED | \LIBXML_HTML_NODEFDTD
-        );
-
-        $this->clear();
+        $this->document = HTMLDocument::createFromString('<!doctype html><body>' . $html, \LIBXML_NOERROR, 'UTF-8');
     }
 
     /**
@@ -45,11 +28,11 @@ class Document
     }
 
     /**
-     * Loop through each node in the document and execute the provided callback.
+     * Loop through each element in the fragment and execute the provided callback.
      */
     public function each(callable $callback): self
     {
-        foreach ($this->xpath('//*') as $node) {
+        foreach ($this->document->body->querySelectorAll('*') as $node) {
             $callback($node);
         }
 
@@ -57,45 +40,11 @@ class Document
     }
 
     /**
-     * Evaluate the given XPath expression.
-     */
-    public function xpath(string $expression): DOMNodeList
-    {
-        return (new DOMXPath($this->document))->query($expression);
-    }
-
-    /**
-     * Get the saved document HTML.
+     * Get the serialized fragment HTML.
      */
     public function html(): string
     {
-        return trim(
-            preg_replace(
-                '/^(?:<\?xml[^>]*>\s*|<!--\?xml[^>]*-->\s*)/i',
-                '',
-                $this->document->saveHTML()
-            )
-        );
-    }
-
-    /**
-     * Suppress the XML errors.
-     */
-    protected function suppress(): self
-    {
-        libxml_use_internal_errors(true);
-
-        return $this;
-    }
-
-    /**
-     * Clear the XML errors.
-     */
-    protected function clear(): self
-    {
-        libxml_clear_errors();
-
-        return $this;
+        return trim($this->document->body->innerHTML);
     }
 
     /**

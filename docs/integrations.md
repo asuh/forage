@@ -18,6 +18,10 @@ Forage leaves Global Styles and `theme.json` output under WordPress control so p
 
 Set `clean-up.clean-asset-tags` to `true` to restore cosmetic script and stylesheet attribute cleanup. This opt-in also requires `clean-html5-markup` to remain enabled. Navigation class normalization and the other HTML cleanup remain enabled by default.
 
+### Disable Random Content
+
+Enabled by default, this turns off the random content redirects added in WordPress 7.2, such as `/random/` and `/random/category/news/`. It also runs in the admin so rebuilt rewrite rules omit those routes. Flush the rewrite rules by saving **Settings → Permalinks** after changing `disable-random-content.enabled`, and once after updating an existing WordPress 7.2+ site to this version of Forage.
+
 ### Nice Search
 
 Enabled by default, Nice Search redirects `/?s=query` to `/search/query/`. It is compatible with Yoast SEO.
