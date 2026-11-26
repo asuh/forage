@@ -17,11 +17,11 @@ body {
   }
 }
 
-@view-transition {
-  navigation: auto;
-}
-
 @media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
   :where(html:focus-within) {
     scroll-behavior: smooth;
   }
