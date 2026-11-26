@@ -84,22 +84,6 @@ class Setup
     }
 
     /**
-     * Register navigation menus
-     * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
-     *
-     * @action after_setup_theme
-     */
-    public function addNavMenus(): void
-    {
-        register_nav_menus(
-            [
-                'primary_navigation' => __('Primary Navigation', 'forage'),
-            /** 'secondary_navigation' => __('Secondary Navigation') */
-            ]
-        );
-    }
-
-    /**
      * Register the theme sidebars.
      *
      * @action widgets_init

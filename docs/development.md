@@ -18,6 +18,7 @@ forage/
 |   |-- Core/               # Cache, configuration, and DocBlock hooks
 |   |-- Editor/             # Block Editor and Classic Editor styles
 |   |-- Integrations/       # Vite and Gravatar integrations
+|   |-- Navigation/         # Menu registration and submenu disclosure buttons
 |   |-- Prettify/           # WordPress output cleanup modules
 |   |-- config/             # Theme-specific PHP configuration
 |   |-- App.php             # Application service initialization

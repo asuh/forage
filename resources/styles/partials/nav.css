@@ -11,6 +11,6 @@
   }
 }
 
-.menu-item > .sub-menu[hidden] {
+.menu-item > [aria-expanded="false"] + .sub-menu {
   display: none;
 }

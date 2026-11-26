@@ -24,3 +24,35 @@
     display: none;
   }
 }
+
+.submenu-toggle {
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  display: inline-flex;
+  font: inherit;
+  gap: var(--space-20);
+  justify-content: center;
+  min-block-size: 24px;
+  min-inline-size: 24px;
+  padding-inline: var(--space-20);
+
+  &:first-child {
+    padding-inline: 0;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+
+  &[aria-expanded="true"] svg {
+    rotate: 180deg;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    svg {
+      transition: rotate 0.2s;
+    }
+  }
+}

@@ -10,6 +10,7 @@ use Forage\Core\Hooks;
 use Forage\Editor\Editor;
 use Forage\Setup;
 use Forage\Integrations\Integrations;
+use Forage\Navigation\Navigation;
 use Forage\Blade\Templating;
 use Forage\Prettify\CleanUpModule;
 use Forage\Prettify\NiceSearchModule;
@@ -31,6 +32,8 @@ class App
     private Editor $editor;
 
     private Integrations $integrations;
+
+    private Navigation $navigation;
 
     private Setup $setup;
 
@@ -56,6 +59,7 @@ class App
         $this->cache = self::init(new Cache());
         $this->editor = self::init(new Editor());
         $this->integrations = self::init(new Integrations());
+        $this->navigation = self::init(new Navigation());
         $this->setup = self::init(new Setup());
         $this->templating = self::init(new Templating());
 
@@ -98,6 +102,11 @@ class App
     public function integrations(): Integrations
     {
         return $this->integrations;
+    }
+
+    public function navigation(): Navigation
+    {
+        return $this->navigation;
     }
 
     public function setup(): Setup
