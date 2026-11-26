@@ -23,7 +23,9 @@
       "!**/.output",
       "!**/*.lock",
       "!**/*-lock.json",
-      "!**/*.js"
+      "!.vite/**",
+      "!tests/**",
+      "!vite.config.js"
     ]
   },
   "linter": {
@@ -116,7 +118,7 @@
       "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
       "trailingCommas": "all",
-      "semicolons": "asNeeded",
+      "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
       "quoteStyle": "single",

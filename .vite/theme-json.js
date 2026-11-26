@@ -49,7 +49,12 @@ export function parseTokens(css) {
     if (existing) {
       existing.hasOverride = true
     } else {
-      declarations.set(property, { label: comment?.trim(), value: raw.trim() })
+      const value = raw
+        .trim()
+        .replace(/\([ \t]*\r?\n[ \t\r\n]*/g, '(')
+        .replace(/(\\[ \t])?[ \t]*\r?\n[ \t\r\n]*\)/g, (match, escape = '') => `${escape})`)
+        .replace(/(\\[ \t])?[ \t]*\r?\n[ \t\r\n]*/g, (match, escape = '') => `${escape} `)
+      declarations.set(property, { label: comment?.trim(), value })
     }
   }
 

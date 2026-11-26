@@ -15,12 +15,20 @@
 
       const query = window.wp.data.select(store);
       const update = window.wp.data.dispatch(store)?.updateEditorSettings;
-      if (typeof update !== 'function' || !query?.getEditorSettings?.()?.styles?.some(style => style.css?.includes(marker))) {
+      if (
+        typeof update !== 'function' ||
+        !query
+          ?.getEditorSettings?.()
+          ?.styles?.some((style) => style.css?.includes(marker))
+      ) {
         return;
       }
 
       const response = await fetch(stylesheet, { cache: 'no-cache' });
-      if (!response.ok || !response.headers.get('content-type')?.startsWith('text/css')) {
+      if (
+        !response.ok ||
+        !response.headers.get('content-type')?.startsWith('text/css')
+      ) {
         failures += 1;
         interval = 5000;
         return;
@@ -33,9 +41,13 @@
       }
 
       const styles = query.getEditorSettings()?.styles;
-      const current = styles?.find(style => style.css?.includes(marker));
+      const current = styles?.find((style) => style.css?.includes(marker));
       if (current && current.css !== css) {
-        update({ styles: styles.map(style => style === current ? { ...style, css } : style) });
+        update({
+          styles: styles.map((style) =>
+            style === current ? { ...style, css } : style,
+          ),
+        });
       }
     } catch {
       failures += 1;
@@ -44,7 +56,9 @@
       if (failures < maxFailures) {
         window.setTimeout(refresh, interval);
       } else {
-        console.info('Forage live editor CSS stopped because Vite is unavailable. Reload the editor after restarting Vite.');
+        console.info(
+          'Forage live editor CSS stopped because Vite is unavailable. Reload the editor after restarting Vite.',
+        );
       }
     }
   }

@@ -9,7 +9,7 @@
     "build": "vite build",
     "start": "vite",
     "format": "biome check --write ./resources && composer format",
-    "lint": "biome lint ./resources && composer lint",
+    "lint": "biome check ./resources && composer lint",
     "test": "node --test .vite/*.test.js",
     "check": "npm test && npm run lint && composer test",
     "test:editor": "node tests/editor-browser.mjs",

@@ -32,6 +32,30 @@ test('uses only an immediately preceding comment as a token name', () => {
   ])
 })
 
+test('collapses values that formatters wrap across lines', () => {
+  const tokens = parseTokens(`
+    :root {
+      --space-20: calc(
+        0.375rem +
+        var(--progress, 0) *
+        (0.44rem - 0.375rem)
+      );
+      --font-family-body:
+        /* Designer's pick */ 'Acme ( Display )  Wide',
+        Acme\\ ,\u00a0Wide, var(--brand, Acme\\ ),
+        var(
+          --a-very-long-custom-property-name,
+          Acme\\\x20
+        ),
+        system-ui, "Segoe UI",
+        sans-serif;
+    }
+  `)
+
+  assert.equal(tokens.spacingSizes[0].size, 'calc(0.375rem + var(--progress, 0) * (0.44rem - 0.375rem))')
+  assert.equal(tokens.fontFamilies[0].fontFamily, "/* Designer's pick */ 'Acme ( Display )  Wide', Acme\\ ,\u00a0Wide, var(--brand, Acme\\ ), var(--a-very-long-custom-property-name, Acme\\ ), system-ui, \"Segoe UI\", sans-serif")
+})
+
 test('leaves fluid font-size behavior to theme.json', () => {
   const tokens = parseTokens(`
     :root {

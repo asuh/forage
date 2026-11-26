@@ -1,4 +1,4 @@
-import { submenuA11y, toggleNavigation } from "./navigation.js";
+import { submenuA11y, toggleNavigation } from './navigation.js';
 
 /**
  * Load Events
@@ -7,40 +7,39 @@ import { submenuA11y, toggleNavigation } from "./navigation.js";
  * then apply any scripts contained in this eventlistener
  *
  **/
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Load your scripts inside here
   const noop = () => undefined;
 
   function initializeDialogs() {
-    const dialogs = document.querySelectorAll("dialog[id]");
+    const dialogs = document.querySelectorAll('dialog[id]');
 
     if (!dialogs.length) {
       return noop;
     }
 
-    if (!("HTMLDialogElement" in window)) {
+    if (!('HTMLDialogElement' in window)) {
       return noop;
     }
 
     const supportsInvokerCommands =
-      "commandForElement" in HTMLButtonElement.prototype;
-    const supportsLightDismiss =
-      "closedBy" in HTMLDialogElement.prototype;
+      'commandForElement' in HTMLButtonElement.prototype;
+    const supportsLightDismiss = 'closedBy' in HTMLDialogElement.prototype;
     const abortController = new AbortController();
     const { signal } = abortController;
 
-    document.querySelectorAll("button[commandfor]").forEach((button) => {
-      const dialog = document.getElementById(button.getAttribute("commandfor"));
+    document.querySelectorAll('button[commandfor]').forEach((button) => {
+      const dialog = document.getElementById(button.getAttribute('commandfor'));
 
       if (!(dialog instanceof HTMLDialogElement) || supportsInvokerCommands) {
         return;
       }
 
-      const command = button.getAttribute("command");
+      const command = button.getAttribute('command');
 
-      if (command === "show-modal") {
+      if (command === 'show-modal') {
         button.addEventListener(
-          "click",
+          'click',
           () => {
             if (!dialog.open) {
               dialog.showModal();
@@ -48,9 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           { signal },
         );
-      } else if (command === "close") {
+      } else if (command === 'close') {
         button.addEventListener(
-          "click",
+          'click',
           () => {
             if (dialog.open) {
               dialog.close();
@@ -64,10 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!supportsLightDismiss) {
       dialogs.forEach((dialog) => {
         dialog.addEventListener(
-          "click",
+          'click',
           (event) => {
             if (event.target === dialog) {
-              dialog.close("dismiss");
+              dialog.close('dismiss');
             }
           },
           { signal },
@@ -81,9 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function appendLoadTime() {
     const appendTiming = () => {
       const navigation = window.performance
-        ?.getEntriesByType("navigation")
-        .find((entry) => entry.entryType === "navigation");
-      const copyright = document.querySelector(".copyright");
+        ?.getEntriesByType('navigation')
+        .find((entry) => entry.entryType === 'navigation');
+      const copyright = document.querySelector('.copyright');
 
       if (!navigation || !copyright) {
         return;
@@ -95,18 +94,18 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const element = document.createElement("small");
+      const element = document.createElement('small');
       element.textContent = `This page loaded in ${loadTime.toFixed(2)} seconds`;
       copyright.appendChild(element);
     };
 
-    if (document.readyState === "complete") {
+    if (document.readyState === 'complete') {
       appendTiming();
       return;
     }
 
     window.addEventListener(
-      "load",
+      'load',
       () => {
         window.setTimeout(appendTiming, 0);
       },
@@ -114,8 +113,8 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-	toggleNavigation();
-	submenuA11y();
+  toggleNavigation();
+  submenuA11y();
   initializeDialogs();
   if (import.meta.env.DEV) {
     appendLoadTime();

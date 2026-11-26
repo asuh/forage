@@ -60,7 +60,7 @@
       "fontFamilies": [
         {
           "slug": "body",
-          "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica,\n    Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+          "fontFamily": "system-ui, -apple-system, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
           "name": "Body"
         }
       ]
