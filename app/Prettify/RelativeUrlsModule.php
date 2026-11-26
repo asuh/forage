@@ -130,7 +130,7 @@ class RelativeUrlsModule extends AbstractModule
         }
 
         if (isset($baseUrl['port']) || isset($inputUrl['port'])) {
-            return isset($baseUrl['port'], $inputUrl['port']) && Str::is($baseUrl['port'], $inputUrl['port']);
+            return isset($baseUrl['port'], $inputUrl['port']) && $baseUrl['port'] === $inputUrl['port'];
         }
 
         return true;

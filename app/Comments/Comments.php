@@ -20,13 +20,6 @@ if (class_exists('\Webmention\Comment_Walker')) {
 
             $tag = 'div' === $args['style'] ? 'div' : 'li';
 
-            $cite = apply_filters(
-                'webmention_cite',
-                '<small>&nbsp;@&nbsp;<cite><a href="%1s">%2s</a></cite></small>',
-            );
-            $url = get_url_from_webmention($comment);
-            $host = wp_parse_url($url, PHP_URL_HOST);
-            $host = preg_replace('/^www\./', '', $host);
             $type = get_webmention_comment_type_attr(
                 $comment->comment_type,
                 'class',
@@ -71,21 +64,6 @@ if (class_exists('\Webmention\Comment_Walker')) {
                             }
 
                             echo '<b class="fn">' . wp_kses_post($comment_author) . '</b>';
-                            if (
-                                ! empty($cite) &&
-                                'webmention' ===
-                                    get_comment_meta(
-                                        $comment->comment_ID,
-                                        'protocol',
-                                        true,
-                                    )
-                            ) {
-                                printf(
-                                    wp_kses_post($cite), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped format keeps allowed Webmention cite markup.
-                                    esc_url($url),
-                                    esc_html($host),
-                                );
-                            }
                             ?>
                         </div><!-- .comment-author -->
 

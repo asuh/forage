@@ -20,7 +20,7 @@ abstract class AbstractModule
     /**
      * Initialize the Module instance.
      */
-    public function __construct(\Forage\App $app, Collection $config)
+    final public function __construct(\Forage\App $app, Collection $config)
     {
         $this->app = $app;
         $this->config = collect($config->get($this->getKey(), []));
@@ -41,14 +41,17 @@ abstract class AbstractModule
      */
     protected function boot(): void
     {
-        if (empty($this->config)) {
+        if ($this->config->isEmpty()) {
             return;
         }
 
-        $method = method_exists($this, 'handle') ? 'handle' : '__invoke';
-
-        $this->$method();
+        $this->handle();
     }
+
+    /**
+     * Register the module's hooks.
+     */
+    abstract public function handle(): void;
 
     /**
      * Determine if the module is enabled.

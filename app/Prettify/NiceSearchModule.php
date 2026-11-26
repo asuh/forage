@@ -33,7 +33,7 @@ class NiceSearchModule extends AbstractModule
      */
     protected function handleRedirect(): self
     {
-        add_filter('template_redirect', function () {
+        add_action('template_redirect', function () {
             global $wp_rewrite;
 
             if (
