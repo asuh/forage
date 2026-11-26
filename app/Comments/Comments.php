@@ -123,9 +123,5 @@ if (class_exists('\Webmention\Comment_Walker')) {
 } else {
     class Comments extends \Walker_Comment
     {
-        protected function html5_comment($comment, $depth, $args)
-        {
-            parent::html5_comment($comment, $depth, $args);
-        }
     }
 }

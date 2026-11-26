@@ -28,10 +28,6 @@ class Resolver
      */
     public function relocate(array $templates): array
     {
-        if (! forage()->config()->isTheme()) {
-            return $templates;
-        }
-
         $templates = array_map(fn($item) => preg_replace('/^[^\/]+\/|(\.blade)?\.php$/', '', $item), $templates);
         $templates = array_map(fn($item) => forage()->config()->get('views.path') . '/' . $item . '.blade.php', $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
         $templates = array_map(fn($item) => str_replace(FORAGE_PATH . '/', '', $item), $templates); // phpcs:ignore Generic.Files.LineLength.TooLong
@@ -46,7 +42,7 @@ class Resolver
      */
     public function render(string $template): string
     {
-        if (forage()->config()->isTheme() && str_ends_with($template, '.blade.php')) {
+        if (str_ends_with($template, '.blade.php')) {
             forage()->templating()->selectTemplate($template);
             return FORAGE_PATH . '/inc/render-template.php';
         }

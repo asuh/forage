@@ -31,7 +31,7 @@ class Vite
     }
 
     /**
-     * @filter forage_assets_resolver_resolve_url 1 2
+     * @filter forage_assets_resolver_resolve_url 1
      */
     public function url(string $current, string $path): string
     {
@@ -39,7 +39,7 @@ class Vite
     }
 
     /**
-     * @filter forage_assets_resolver_resolve_path 1 2
+     * @filter forage_assets_resolver_resolve_path 1
      */
     public function path(string $current, string $path): string
     {

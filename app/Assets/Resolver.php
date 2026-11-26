@@ -30,7 +30,7 @@ trait Resolver
     }
 
     /**
-     * @filter script_loader_tag 1 3
+     * @filter script_loader_tag 1
      */
     public function module(string $tag, string $handle, string $url): string
     {

@@ -22,7 +22,8 @@
       "php tests/prettify.php",
       "php tests/comments.php",
       "php tests/nav.php",
-      "php tests/i18n.php"
+      "php tests/i18n.php",
+      "php tests/setup.php"
     ],
     "lint": "phpcs",
     "make-pot": "wp i18n make-pot . languages/forage.pot --exclude=dist",

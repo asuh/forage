@@ -20,11 +20,6 @@ class Config
             'version' => $this->isLocalEnvironment() ? time() : FORAGE_VERSION,
             'env' => [
                 'type' => wp_get_environment_type(),
-                'mode' =>
-                    false ===
-                    strpos(FORAGE_PATH, ABSPATH . 'wp-content/plugins')
-                        ? 'theme'
-                        : 'plugin',
             ],
             'hmr' => [
                 'uri' => $this->hmrHost,
@@ -64,16 +59,6 @@ class Config
         }
 
         return $value;
-    }
-
-    public function isTheme(): bool
-    {
-        return 'theme' === $this->get('env.mode');
-    }
-
-    public function isPlugin(): bool
-    {
-        return 'plugin' === $this->get('env.mode');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php // phpcs:ignore PSR1.Files.SideEffects.FoundWithSymbols
 
-define('FORAGE_VERSION', '2.0.0');
+define('FORAGE_VERSION', wp_get_theme(get_template())->get('Version'));
 define('FORAGE_PATH', __DIR__);
 define('FORAGE_ROOT', str_replace(ABSPATH, '/', FORAGE_PATH));
 define('FORAGE_URI', get_template_directory_uri());

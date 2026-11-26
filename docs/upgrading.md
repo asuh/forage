@@ -1,5 +1,18 @@
 # Upgrading Forage
 
+## Plugin Integrations Moved
+
+The Syndication Links, Simple Location, Webmention, and Contact Form 7 hooks moved from `Forage\Setup` into `app/Integrations/`. Child themes that unhook them must use the new objects and method names:
+
+| Before | After |
+| --- | --- |
+| `[forage()->setup(), 'initIndieWeb']` on `init` | `[forage()->integrations()->indieWeb(), 'removeContentFilters']` |
+| `[forage()->setup(), 'overrideWebmentionsWalker']` on `wp_list_comments_args` | `[forage()->integrations()->indieWeb(), 'overrideWebmentionsWalker']` |
+| `[forage()->setup(), 'conditionallyDisableCf7']` on `wp_enqueue_scripts` (priority 1) | `[forage()->integrations()->contactForm7(), 'disableUnusedAssets']` |
+| `[forage()->setup(), 'dequeueCf7Assets']` on `wp_print_scripts`/`wp_print_styles` (priority 99) | `[forage()->integrations()->contactForm7(), 'dequeueAssets']` |
+
+`Config::isTheme()`, `Config::isPlugin()`, the `env.mode` config key, and `Forage\Blade\TemplatingException` were removed. `FORAGE_VERSION` now reads the `Version` header from `style.css`.
+
 ## Node And PHP Lint Tool Updates
 
 Forage now requires Node 24.22.1+ within the 24.x LTS branch (`^24.22.1`), which includes the October 2026 security fixes for Brotli decompression and other Node APIs. The development proxy uses Node's Brotli decoder, so update local and build runtimes as well as the package metadata. With nvm, run `nvm install` and `nvm use` from the theme directory to use `.nvmrc`, then run `npm ci`. With mise, run `mise trust`, `mise install`, and `mise exec -- npm ci` to use `mise.toml`. Both files pin the same Node version. See [Node version managers](development.md#node-version-managers) and the [Node security release](https://nodejs.org/en/blog/release/v24.22.1).

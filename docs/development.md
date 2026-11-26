@@ -17,7 +17,7 @@ forage/
 |   |-- Comments/           # Comment walker and namespaced helpers
 |   |-- Core/               # Cache, configuration, and DocBlock hooks
 |   |-- Editor/             # Block Editor and Classic Editor styles
-|   |-- Integrations/       # Vite and Gravatar integrations
+|   |-- Integrations/       # Vite, Gravatar, IndieWeb, and Contact Form 7 integrations
 |   |-- Navigation/         # Menu registration and submenu disclosure buttons
 |   |-- Prettify/           # WordPress output cleanup modules
 |   |-- config/             # Theme-specific PHP configuration

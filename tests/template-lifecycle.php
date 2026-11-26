@@ -21,7 +21,6 @@ $filesystem->put($root . '/override.php', '<?php echo "Plugin template";');
 
 $hooks = [];
 $initializations = 0;
-$isTheme = true;
 $events = [];
 
 function forage(): object
@@ -32,7 +31,6 @@ function forage(): object
         public function config(): object
         {
             return new class {
-                public function isTheme(): bool { return $GLOBALS['isTheme']; }
                 public function get(string $key): string
                 {
                     return match ($key) {
@@ -145,9 +143,7 @@ $bridge = apply_filters('template_include', $root . '/views/custom.blade.php');
 check($templating->generate('partials.content') === '<p>Page content</p>', 'Direct view rendering must remain available.');
 check(capture(static function () use ($bridge) { include $bridge; }) === '<main>Custom template</main>', 'Direct view rendering must not replace the selected page template.');
 check(apply_filters('template_include', '') === '', 'An empty template must remain empty.');
-$isTheme = false;
-check(apply_filters('template_include', '/plugin-template.php') === '/plugin-template.php', 'Plugin mode must preserve native template selection.');
-$isTheme = true;
+check(apply_filters('template_include', '/plugin-template.php') === '/plugin-template.php', 'Non-Blade templates must keep native template selection.');
 
 // A later WordPress filter can replace the bridge without Forage having emitted a page.
 add_filter('template_include', fn () => $root . '/override.php', 100);

@@ -257,18 +257,10 @@ class CleanUpModule extends AbstractModule
     }
 
     /**
-     * Add and remove body_class() classes.
+     * Remove redundant body_class() classes.
      */
     public function bodyClass(array $classes, array $disallowedClasses = ['page-template-default']): array
     {
-        if (is_single() || (is_page() && ! is_front_page())) {
-            $slug = basename(get_permalink());
-
-            if (! in_array($slug, $classes, true)) {
-                $classes[] = $slug;
-            }
-        }
-
         if (is_front_page()) {
             $disallowedClasses[] = 'page-id-' . get_option('page_on_front');
         }
