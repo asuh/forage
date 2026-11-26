@@ -61,6 +61,6 @@
     @endif
 @endif
 
-@if (class_exists('WP_Geo_Data'))
-    {!! Loc_View::get_location() !!}
+@if (class_exists('Geo_Data'))
+    {!! Geo_Data::get_location('post', get_the_ID()) !!}
 @endif

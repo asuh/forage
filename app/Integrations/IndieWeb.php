@@ -18,10 +18,10 @@ class IndieWeb
             remove_filter('the_content', ['Syn_Config', 'the_content'], 30);
         }
         if (
-            class_exists('Loc_View') &&
-            has_filter('the_content', ['Loc_View', 'location_content'])
+            class_exists('Geo_Data') &&
+            has_filter('the_content', ['Geo_Data', 'location_content'])
         ) {
-            remove_filter('the_content', ['Loc_View', 'location_content'], 12);
+            remove_filter('the_content', ['Geo_Data', 'location_content'], 12);
         }
     }
 
