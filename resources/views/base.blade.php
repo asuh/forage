@@ -8,7 +8,7 @@
 
     <body @php(body_class())>
         <a class="skip-link visuallyhidden" href="#main">
-            {{ __('Skip to content') }}
+            {{ __('Skip to content', 'forage') }}
         </a>
         @php(do_action('wp_body_open'))
         @php(do_action('get_header'))

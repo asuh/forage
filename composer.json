@@ -21,9 +21,11 @@
       "php tests/config.php",
       "php tests/prettify.php",
       "php tests/comments.php",
-      "php tests/nav.php"
+      "php tests/nav.php",
+      "php tests/i18n.php"
     ],
     "lint": "phpcs",
+    "make-pot": "wp i18n make-pot . languages/forage.pot --exclude=dist",
     "format": "phpcbf"
   },
   "require-dev": {

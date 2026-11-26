@@ -6,7 +6,7 @@
 
     {!! wp_link_pages([
         'echo' => 0,
-        'before' => '<nav class="page-nav"><p>' . __('Pages:'),
+        'before' => '<nav class="page-nav"><p>' . esc_html__('Pages:', 'forage'),
         'after' => '</p></nav>',
     ]) !!}
 </div><!-- .main-content -->

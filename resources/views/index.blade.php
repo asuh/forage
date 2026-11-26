@@ -5,7 +5,7 @@
 
     @if (!have_posts())
         <div class="alert alert-warning">
-            {{ __('Sorry, no results were found.') }}
+            {{ __('Sorry, no results were found.', 'forage') }}
         </div>
 
         {!! get_search_form(false) !!}
@@ -21,5 +21,5 @@
         @endif
     @endwhile
 
-    {!! get_the_posts_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
+    {!! get_the_posts_navigation(['prev_text' => esc_html__('Older', 'forage'), 'next_text' => esc_html__('Newer', 'forage')]) !!}
 @endsection

@@ -4,12 +4,12 @@
 
 <section id="comments" class="comments">
     <h2 class="comments-title">
-        Responses
+        {{ __('Responses', 'forage') }}
     </h2>
 
     @if (isset($comments_open) && $comments_open)
     <div class="respond-link">
-        <a href="#respond">Write a new comment below</a>
+        <a href="#respond">{{ __('Write a new comment below', 'forage') }}</a>
     </div>
     @endif
 
@@ -26,8 +26,8 @@
 
     @if (get_comment_pages_count() > 1 && get_option('page_comments'))
         @php
-            $previousCommentsLink = get_previous_comments_link(__('← Older comments', 'forage'));
-            $nextCommentsLink = get_next_comments_link(__('Newer comments →', 'forage'));
+            $previousCommentsLink = get_previous_comments_link(esc_html__('← Older comments', 'forage'));
+            $nextCommentsLink = get_next_comments_link(esc_html__('Newer comments →', 'forage'));
         @endphp
         <nav>
             <ul class="pager">
@@ -47,7 +47,7 @@
 
     @if (! $comments_open)
     <p class="warning">
-        {!! __('Comments are closed.', 'forage') !!}
+        {{ __('Comments are closed.', 'forage') }}
     </p>
     @endif
 

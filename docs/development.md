@@ -38,6 +38,7 @@ forage/
 |       |-- components/     # Reusable view components
 |       |-- forms/          # Form views
 |       `-- partials/       # Template partials
+|-- languages/              # Translation template (forage.pot)
 |-- dist/                   # Generated production assets (ignored)
 |-- node_modules/           # Generated npm dependencies (ignored)
 |-- vendor/                 # Generated Composer dependencies (ignored)
@@ -152,6 +153,8 @@ An explicit `version` passed to `enqueue()` is preserved, including `null` and `
 Use `forage_assets_module_preload` to customize or remove generated JavaScript module hints. For project-specific font or image preloads, output the appropriate `<link>` tags through WordPress's `wp_head` action. That hook provides the insertion point; it does not choose or optimize preloads automatically. Add hints only when measurements justify them, escape their URLs and attributes, and match the eventual resource request.
 
 Run `npm test` for build utility and Vite lifecycle regressions and `composer test` for PHP regressions. The Vite test briefly starts a loopback development server. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.
+
+Use the `forage` text domain for every translatable string, including in Blade views. `composer test` lints the compiled views for missing domains and translator comments. After changing strings, run `composer make-pot` (requires [WP-CLI](https://wp-cli.org/) 2.7 or later for Blade support) to update `languages/forage.pot`. WP-CLI skips strings inside `@props`, so set translated defaults in `@php` instead. Translations bundled in `languages/` are named by locale only, such as `de_DE.mo`.
 
 Forage keeps `dist/` out of version control. Deployments must run:
 

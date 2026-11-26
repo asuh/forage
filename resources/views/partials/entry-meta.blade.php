@@ -12,19 +12,23 @@
             {{-- "mins/hrs ago if < 24hrs --}}
             @if (current_time('timestamp') - get_the_time('U') > 0 && current_time('timestamp') - get_the_time('U') < 24 * 60 * 60)
                 @yield('link')<time class="entry-date dt-published"
-                    datetime="{{ get_post_time(DATE_W3C) }}">{!! human_time_diff(get_the_time('U'), current_time('timestamp')) . ' ' . __('ago') !!}</time>
+                    datetime="{{ get_post_time(DATE_W3C) }}">{{ sprintf(/* translators: %s: Time since publishing, such as "5 mins". */ __('%s ago', 'forage'), human_time_diff(get_the_time('U'), current_time('timestamp'))) }}</time>
             @else
                 @yield('link')<time class="entry-date dt-published" datetime="{{ get_post_time(DATE_W3C) }}"><span
-                        class="date-month-day">{{ get_the_date('F jS') }}</span> <span
+                        class="date-month-day">{{ get_the_date(/* translators: Post month and day format. See https://www.php.net/manual/datetime.format.php */ _x('F jS', 'post date format', 'forage')) }}</span> <span
                         class="date-year">{{ get_the_date('Y') }}</span></time>
             @endif
         </a>
     </span>
 @endif
 
-@if (!is_singular())
+@if (!is_singular() && ($replies = (int) get_comments_number()) > 0)
     <span class="comments-link">
-        {!! comments_number('', '1 reply', '% replies') !!}
+        {!! apply_filters('comments_number', esc_html(sprintf(
+            /* translators: %s: Number of replies. */
+            _n('%s reply', '%s replies', $replies, 'forage'),
+            number_format_i18n($replies),
+        )), $replies) !!}
     </span>
 @endif
 
@@ -43,7 +47,7 @@
     @if (taxonomy_exists('series') && get_the_term_list(get_the_ID(), 'series', '', ', '))
         <span class="series-links">
             <span class="screen-reader-text">
-                {{ _x('Series', '') }}
+                {{ __('Series', 'forage') }}
             </span>
             {!! get_the_term_list(get_the_ID(), 'series', '', ', ') !!}
         </span>
@@ -51,7 +55,7 @@
 
     @if (is_singular() && get_the_tag_list('', ', '))
         <div class="tags-links">
-            {{ _x('Tags:', '') }}
+            {{ __('Tags:', 'forage') }}
             {!! get_the_tag_list('', ', ') !!}
         </div>
     @endif

@@ -1,0 +1,279 @@
+# Copyright (C) 2026 asuh.com
+# This file is distributed under the GPL-3.0.
+msgid ""
+msgstr ""
+"Project-Id-Version: Forage 2.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/forage\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-26T05:03:32+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: forage\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Forage"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "A modern WordPress theme with Blade templating and Vite, based on Roots Sage and Vilare"
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "asuh.com"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://asuh.com"
+msgstr ""
+
+#: app/Comments/Comments.php:42
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: app/Comments/Comments.php:47
+msgid "Your comment is awaiting moderation. This is a preview; your comment will be visible after it has been approved."
+msgstr ""
+
+#: app/Comments/Comments.php:117
+msgid "Edit"
+msgstr ""
+
+#. translators: Date format for comments older than a year. See https://www.php.net/manual/datetime.format.php
+#: app/Comments/helpers.php:21
+msgctxt "comment date format"
+msgid "m/d/Y"
+msgstr ""
+
+#: app/Comments/helpers.php:25
+msgctxt "comment time"
+msgid "now"
+msgstr ""
+
+#. translators: %d: Number of months, abbreviated.
+#: app/Comments/helpers.php:30
+#, php-format
+msgctxt "comment time"
+msgid "%dmo"
+msgstr ""
+
+#. translators: %d: Number of days, abbreviated.
+#: app/Comments/helpers.php:32
+#, php-format
+msgctxt "comment time"
+msgid "%dd"
+msgstr ""
+
+#. translators: %d: Number of hours, abbreviated.
+#: app/Comments/helpers.php:34
+#, php-format
+msgctxt "comment time"
+msgid "%dh"
+msgstr ""
+
+#. translators: %d: Number of minutes, abbreviated.
+#: app/Comments/helpers.php:36
+#, php-format
+msgctxt "comment time"
+msgid "%dm"
+msgstr ""
+
+#: app/Navigation/Navigation.php:17
+msgid "Primary Navigation"
+msgstr ""
+
+#. translators: %s: Parent menu item title.
+#: app/Navigation/Navigation.php:58
+#, php-format
+msgid "%s submenu"
+msgstr ""
+
+#: app/Setup.php:102
+msgid "Primary"
+msgstr ""
+
+#: app/Setup.php:109
+msgid "Footer"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Custom Template"
+msgstr ""
+
+#: resources/views/404.blade.php:8
+msgid "Sorry, but the page you were trying to view does not exist."
+msgstr ""
+
+#: resources/views/base.blade.php:11
+msgid "Skip to content"
+msgstr ""
+
+#: resources/views/components/dialog.blade.php:8
+msgid "Dialog"
+msgstr ""
+
+#. translators: %s: Dialog title.
+#: resources/views/components/dialog.blade.php:15
+#, php-format
+msgid "Open %s"
+msgstr ""
+
+#. translators: %s: Dialog title.
+#: resources/views/components/dialog.blade.php:28
+#, php-format
+msgid "Close %s"
+msgstr ""
+
+#: resources/views/forms/search.blade.php:4
+msgctxt "label"
+msgid "Search for:"
+msgstr ""
+
+#: resources/views/forms/search.blade.php:11
+msgctxt "placeholder"
+msgid "Search..."
+msgstr ""
+
+#: resources/views/forms/search.blade.php:18
+msgctxt "label"
+msgid "Submit search request"
+msgstr ""
+
+#: resources/views/index.blade.php:8
+#: resources/views/search.blade.php:8
+msgid "Sorry, no results were found."
+msgstr ""
+
+#: resources/views/index.blade.php:26
+#: resources/views/partials/content-single.blade.php:35
+msgid "Older"
+msgstr ""
+
+#: resources/views/index.blade.php:26
+#: resources/views/partials/content-single.blade.php:35
+msgid "Newer"
+msgstr ""
+
+#: resources/views/partials/comments.blade.php:7
+msgid "Responses"
+msgstr ""
+
+#: resources/views/partials/comments.blade.php:13
+msgid "Write a new comment below"
+msgstr ""
+
+#: resources/views/partials/comments.blade.php:31
+msgid "← Older comments"
+msgstr ""
+
+#: resources/views/partials/comments.blade.php:32
+msgid "Newer comments →"
+msgstr ""
+
+#: resources/views/partials/comments.blade.php:54
+msgid "Comments are closed."
+msgstr ""
+
+#: resources/views/partials/content-page.blade.php:9
+#: resources/views/partials/content-single.blade.php:25
+msgid "Pages:"
+msgstr ""
+
+#. translators: %s: Time since publishing, such as "5 mins".
+#: resources/views/partials/entry-meta.blade.php:15
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#. translators: Post month and day format. See https://www.php.net/manual/datetime.format.php
+#: resources/views/partials/entry-meta.blade.php:18
+msgctxt "post date format"
+msgid "F jS"
+msgstr ""
+
+#. translators: %s: Number of replies.
+#: resources/views/partials/entry-meta.blade.php:29
+#, php-format
+msgid "%s reply"
+msgid_plural "%s replies"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/views/partials/entry-meta.blade.php:52
+msgid "Series"
+msgstr ""
+
+#: resources/views/partials/entry-meta.blade.php:62
+msgid "Tags:"
+msgstr ""
+
+#. translators: %s: Author name.
+#: resources/views/partials/h-card.blade.php:10
+#, php-format
+msgid "Profile image for %s"
+msgstr ""
+
+#: resources/views/partials/header.blade.php:12
+msgid "Toggle Navigation"
+msgstr ""
+
+#: resources/views/partials/header.blade.php:37
+msgid "Search"
+msgstr ""
+
+#. translators: %s is replaced with the search query
+#: resources/views/partials/page-header.blade.php:9
+#, php-format
+msgid "Search Results for %s"
+msgstr ""
+
+#: resources/views/partials/page-header.blade.php:15
+msgid "Not Found"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2X-Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "X-Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "X-Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2X-Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Body"
+msgstr ""

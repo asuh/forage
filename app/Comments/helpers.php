@@ -15,33 +15,31 @@ function timeAgo(string $timestamp): string
     }
 
     $timeDiff = $currentTime - $timestampDate;
+
+    if ($timeDiff >= YEAR_IN_SECONDS) {
+        /* translators: Date format for comments older than a year. See https://www.php.net/manual/datetime.format.php */
+        return wp_date(_x('m/d/Y', 'comment date format', 'forage'), $timestampDate);
+    }
+
+    if ($timeDiff < MINUTE_IN_SECONDS) {
+        return _x('now', 'comment time', 'forage');
+    }
+
     $intervals = [
-        'mo' => 2592000,
-        'd' => 86400,
-        'h' => 3600,
-        'm' => 60,
+        /* translators: %d: Number of months, abbreviated. */
+        MONTH_IN_SECONDS => _x('%dmo', 'comment time', 'forage'),
+        /* translators: %d: Number of days, abbreviated. */
+        DAY_IN_SECONDS => _x('%dd', 'comment time', 'forage'),
+        /* translators: %d: Number of hours, abbreviated. */
+        HOUR_IN_SECONDS => _x('%dh', 'comment time', 'forage'),
+        /* translators: %d: Number of minutes, abbreviated. */
+        MINUTE_IN_SECONDS => _x('%dm', 'comment time', 'forage'),
     ];
 
-    if ($timeDiff >= 31536000) {
-        return wp_date('m/d/Y', $timestampDate);
-    }
-
-    if ($timeDiff < 60) {
-        return 'now';
-    }
-
-    foreach ($intervals as $interval => $seconds) {
-        $diff = floor($timeDiff / $seconds);
-
-        if ($diff < 1) {
-            continue;
+    foreach ($intervals as $seconds => $format) {
+        if ($timeDiff >= $seconds) {
+            return sprintf($format, intdiv($timeDiff, $seconds));
         }
-
-        if ('mo' === $interval) {
-            return floor($timeDiff / $intervals['mo']) . 'mo';
-        }
-
-        return $diff . $interval;
     }
 
     return '';

@@ -21,6 +21,7 @@ function get_option($key): bool { return $GLOBALS['paginate']; }
 function have_comments(): bool { return false; }
 function comment_form(): void { echo '<form id="commentform"></form>'; }
 function __($text, $domain = ''): string { return $text; }
+function esc_html__($text, $domain = ''): string { return htmlspecialchars($text, ENT_QUOTES); }
 function check($condition, $message): void
 {
     if (! $condition) {
@@ -77,4 +78,18 @@ $open = false;
 $html = $render();
 check($linkCalls === 0 && ! str_contains($html, 'class="pager"'), 'Disabled pagination must skip link generation.');
 check(str_contains($html, 'Comments are closed.'), 'Closed comments must retain their notice.');
+
+require FORAGE_PATH . '/app/Comments/helpers.php';
+const MINUTE_IN_SECONDS = 60;
+const HOUR_IN_SECONDS = 3600;
+const DAY_IN_SECONDS = 86400;
+const MONTH_IN_SECONDS = 2592000;
+const YEAR_IN_SECONDS = 31536000;
+function _x($text, $context, $domain = ''): string { return 'm/d/Y' === $text ? 'd.m.Y' : "[$text]"; }
+function wp_date($format, $timestamp): string { return date($format, $timestamp); }
+$ago = static fn (int $seconds): string => Forage\Comments\timeAgo(date(DATE_W3C, time() - $seconds));
+check($ago(30) === '[now]', 'Comments under a minute old must read as now.');
+check($ago(5 * 60) === '[5m]' && $ago(2 * 3600) === '[2h]' && $ago(3 * 86400) === '[3d]' && $ago(65 * 86400) === '[2mo]', 'Relative comment times must use the translated unit formats.');
+check($ago(400 * 86400) === date('d.m.Y', time() - 400 * 86400), 'Year-old comments must use the translated date format.');
+check(Forage\Comments\timeAgo('not a date') === '', 'Invalid comment times must render nothing.');
 echo "Comments regression checks passed.\n";

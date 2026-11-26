@@ -22,7 +22,7 @@
 
         @php($pageLinks = wp_link_pages([
             'echo' => 0,
-            'before' => '<nav class="page-nav"><p>' . __('Pages:', 'forage'),
+            'before' => '<nav class="page-nav"><p>' . esc_html__('Pages:', 'forage'),
             'after' => '</p></nav>',
         ]))
 
@@ -31,7 +31,7 @@
         @endif
     </footer>
 
-    {!! get_the_post_navigation(['prev_text' => 'Older', 'next_text' => 'Newer']) !!}
+    {!! get_the_post_navigation(['prev_text' => esc_html__('Older', 'forage'), 'next_text' => esc_html__('Newer', 'forage')]) !!}
     {!! comments_template() !!}
 </article>
 

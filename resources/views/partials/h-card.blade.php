@@ -7,7 +7,7 @@
     @endphp
     <a class="u-url u-uid" rel="author" href="{{ home_url('/') }}">
         @if ($author && forage()->integrations()->gravatar()->hasAvatar($author->ID))
-            {!! get_avatar($author->ID, 96, '404', 'Profile image for ' . get_the_author_meta('display_name', $author->ID), ['class' => 'u-photo']) !!}
+            {!! get_avatar($author->ID, 96, '404', sprintf(/* translators: %s: Author name. */ __('Profile image for %s', 'forage'), get_the_author_meta('display_name', $author->ID)), ['class' => 'u-photo']) !!}
         @else
             <svg class="avatar avatar-placeholder" width="96" height="96" viewBox="0 0 256 256" aria-hidden="true" focusable="false">
                 <rect width="256" height="256" fill="#c5c5c5" />

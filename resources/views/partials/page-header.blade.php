@@ -4,15 +4,15 @@
     </div>
 @elseif (is_search())
     <div class="page-header">
-        <h1 class="page-title p-name">{!! sprintf(
+        <h1 class="page-title p-name">{{ sprintf(
             /* translators: %s is replaced with the search query */
-            __('Search Results for %s'),
-            get_search_query(),
-        ) !!}</h1>
+            __('Search Results for %s', 'forage'),
+            get_search_query(false),
+        ) }}</h1>
     </div>
 @elseif (is_404())
     <div class="page-header">
-        <h1 class="page-title p-name">{!! __('Not Found') !!}</h1>
+        <h1 class="page-title p-name">{{ __('Not Found', 'forage') }}</h1>
     </div>
 @elseif (!is_front_page() && !is_home())
     <div class="page-header">
