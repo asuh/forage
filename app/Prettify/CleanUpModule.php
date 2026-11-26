@@ -247,9 +247,13 @@ class CleanUpModule extends AbstractModule
     public function cleanScriptTags(string $html): string
     {
         return Document::make($html)->each(static function ($script) {
-            // Forage enqueues Vite ESM through WordPress, so preserve module scripts.
-            if ('module' !== $script->getAttribute('type')) {
+            $raw = $script->getAttribute('type');
+            $type = strtolower(trim((string) $raw, " \t\n\f\r"));
+
+            if (in_array($raw, [null, ''], true) || in_array($type, ['text/javascript', 'application/javascript'], true)) {
                 $script->removeAttribute('type');
+            } elseif ('module' !== $type) {
+                return;
             }
 
             $script->removeAttribute('id');

@@ -28,6 +28,15 @@ check(isset($filters['script_loader_tag'], $filters['style_loader_tag']), 'Optin
 $script = $module->cleanScriptTags('<script type="module" id="app" src="/app.js"></script>');
 check(str_contains($script, 'type="module"'), 'Opt-in cleanup must preserve module scripts.');
 check(! str_contains($script, 'id="app"'), 'Opt-in cleanup must remove cosmetic IDs.');
+check($module->cleanScriptTags('<script type="text/javascript" src="/a.js"></script>') === '<script src="/a.js"></script>', 'Opt-in cleanup must drop the default JavaScript type.');
+foreach (['text/plain', 'application/json', 'application/ld+json', 'text/template', 'importmap'] as $type) {
+    $html = "<script type=\"{$type}\" id=\"data\">{}</script>";
+    check($module->cleanScriptTags($html) === $html, "Opt-in cleanup must keep the type and ID of {$type} blocks.");
+}
+check(str_contains($module->cleanScriptTags("<script type=\"\vtext/javascript\"></script>"), 'type='), 'Only HTML whitespace may be trimmed from script types.');
+check($module->cleanScriptTags('<script type="" id="a"></script>') === '<script></script>', 'An empty type is classic JavaScript.');
+check($module->cleanScriptTags('<script type=" Application/JavaScript " id="a"></script>') === '<script></script>', 'JavaScript types match case-insensitively.');
+check($module->cleanScriptTags('<script type="  " id="a"></script>') === '<script type="  " id="a"></script>', 'A whitespace-only type is inert and must be kept.');
 $scripts = $module->cleanScriptTags("<script src=\"/a.js\" id=\"a-js\"></script>\n<script id=\"a-js-after\">var x = \"<meta charset=windows-1252><p>é</p>\" && 1 < 2;</script>");
 check($scripts === "<script src=\"/a.js\"></script>\n<script>var x = \"<meta charset=windows-1252><p>é</p>\" && 1 < 2;</script>", 'Opt-in cleanup must keep adjacent and inline scripts intact.');
 $styles = $module->cleanStylesheetLinks('<link rel="stylesheet" id="x-css" href="/x.css?ver=1&amp;y=2" media="all" />');
