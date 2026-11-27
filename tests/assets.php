@@ -11,6 +11,7 @@ $settings = [
 ];
 $scripts = [];
 $styles = [];
+$translations = [];
 $assets = new Forage\Assets\Assets();
 
 function forage(): object
@@ -48,7 +49,14 @@ function wp_enqueue_style($handle, $src, $deps, $version, $media): void
     $GLOBALS['styles'][$handle] = compact('src', 'deps', 'version', 'media');
 }
 
-function wp_set_script_translations(string $handle, string $domain): void {}
+function wp_set_script_translations(string $handle, string $domain): void
+{
+    if (! isset($GLOBALS['scripts'][$handle])) {
+        throw new RuntimeException('Translations must be set after the script is enqueued.');
+    }
+
+    $GLOBALS['translations'][$handle] = $domain;
+}
 
 function esc_url(string $value): string
 {
@@ -123,6 +131,10 @@ check(! str_contains($modules, 'blocks-123.js'), 'Optional block entries must no
 check(substr_count($modules, 'shared-123.js') === 1, 'Shared module preloads must be deduplicated.');
 check(str_contains($modules, 'nested-123.js'), 'Nested static imports must be preloaded.');
 check(! str_contains($modules, 'lazy-123'), 'Dynamic imports must remain lazy.');
+
+check($translations === [], 'Scripts must skip translation registration by default.');
+$assets->enqueue('scripts/blocks.js', ['handle' => 'translated', 'translations' => true]);
+check($translations === ['translated' => 'forage'], 'Scripts must opt in to translations.');
 
 foreach ([null, false, 'custom'] as $version) {
     $assets->enqueue('scripts/blocks.js', ['handle' => 'explicit', 'version' => $version]);

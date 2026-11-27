@@ -67,6 +67,7 @@ trait Resolver
                 'media' => ! empty($config['media']) ? $config['media'] : 'all',
             ],
             'type' => ! empty($config['type']) ? $config['type'] : '',
+            'translations' => ! empty($config['translations']),
         ];
 
         if (preg_match('/\.(css|scss)(\?.*)?$/', $path)) {
@@ -107,7 +108,10 @@ trait Resolver
                         'in_footer' => $config['args']['footer'],
                     ],
                 );
-                wp_set_script_translations($config['handle'], 'forage');
+
+                if ($config['translations']) {
+                    wp_set_script_translations($config['handle'], 'forage');
+                }
                 break;
 
             case 'style':

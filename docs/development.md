@@ -150,6 +150,8 @@ The asset resolver enqueues CSS from entries and their static imports, including
 
 An explicit `version` passed to `enqueue()` is preserved, including `null` and `false`. If overriding a module-preloaded entry's version, update its preload URL through `forage_assets_module_preload` to match. External assets retain the configured theme version by default.
 
+Pass `'translations' => true` to `enqueue()` to register the script's `forage` translations. WordPress then adds the `wp-i18n` dependency automatically. This is off by default, so Forage's scripts don't pull in `wp-i18n` and `wp-hooks` unless they need them. A script that uses `wp.i18n` without theme translations can list `wp-i18n` in `deps` instead.
+
 Use `forage_assets_module_preload` to customize or remove generated JavaScript module hints. For project-specific font or image preloads, output the appropriate `<link>` tags through WordPress's `wp_head` action. That hook provides the insertion point; it does not choose or optimize preloads automatically. Add hints only when measurements justify them, escape their URLs and attributes, and match the eventual resource request.
 
 Run `npm test` for build utility and Vite lifecycle regressions and `composer test` for PHP regressions. The Vite test briefly starts a loopback development server. The PHP tests use isolated WordPress API doubles and require installed Composer dependencies, but do not require a WordPress installation.

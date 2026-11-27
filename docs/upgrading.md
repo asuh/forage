@@ -1,5 +1,9 @@
 # Upgrading Forage
 
+## Script Translations Are Opt-In
+
+`forage()->assets()->enqueue()` no longer registers translations for every script, so `wp-i18n` is no longer added implicitly. Scripts that need `forage` translations must pass `'translations' => true`. Scripts that only use the `wp.i18n` API can list `wp-i18n` in `deps` instead.
+
 ## Plugin Integrations Moved
 
 The Syndication Links, Simple Location, Webmention, and Contact Form 7 hooks moved from `Forage\Setup` into `app/Integrations/`. Child themes that unhook them must use the new objects and method names:
